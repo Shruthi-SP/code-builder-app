@@ -1,8 +1,4 @@
 import { useState } from "react"
-/*
-const { name:editName, mobile:editMobile, email:editEmail, formSubmission } = props
-    const [name, setName] = useState(editName ? editName : '')
-*/
 
 const FormText = (props) => {
     console.log('formtxt props', props)
