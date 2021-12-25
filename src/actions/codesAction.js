@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios from '../config/axios-config'
 
 export const asyncGetAllCodes = () => {
     console.log('inside asyncGetAllCodes')
     return (dispatch) => {
-        axios.get('http://localhost:3044/api/code-snippets')
+        axios.get()
             .then((response) => {
                 console.log('inside then')
                 const result = response.data
@@ -20,10 +20,10 @@ export const asyncGetAllCodes = () => {
             })
     }
 }
-export const asyncAddCode = (formData, resetForm) => {
+export const asyncAddCode = (formData, resetForm, redirect) => {
     console.log('inside async add code')
     return (dispatch) => {
-        axios.post('http://localhost:3044/api/code-snippets', formData)
+        axios.post('',formData)
             .then((response) => {
                 const result = response.data
                 if (result.hasOwnProperty('errors')) {
@@ -34,7 +34,7 @@ export const asyncAddCode = (formData, resetForm) => {
                     console.log('axios post code=', result)
                     dispatch(addCode(result))
                     resetForm()
-                    //redirect(result._id)   
+                    redirect(result._id)  
                 }
             })
             .catch((err) => {
@@ -45,7 +45,7 @@ export const asyncAddCode = (formData, resetForm) => {
 }
 export const asyncGetCode = (_id, getResult) => {
     return (dispatch) => {
-        axios.get(`http://localhost:3044/api/code-snippets/${_id}`)
+        axios.get(`/${_id}`)
             .then(response=>{
                 const result = response.data
                 console.log('axios put res result=', result)
@@ -57,9 +57,9 @@ export const asyncGetCode = (_id, getResult) => {
             })
     }
 }
-export const asyncUpdateCode = (obj, resetForm, redirect) => {
+export const asyncUpdateCode = (obj, formData) => {
     return (dispatch) => {
-        axios.put(`http://localhost:3044/api/code-snippets/${obj._id}`)
+        axios.put(`/${obj._id}`, formData)
             .then(response=>{
                 const result = response.data
                 console.log('axios put res result=', result)
@@ -71,13 +71,15 @@ export const asyncUpdateCode = (obj, resetForm, redirect) => {
             })
     }
 }
-export const asyncDeleteCode = (obj, resetForm, redirect) => {
+export const asyncDeleteCode = (id, redirect) => {
+    console.log('deleteCode id=', id)
     return (dispatch) => {
-        axios.delete(`http://localhost:3044/api/code-snippets/${obj._id}`)
+        axios.delete(`/${id}`)
             .then(response=>{
                 const result = response.data
                 console.log('axios put res result=', result)
                 dispatch(deleteCode(result))
+                redirect()
             })
             .catch(err=>{
                 console.log('put err=', err)
@@ -89,7 +91,7 @@ export const asyncDeleteCode = (obj, resetForm, redirect) => {
 export const asyncAddSnippet = (id, formData) => {
     console.log('inside asyncAddSnippet')
     return (dispatch) => {
-        axios.post(`http://localhost:3044/api/code-snippets/${id}/snippets`, formData)
+        axios.post(`/${id}/snippets`, formData)
             .then(response =>{
                 console.log(response)
                 const result = response.data
@@ -104,9 +106,9 @@ export const asyncAddSnippet = (id, formData) => {
     }
 }
 export const asyncUpdateSnippet = (codeId, snipId, formData) => {
-    console.log('inside asyncEditSnippet', codeId, snipId, formData)
+    console.log('inside asyncUpdateSnippet', codeId, snipId, formData)
     return (dispatch) => {
-        axios.put(`http://localhost:3044/api/code-snippets/${codeId}/snippets/${snipId}}`, formData)
+        axios.put(`/${codeId}/snippets/${snipId}`, formData)
             .then(response =>{
                 console.log(response)
                 const result = response.data
@@ -114,9 +116,23 @@ export const asyncUpdateSnippet = (codeId, snipId, formData) => {
                 dispatch(updateCode(result))
             })
             .catch(err=>{
-                console.log('inside catch')
-                console.log('put snippet err=', err)
+                console.log('inside catch.put snippet err=', err)
                 alert(err.message)
+            })
+    }
+}
+export const asyncDeleteSnippet = (codeId, snipId) => {
+    console.log('inside delete snippet', codeId, snipId)
+    return (dispatch) => {
+        axios.delete(`/${codeId}/snippets/${snipId}`)
+            .then(response=>{
+                console.log(response)
+                const result = response.data
+                console.log('deleting snippet', result)
+                dispatch(updateCode(result))
+            })
+            .catch(err=>{
+                console.log('delete snippet err=', err)
             })
     }
 }

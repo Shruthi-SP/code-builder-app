@@ -1,4 +1,4 @@
 const Submit = (props) => {
-    return <button onClick={(e)=>{props.handleSubmitAns(e)}}>Submit Answers</button>
+    return <input type='submit' value={'submit answer'}/>
 }
 export default Submit

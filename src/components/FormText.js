@@ -2,7 +2,7 @@ import { useState } from "react"
 
 const FormText = (props) => {
     console.log('formtxt props', props)
-    const { handleCancelText ,formSubmission, value:editTxt, hint:editHint} = props
+    const { handleCancelText, handleCancelEdit, formSubmission, value:editTxt, hint:editHint} = props
     
     const [txt, setTxt] = useState(editTxt ? editTxt : '')
     const [hint, setHint] = useState(editHint ? editHint : '')
@@ -21,7 +21,12 @@ const FormText = (props) => {
     return <form onSubmit={handleSubmit} >
         <input style={{margin:'5px'}} type='text' value={txt} placeholder="enter texts" onChange={(e)=>{setTxt(e.target.value)}} />
         <input style={{margin:'5px'}} type='text' value={hint} placeholder="enter hint" onChange={(e)=>{setHint(e.target.value)}} />
-        <input style={{margin:'5px'}} type='submit' /><button onClick={()=>{handleCancelText()}}>Cancel</button>
+        <input style={{margin:'5px'}} type='submit' />
+        {
+            editTxt ? <button onClick={()=>{handleCancelEdit()}}>Cancel</button> : <button onClick={()=>{handleCancelText()}}>Cancel</button>
+        }
+        
+        
     </form>
 }
 export default FormText

@@ -1,24 +1,18 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { asyncAddCode } from "../actions/codesAction"
 
 const CodesForm =(props) => {
     console.log('form props=', props, props.history)
-
+    const { title:editTitle, statement:editStatement, formSubmission, handleCancelCode } = props
     const dispatch = useDispatch()
 
-    const [title, setTitle] = useState('')
-    const [statement, setStatement] = useState('')
+    const [title, setTitle] = useState(editTitle ? editTitle : '')
+    const [statement, setStatement] = useState(editStatement ? editStatement : '')
 
     const resetForm = () => {
         setStatement('')
         setTitle('')
     }
-
-    // const redirect = (id) => {
-    //     console.log('redirecting from cmpt')
-    //     props.history.push(`/code-snippet/${id}`)
-    // }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -26,17 +20,18 @@ const CodesForm =(props) => {
             title: title,
             statement: statement
         }
-        dispatch(asyncAddCode(formData, resetForm))
+        //dispatch(asyncAddCode(formData, resetForm))
+        formSubmission(formData, resetForm)
     }
 
     return (
         <div>
+            <h2>Create the code</h2>
             <form onSubmit={handleSubmit}>
-                <input type='text' placeholder="Enter the title" value={title} onChange={(e)=>{setTitle(e.target.value)}}/><br />
-
-                <input type='text' placeholder="Enter the problem statement" value={statement} onChange={(e)=>{setStatement(e.target.value)}} /> <br />
-                
+                <input style={{margin:'3px'}} type='text' placeholder="Enter the title" value={title} onChange={(e)=>{setTitle(e.target.value)}}/><br />
+                <textarea style={{margin:'3px'}} placeholder="Enter the problem statement" value={statement} onChange={(e)=>{setStatement(e.target.value)}} /> <br />
                 <input type='submit' />
+                {handleCancelCode && <button onClick={()=>{handleCancelCode()}}>Cancel</button>}
             </form>
         </div>
     )

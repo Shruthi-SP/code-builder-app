@@ -13,6 +13,10 @@ const CodesListing = (props) => {
         console.log('dispatching')
         dispatch(asyncGetAllCodes())
     }, [])
+    useEffect(()=>{
+        props.handleCancelShow()
+        props.handleCancelPreview()
+    })
 
     const codes = useSelector((state) => {
         console.log(state.codes)
@@ -33,7 +37,7 @@ const CodesListing = (props) => {
                         <Link to='#' onClick={(e)=>{
                             props.handleShow()
                             props.history.push(`/codes/${ele._id}`)
-                        }} >Show</Link>       
+                        }} >Show</Link><br />       
                     </div>
                 })
             }

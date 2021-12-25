@@ -10,6 +10,8 @@ export const buildFor = (ele) => {
         return <Break />
     } else if (ele.group === 'tab') {
         return <Tab />
+    } else if (ele.group === 'doubleTab') {
+        return <><Tab /><Tab /></>
     } else if (ele.group === 'space') {
         return <Space />
     } else if (ele.group === 'submit') {
@@ -17,4 +19,20 @@ export const buildFor = (ele) => {
     } else if (ele.group === 'input') {
         return <input type='text' disabled={true}  />
     }
+}
+export const arrToDd = (arr) => {
+    const a = arr.map((ele,i)=>{
+        return {...ele, id:i}
+    })
+    console.log('arrtodd=', a)
+    return a
+}
+export const ddToArr = (arr) => {
+    let ar = [...arr]
+    const a = ar.map(ele=>{
+        delete ele.id
+        return ele
+    })
+    console.log('ddtoarr', a)
+    return a
 }
