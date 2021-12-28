@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import Hints from "./Hints"
 import Input from "./tools/Input"
 import Break from "./tools/Break"
@@ -12,11 +12,10 @@ const ShowCode = (props) => {
     const { isSubmitted, handleIsSubmit, codeId, handleInputChange, handleSubmitAns, errors, string} = props
 
     console.log('showCode props=', props)
-    const dispatch = useDispatch()
 
     const codeSnippet = useSelector(state => {
         console.log('total questions', state.codes)
-        const obj = state.codes.find(ele => ele._id == codeId)
+        const obj = state.codes.find(ele => ele._id === codeId)
         console.log('selected question snippets', obj)
         return obj
     })
@@ -35,11 +34,11 @@ const ShowCode = (props) => {
     }
 
     const [code, setCode] = useState(codeSnippet)
-    const [start, setStart] = useState(true)
-    const [count, setCount] = useState(0)
-    const [limits, setLimits] = useState(0)
-    const [prevBtn, setPrevBtn] = useState(false)
-    const [nxtBtn, setNxtBtn] = useState(true)
+    //const [start, setStart] = useState(true)
+    // const [count, setCount] = useState(0)
+    // const [limits, setLimits] = useState(0)
+    // const [prevBtn, setPrevBtn] = useState(false)
+    // const [nxtBtn, setNxtBtn] = useState(true)
     const [hints, setHints] = useState([])
     const [solution, setSolution] = useState(false)
 
@@ -54,75 +53,75 @@ const ShowCode = (props) => {
         setSolution(!solution)
     }
 
-    const handleStartBtn = () => {
-        console.log('start button clicked')
-        setStart(!start)
-        const index = code.snippets.findIndex(ele => ele.group=='break')
-        console.log('inc by count=', index, limits, count)
-        if (index > 0) {
-            setCount(index)
-            setLimits(limits + 1)
-            console.log(`going to be l=${limits + 1} c=${index}`)
-            const arr = getHints(code.snippets, index)
-            console.log('hint ele', arr)
-            setHints(arr)
-        }
-    }
-    const handlePreviousBtn = () => {
-        console.log('previous button clicked')
-        if (count > 2 && limits > 1) {
-            setNxtBtn(true)
-            console.log('Curr limits=' + limits, 'count=' + count)
-            const index = code.snippets.findIndex(ele => ele.group=='break')
-            console.log('dec', index)
-            const arr = getHints(code.snippets, index)
-            console.log('hint ele', arr)
-            setHints(arr)
-            console.log('hint ele', arr)
-            if (index > 0 && limits - 1 !== 1 && index !== 2) {
-                console.log(`going to be l=${limits - 1} c=${index}`)
-                setLimits(limits - 1)
-                setCount(index)
-            } 
+    // const handleStartBtn = () => {
+    //     console.log('start button clicked')
+    //     setStart(!start)
+    //     const index = code.snippets.findIndex(ele => ele.group=='break')
+    //     console.log('inc by count=', index, limits, count)
+    //     if (index > 0) {
+    //         setCount(index)
+    //         setLimits(limits + 1)
+    //         console.log(`going to be l=${limits + 1} c=${index}`)
+    //         const arr = getHints(code.snippets, index)
+    //         console.log('hint ele', arr)
+    //         setHints(arr)
+    //     }
+    // }
+    // const handlePreviousBtn = () => {
+    //     console.log('previous button clicked')
+    //     if (count > 2 && limits > 1) {
+    //         setNxtBtn(true)
+    //         console.log('Curr limits=' + limits, 'count=' + count)
+    //         const index = code.snippets.findIndex(ele => ele.group=='break')
+    //         console.log('dec', index)
+    //         const arr = getHints(code.snippets, index)
+    //         console.log('hint ele', arr)
+    //         setHints(arr)
+    //         console.log('hint ele', arr)
+    //         if (index > 0 && limits - 1 !== 1 && index !== 2) {
+    //             console.log(`going to be l=${limits - 1} c=${index}`)
+    //             setLimits(limits - 1)
+    //             setCount(index)
+    //         } 
             // else {
             //     setCount(2)
             //     setLimits(1)
             //     setPrevBtn(false)
             // }
-        } else {
-            setCount(2)
-            setLimits(1)
-            setPrevBtn(false)
-        }
-    }
-    const handleNextBtn = () => {
-        console.log('next button clicked')
-        if (count < code.snippets.length) {
-            console.log('curr limits=' + limits, 'count=' + count)
-            setPrevBtn(true)
-            const index = code.snippets.findIndex(ele => ele.group=='break')
-            console.log('inc by count', index)
-            const arr = getHints(code.snippets, index)
-            console.log('hint ele', arr)
-            console.log('hint ele', arr)
-            setHints(arr)
-            if (index > 0) {
-                console.log(`will be l=${limits + 1} c=${index}`)
-                setLimits(limits + 1)
-                setCount(index)
-            }
+    //     } else {
+    //         setCount(2)
+    //         setLimits(1)
+    //         setPrevBtn(false)
+    //     }
+    // }
+    // const handleNextBtn = () => {
+    //     console.log('next button clicked')
+    //     if (count < code.snippets.length) {
+    //         console.log('curr limits=' + limits, 'count=' + count)
+    //         setPrevBtn(true)
+    //         const index = code.snippets.findIndex(ele => ele.group=='break')
+    //         console.log('inc by count', index)
+    //         const arr = getHints(code.snippets, index)
+    //         console.log('hint ele', arr)
+    //         console.log('hint ele', arr)
+    //         setHints(arr)
+    //         if (index > 0) {
+    //             console.log(`will be l=${limits + 1} c=${index}`)
+    //             setLimits(limits + 1)
+    //             setCount(index)
+    //         }
             // else {
             //     console.log(`will be l=${limits + 1} c=${code.snippets.length}`)
             //     setCount(code.snippets.length)
             //     setLimits(limits + 1)
             //     setNxtBtn(false)
             // }
-        } else {
-            setCount(code.snippets.length)
-            setLimits(limits + 1)
-            setNxtBtn(false)
-        }
-    }
+    //     } else {
+    //         setCount(code.snippets.length)
+    //         setLimits(limits + 1)
+    //         setNxtBtn(false)
+    //     }
+    // }
     const buildFor = (ele) => {
         if (ele.group === 'texts') {
             return ele.value
@@ -137,13 +136,13 @@ const ShowCode = (props) => {
         } else if (ele.group === 'submit') {
             return <Submit />
         } else if (ele.group === 'input') {
-            return <Input ele={ele} handleInputChange={handleInputChange} />
+            return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleInputChange} />
         }
     }
 
     return <div style={{ display: 'flex', justifyContent: 'start' }}>
         <div>
-            <h3>Code Preview</h3>
+            <h3>Code View</h3>
             {code.snippets.length > 0 && <code>
                 <b>{code.title}</b><br />
                 <b>{code.statement}</b><br />

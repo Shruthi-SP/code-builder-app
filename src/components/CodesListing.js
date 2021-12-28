@@ -6,6 +6,7 @@ import CodeItem from "./CodeItem"
 
 const CodesListing = (props) => {
     console.log('CodesListing props=', props)
+    const {admin} = props
 
     const dispatch = useDispatch()
 
@@ -33,7 +34,7 @@ const CodesListing = (props) => {
                     return <div key={i} style={{ border: '2px solid', padding: '5px', margin: '5px' }}>
                         <code>{ele.title}</code><br />
                         <code>{i + 1} {ele.statement}</code><br />
-                        <CodeItem snippets={ele.snippets} />
+                        {admin && <CodeItem snippets={ele.snippets} />}
                         <Link to='#' onClick={(e)=>{
                             props.handleShow()
                             props.history.push(`/codes/${ele._id}`)

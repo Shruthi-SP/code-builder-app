@@ -7,6 +7,7 @@ import EditCode from "./EditCode"
 
 const CodeSnippets = (props) => {
     console.log('code snippet compt props=', props, props.match.params.id)
+    const { admin } = props
     const _id = props.match.params.id
 
     const dispatch = useDispatch()
@@ -42,35 +43,40 @@ const CodeSnippets = (props) => {
 
     return (
         <div>
-            <h3>Edit code or Create a snippet</h3>
-            {snippetToggle ? <><CodeSnippetForm codeId={_id} handleEditSnippets={handleEditSnippets} {...props} /></> : <>
-                {
-                    Object.keys(obj).length > 0 ? <div>
+            {
+                admin ? <div>
+                    <h3>Edit code or Create a snippet</h3>
+                    {snippetToggle ? <><CodeSnippetForm admin={admin} codeId={_id} handleEditSnippets={handleEditSnippets} {...props} /></> : <>
                         {
-                            codeToggle ? <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} /> : <>
-                                <code><b>Title: {obj.title}</b><br /></code>
-                                <code><b>Statement: {obj.statement}</b></code><br />
-                            </>
-                        }
-                        {
-                            obj.snippets.length > 0 && obj.snippets.map((ele, i) => {
-                                return <code key={i}>
-                                    {buildFor(ele)}
-                                </code>
-                            })
-                        }
-                        <br /><button style={{ margin: '2px' }} onClick={handleEditCode}>Edit Code</button>
-                        <button style={{ margin: '2px' }} onClick={handleRemoveCode}>Remove Code</button>
+                            Object.keys(obj).length > 0 ? <div>
+                                {
+                                    codeToggle ? <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} /> : <>
+                                        <code><b>Title: {obj.title}</b><br /></code>
+                                        <code><b>Statement: {obj.statement}</b></code><br />
+                                    </>
+                                }
+                                {
+                                    obj.snippets.length > 0 && obj.snippets.map((ele, i) => {
+                                        return <code key={i}>
+                                            {buildFor(ele)}
+                                        </code>
+                                    })
+                                }
+                                <br /><button style={{ margin: '2px' }} onClick={handleEditCode}>Edit Code</button>
+                                <button style={{ margin: '2px' }} onClick={handleRemoveCode}>Remove Code</button>
 
-                        <button style={{ margin: '2px' }} onClick={handleEditSnippets}>Edit/Add Snippets</button>
-                    </div> : <div>
-                        <p>No Object</p>
-                    </div>
-                }
-            </>
+                                <button style={{ margin: '2px' }} onClick={handleEditSnippets}>Edit/Add Snippets</button>
+                            </div> : <div>
+                                <p>No Object</p>
+                            </div>
+                        }
+                    </>
+                    }
+
+                </div> : <><CodeSnippetForm admin={admin} codeId={_id} {...props} /></>
             }
-
         </div>
+
     )
 }
 export default CodeSnippets 
