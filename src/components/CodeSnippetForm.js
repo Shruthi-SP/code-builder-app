@@ -16,25 +16,21 @@ const CodeSnippetForm = (props) => {
     const dispatch = useDispatch()
 
     const codeObj = useSelector(state => {
-        console.log('useSeletor hook id and state', props.match.params.id, state.codes)
-        console.log(state.codes.find(ele=>ele._id===props.codeId))
-        return state.codes.find(ele => ele._id === props.match.params.id)
+        console.log('useSeletor hook id and state.codes', props.match.params.id, state.codes)
+        console.log('code obj=', state.codes.data.find(ele => ele._id === props.codeId))
+        return state.codes.data.find(ele => ele._id === props.match.params.id)
     })
-    const array = codeObj.snippets
-    console.log('after useselector hook codeObj, snippets', codeObj, array)
-
-    // const array = useSelector(state => {
-    //     console.log('total questions', state.codes)
-    //     const obj = state.codes.find(ele => ele._id == props.codeId)
-    //     console.log('selected question snippets', obj.snippets)
-    //     return obj.snippets
-    // })
+    let array = []
+    if(codeObj){
+        array = codeObj.snippets
+    }
+    // console.log('after useselector hook codeObj, snippets', codeObj, array)
 
     useEffect(() => {
         setArraySnippet(array)
     }, [array])
-
-    const [arraySnippet, setArraySnippet] = useState([array])
+    
+    const [arraySnippet, setArraySnippet] = useState(array)
     const [formTextToggle, setFormTextToggle] = useState(false)
     const [formInputToggle, setFormInputToggle] = useState(false)
     const [limit, setLimit] = useState(0)
@@ -50,7 +46,6 @@ const CodeSnippetForm = (props) => {
     }
 
     const handleRLDDChange = (newItems) => {
-        //const a = ddToArr(newItems)
         const formData = {
             snippets: [...newItems]
         }
@@ -129,18 +124,16 @@ const CodeSnippetForm = (props) => {
         console.log('input tags', arr.length)
         let n = arr.length
         let err = []
-        let colour = []
         let answers = []
         arr.forEach(ele => {
             answers.push({ snipId: ele._id, snipAnswer: ele.value })
             if (ele.answer !== ele.value) {
                 n--
-                colour.push(ele._id)
                 ele.value.trim() === '' ? err.push(`Expected ${ele.answer} instead Received empty`) :
                     err.push(`Expected ${ele.answer} instead Received ${ele.value}`)
             }
         })
-        console.log('input err colours=', colour, answers)
+        console.log('input answers', answers)
         const str = `Score ${n}/${arr.length}`
         console.log('err str', err, string)
         const formData = {
@@ -158,8 +151,8 @@ const CodeSnippetForm = (props) => {
             })
         console.log('Submitted answers to api', formData)
         setErrors(err)
-                setString(str)
-                setIsSubmitted(true)
+        setString(str)
+        setIsSubmitted(true)
     }
     //-------------------------end of submit ans-----------------------------------------
     const handleEdit = (e, ele) => {
@@ -201,7 +194,7 @@ const CodeSnippetForm = (props) => {
     return (
         <div>
             {
-                // solution ? <CodeSolution codeId={props.codeId} handleSolution={handleSolution} /> :
+                
                 <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                     {
                         admin && <div>

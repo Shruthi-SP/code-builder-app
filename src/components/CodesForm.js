@@ -1,10 +1,9 @@
 import { useState } from "react"
-import { useDispatch } from "react-redux"
+import Button from '@mui/material/Button';
 
 const CodesForm =(props) => {
     console.log('form props=', props, props.history)
     const { title:editTitle, statement:editStatement, formSubmission, handleCancelCode } = props
-    const dispatch = useDispatch()
 
     const [title, setTitle] = useState(editTitle ? editTitle : '')
     const [statement, setStatement] = useState(editStatement ? editStatement : '')
@@ -31,7 +30,8 @@ const CodesForm =(props) => {
                 <input style={{margin:'3px'}} type='text' placeholder="Enter the title" value={title} onChange={(e)=>{setTitle(e.target.value)}}/><br />
                 <textarea style={{margin:'3px'}} placeholder="Enter the problem statement" value={statement} onChange={(e)=>{setStatement(e.target.value)}} /> <br />
                 <input type='submit' />
-                {handleCancelCode && <button onClick={()=>{handleCancelCode()}}>Cancel</button>}
+                {/* {handleCancelCode && <button onClick={()=>{handleCancelCode()}}>Cancel</button>} */}
+                {handleCancelCode && <Button onClick={()=>{handleCancelCode()}} variant="contained">Cancel</Button>}
             </form>
         </div>
     )

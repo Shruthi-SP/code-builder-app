@@ -22,6 +22,7 @@ const CodeSnippets = (props) => {
     const [codeToggle, setCodeToggle] = useState(false)
     const [snippetToggle, setSnippetToggle] = useState(false)
     const [obj, setObj] = useState({})
+    console.log('code Snippet cmpt=',obj)
 
     const redirect = () => {
         console.log('redirecting from code snippets to codes list')

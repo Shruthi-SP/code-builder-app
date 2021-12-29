@@ -9,13 +9,13 @@ import Tab from "./tools/Tab"
 import CodeSolution from "./CodeSolution"
 
 const ShowCode = (props) => {
-    const { isSubmitted, handleIsSubmit, codeId, handleInputChange, handleSubmitAns, errors, string} = props
+    const { isSubmitted, handleIsSubmit, codeId, handleInputChange, handleSubmitAns, errors, string } = props
 
     console.log('showCode props=', props)
 
     const codeSnippet = useSelector(state => {
         console.log('total questions', state.codes)
-        const obj = state.codes.find(ele => ele._id === codeId)
+        const obj = state.codes.data.find(ele => ele._id === codeId)
         console.log('selected question snippets', obj)
         return obj
     })
@@ -24,7 +24,6 @@ const ShowCode = (props) => {
         const ar = []
         a.forEach(ele => {
             if (ele.hasOwnProperty('hint')) {
-                console.log(ele)
                 if (ele.hint !== '') {
                     ar.push(ele.hint)
                 }
@@ -33,19 +32,16 @@ const ShowCode = (props) => {
         return ar
     }
 
-    const [code, setCode] = useState(codeSnippet)
-    //const [start, setStart] = useState(true)
-    // const [count, setCount] = useState(0)
-    // const [limits, setLimits] = useState(0)
-    // const [prevBtn, setPrevBtn] = useState(false)
-    // const [nxtBtn, setNxtBtn] = useState(true)
+    const [code, setCode] = useState(codeSnippet || {})
     const [hints, setHints] = useState([])
     const [solution, setSolution] = useState(false)
 
     useEffect(() => {
-        setCode(codeSnippet)
-        const a = getHints(codeSnippet.snippets)
-        setHints(a)
+        if (codeSnippet) {
+            setCode(codeSnippet)
+            const a = getHints(codeSnippet.snippets)
+            setHints(a)
+        }
     }, [codeSnippet])
 
     const handleSolution = () => {
@@ -53,75 +49,6 @@ const ShowCode = (props) => {
         setSolution(!solution)
     }
 
-    // const handleStartBtn = () => {
-    //     console.log('start button clicked')
-    //     setStart(!start)
-    //     const index = code.snippets.findIndex(ele => ele.group=='break')
-    //     console.log('inc by count=', index, limits, count)
-    //     if (index > 0) {
-    //         setCount(index)
-    //         setLimits(limits + 1)
-    //         console.log(`going to be l=${limits + 1} c=${index}`)
-    //         const arr = getHints(code.snippets, index)
-    //         console.log('hint ele', arr)
-    //         setHints(arr)
-    //     }
-    // }
-    // const handlePreviousBtn = () => {
-    //     console.log('previous button clicked')
-    //     if (count > 2 && limits > 1) {
-    //         setNxtBtn(true)
-    //         console.log('Curr limits=' + limits, 'count=' + count)
-    //         const index = code.snippets.findIndex(ele => ele.group=='break')
-    //         console.log('dec', index)
-    //         const arr = getHints(code.snippets, index)
-    //         console.log('hint ele', arr)
-    //         setHints(arr)
-    //         console.log('hint ele', arr)
-    //         if (index > 0 && limits - 1 !== 1 && index !== 2) {
-    //             console.log(`going to be l=${limits - 1} c=${index}`)
-    //             setLimits(limits - 1)
-    //             setCount(index)
-    //         } 
-            // else {
-            //     setCount(2)
-            //     setLimits(1)
-            //     setPrevBtn(false)
-            // }
-    //     } else {
-    //         setCount(2)
-    //         setLimits(1)
-    //         setPrevBtn(false)
-    //     }
-    // }
-    // const handleNextBtn = () => {
-    //     console.log('next button clicked')
-    //     if (count < code.snippets.length) {
-    //         console.log('curr limits=' + limits, 'count=' + count)
-    //         setPrevBtn(true)
-    //         const index = code.snippets.findIndex(ele => ele.group=='break')
-    //         console.log('inc by count', index)
-    //         const arr = getHints(code.snippets, index)
-    //         console.log('hint ele', arr)
-    //         console.log('hint ele', arr)
-    //         setHints(arr)
-    //         if (index > 0) {
-    //             console.log(`will be l=${limits + 1} c=${index}`)
-    //             setLimits(limits + 1)
-    //             setCount(index)
-    //         }
-            // else {
-            //     console.log(`will be l=${limits + 1} c=${code.snippets.length}`)
-            //     setCount(code.snippets.length)
-            //     setLimits(limits + 1)
-            //     setNxtBtn(false)
-            // }
-    //     } else {
-    //         setCount(code.snippets.length)
-    //         setLimits(limits + 1)
-    //         setNxtBtn(false)
-    //     }
-    // }
     const buildFor = (ele) => {
         if (ele.group === 'texts') {
             return ele.value
@@ -143,33 +70,30 @@ const ShowCode = (props) => {
     return <div style={{ display: 'flex', justifyContent: 'start' }}>
         <div>
             <h3>Code View</h3>
-            {code.snippets.length > 0 && <code>
+            <code>
                 <b>{code.title}</b><br />
                 <b>{code.statement}</b><br />
-            </code>}
+            </code>
             {
-                // start ? (<button onClick={handleStartBtn}> Start</button>) : 
-                    <div style={{ margin: '5px' }}>
-                        <form onSubmit={(e) => { handleSubmitAns(e) }}>
-                            {
-                                code.snippets.map((ele, i) => {
-                                    return <code key={i}>{buildFor(ele)}</code>
-                                })
-                            }
-                        </form>
-                        <br />
-                        {/* {prevBtn && <button style={{ margin: '5px' }} onClick={handlePreviousBtn}>previous</button>}
-                        {nxtBtn && <button style={{ margin: '5px' }} onClick={handleNextBtn}>next</button>} */}
-                    </div>
+                <div style={{ margin: '5px' }}>
+                    <form onSubmit={(e) => { handleSubmitAns(e) }}>
+                        {code.hasOwnProperty('snippets') &&
+                            code.snippets.map((ele, i) => {
+                                return <code key={i}>{buildFor(ele)}</code>
+                            })
+                        }
+                    </form>
+                    <br />
+                </div>
             }
             {errors.length > 0 && <ul>{
                 errors.map((ele, i) => {
-                    return <li key={i}>{ele}</li>
+                    return <li style={{ color: 'red' }} key={i}>{ele}</li>
                 })
             }</ul>}
             <h3>{string}</h3>
-            {isSubmitted && <button onClick={()=>{handleSolution()}}>See Solution</button>}
-            {solution && <CodeSolution codeId={props.codeId} handleSolution={handleSolution} /> }
+            {isSubmitted && <button onClick={() => { handleSolution() }}>See Solution</button>}
+            {solution && <CodeSolution codeId={props.codeId} handleSolution={handleSolution} />}
         </div>
         <div>
             {

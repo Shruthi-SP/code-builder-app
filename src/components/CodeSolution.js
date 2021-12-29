@@ -9,7 +9,7 @@ const CodeSolution = (props) => {
 
     const code = useSelector((state) => {
         console.log(state.codes)
-        return state.codes.find(ele => ele._id === props.codeId)
+        return state.codes.data.find(ele => ele._id === props.codeId)
     })
 
     const buildFor = (ele) => {
@@ -37,11 +37,11 @@ const CodeSolution = (props) => {
             <b>{code.statement}</b><br />
             {
                 code.snippets.slice(0, code.snippets.length-1).map(ele=>{
-                    return buildFor(ele)
+                    return <code key={ele._id}>{buildFor(ele)}</code>
                 })
             }
         </code>
-        <br /><button onClick={() => { props.handleSolution() }}>Cancel</button>
+        <br /><button onClick={() => { props.handleSolution() }}>Close</button>
     </div>
 }
 export default CodeSolution
