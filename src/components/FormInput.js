@@ -13,7 +13,8 @@ const FromInput = (props) => {
             group: 'input',
             hint: hint,
             type: 'input',
-            answer: ans
+            answer: ans,
+            isDisable: false
         }
         console.log('obj=', obj)
         formSubmission(obj)

@@ -39,7 +39,7 @@ const CodesContainer = (props) => {
     }
 
     return (
-        <div>
+        <div style={{marginTop:'5px'}}>
             <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
             {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
             {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}

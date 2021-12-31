@@ -1,12 +1,13 @@
+import { Container, Typography } from "@mui/material";
 import CodesContainer from "./components/CodesContainer";
 
 function App() {
   
   return (
-    <div className="App">
-      <h1>Code Builder App</h1>
+    <Container>
+      <Typography variant="h4">Code Builder App</Typography>
       <CodesContainer />
-    </div>
+    </Container>
   );
 }
 

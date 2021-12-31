@@ -8,6 +8,9 @@ import Submit from "./tools/Submit"
 import ShowCode from "./ShowCode"
 import { asyncAddSnippet, asyncDeleteSnippet, asyncUpdateCode } from '../actions/codesAction'
 import { arrToDd } from "./tools/helper"
+import ModalForm from "./ModalForm"
+import { Button, IconButton, ButtonGroup, Grid, Paper } from "@mui/material"
+import { Delete, Edit } from "@mui/icons-material"
 
 const CodeSnippetForm = (props) => {
     console.log('codeSnippetsform props=', props)
@@ -21,7 +24,7 @@ const CodeSnippetForm = (props) => {
         return state.codes.data.find(ele => ele._id === props.match.params.id)
     })
     let array = []
-    if(codeObj){
+    if (codeObj) {
         array = codeObj.snippets
     }
     // console.log('after useselector hook codeObj, snippets', codeObj, array)
@@ -29,7 +32,7 @@ const CodeSnippetForm = (props) => {
     useEffect(() => {
         setArraySnippet(array)
     }, [array])
-    
+
     const [arraySnippet, setArraySnippet] = useState(array)
     const [formTextToggle, setFormTextToggle] = useState(false)
     const [formInputToggle, setFormInputToggle] = useState(false)
@@ -38,8 +41,18 @@ const CodeSnippetForm = (props) => {
     const [string, setString] = useState('')
     const [errors, setErrors] = useState([])
     const [snipId, setSnipId] = useState('')
+    const [snip, setSnip] = useState({})
     const [editToggle, setEditToggle] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+        handleCancelEdit()
+    };
 
     const handleIsSubmit = () => {
         setIsSubmitted(false)
@@ -89,6 +102,13 @@ const CodeSnippetForm = (props) => {
         const result = arr.find(element => element._id === ele._id)
         result.value = e.target.value.trim()
         console.log('handleInputChange', arr)
+        setArraySnippet(arr)
+    }
+    const handleInputBlur = (e, ele) => {
+        const arr = [...arraySnippet]
+        const result = arr.find(element => element._id === ele._id)
+        result.isDisable = true
+        console.log('handleInputBlur', arr)
         setArraySnippet(arr)
     }
     const handleCancelInput = () => {
@@ -158,8 +178,10 @@ const CodeSnippetForm = (props) => {
     const handleEdit = (e, ele) => {
         e.preventDefault()
         setSnipId(ele._id)
+        setSnip(ele)
         console.log('edit event triggered', e, ele)
         setEditToggle(true)
+        handleClickOpen()
     }
     const handleCancelEdit = () => {
         setEditToggle(false)
@@ -171,6 +193,16 @@ const CodeSnippetForm = (props) => {
         dispatch(asyncDeleteSnippet(props.codeId, ele._id))
         setArraySnippet(array)
     }
+
+    const buttons = [
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleCreateTexts}>Create Text</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleCreateInputField}>Create Input Field</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertTab}>Insert Tab</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertDoubleTab}>Insert Double Tab</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertBreak}>Insert Break</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertSpace}>Insert Space</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertSubmit}>Insert Submit</Button>,
+    ]
 
     const buildFor = (ele) => {
         if (ele.group === 'texts') {
@@ -192,22 +224,26 @@ const CodeSnippetForm = (props) => {
     }
 
     return (
-        <div>
+        <>
             {
-                
-                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                    {
-                        admin && <div>
-                            <button style={{ margin: '5px' }} onClick={handleCreateTexts}>Create Text</button>
-                            <button style={{ margin: '5px' }} onClick={handleCreateInputField}>Create Input Field</button>
-                            <button style={{ margin: '5px' }} onClick={handleInsertBreak}>Insert Break</button>
-                            <button style={{ margin: '5px' }} onClick={handleInsertTab}>Insert Tab</button>
-                            <button style={{ margin: '5px' }} onClick={handleInsertDoubleTab}>Insert Double Tab</button>
-                            <button style={{ margin: '5px' }} onClick={handleInsertSpace}>Insert Space</button>
-                            <button style={{ margin: '5px' }} onClick={handleInsertSubmit}>Insert Submit</button>
 
+                <Grid container>
+                    {
+                        admin && <Grid item xs={4}>
+                            {/* <ButtonGroup variant="contained" color="secondary" size="small" aria-label="small secondary button group">
+                                {buttons}
+                            </ButtonGroup> */}
+                            <Grid container >
+                                {buttons.map(ele=>{
+                                    return <Grid item sx={12} sm={6}>{ele}</Grid>
+                                })}
+                            </Grid>
                             {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
                             {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
+
+                            {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
+                            />}
+
                             <div style={{ margin: '5px' }}>
                                 <h4>Re-arrange the snippets</h4>
                                 <ol>
@@ -217,17 +253,22 @@ const CodeSnippetForm = (props) => {
                                             return (
                                                 <li>
                                                     <code>{buildFor(item)}
-                                                        {/* {
-                                                    editToggle && snipId === item._id ?
-                                                        (<EditSnippet codeId={props.codeId} snippet={item} handleCancelEdit={handleCancelEdit}
-                                                        />) : (<>
-                                                            {
-                                                                (item.group === 'texts' || item.group === 'input' || item.group === 'break') && <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, item) }}>edit</button>
-                                                            }
+                                                        {
+                                                            // editToggle && snipId === item._id ?
+                                                            //     (<ModalForm open={open} codeId={props.codeId} snippet={item} handleCancelEdit={handleCancelEdit}
+                                                            //     />) :
+                                                            (<>
+                                                                {
+                                                                    (item.group === 'texts' || item.group === 'input' || item.group === 'break') && <IconButton variant="outlined" color="primary" size="small" onClick={(e) => { handleEdit(e, item) }}>
+                                                                        <Edit />
+                                                                    </IconButton>
+                                                                    // <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, item) }}>edit</button>
+                                                                }
 
-                                                        </>)
-                                                }
-                                                <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, item) }}>remove</button><br /> */}
+                                                            </>)
+                                                        }
+                                                        <IconButton variant="outlined" color="error" size="small" onClick={(e) => { handleRemove(e, item) }}><Delete /></IconButton>
+                                                        {/* <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, item) }}>remove</button><br /> */}
                                                     </code>
                                                 </li>
                                             );
@@ -236,7 +277,7 @@ const CodeSnippetForm = (props) => {
                                     />
                                 </ol>
                             </div>
-                            <div style={{ margin: '5px' }}>
+                            {/* <div style={{ margin: '5px' }}>
                                 <h4>Building</h4>
                                 <ol>
                                     {
@@ -257,17 +298,17 @@ const CodeSnippetForm = (props) => {
                                             </li>
                                         })
                                     }
-                                </ol>
-                                <button onClick={() => { props.handleEditSnippets() }}>Back to Snippet</button>
-                            </div>
-                        </div>
+                                </ol> 
+                            </div> */}
+                            <button onClick={() => { props.handleEditSnippets() }}>Back</button>
+                        </Grid>
                     }
-                    <div style={{ marginTop: '60px' }}>
-                        <ShowCode isSubmitted={isSubmitted} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handlePreviewCode={handlePreviewCode} />
-                    </div>
-                </div>
+                    <Grid item xs={8}>
+                        <ShowCode isSubmitted={isSubmitted} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
+                    </Grid>
+                </Grid>
             }
-        </div>
+        </>
     )
 }
 export default CodeSnippetForm

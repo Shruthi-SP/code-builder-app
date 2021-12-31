@@ -4,6 +4,8 @@ import CodeSnippetForm from "./CodeSnippetForm"
 import { buildFor } from "./tools/helper"
 import { asyncDeleteCode, asyncGetCode } from "../actions/codesAction"
 import EditCode from "./EditCode"
+import { Button, ButtonGroup, Typography } from "@mui/material"
+import {Delete, Edit, Add} from "@mui/icons-material"
 
 const CodeSnippets = (props) => {
     console.log('code snippet compt props=', props, props.match.params.id)
@@ -22,7 +24,7 @@ const CodeSnippets = (props) => {
     const [codeToggle, setCodeToggle] = useState(false)
     const [snippetToggle, setSnippetToggle] = useState(false)
     const [obj, setObj] = useState({})
-    console.log('code Snippet cmpt=',obj)
+    console.log('code Snippet cmpt=', obj)
 
     const redirect = () => {
         console.log('redirecting from code snippets to codes list')
@@ -45,8 +47,8 @@ const CodeSnippets = (props) => {
     return (
         <div>
             {
-                admin ? <div>
-                    <h3>Edit code or Create a snippet</h3>
+                admin ? <div style={{ margin: '5px' }}>
+                    <Typography variant="h5" color="primary.dark">Code and Snippets</Typography>
                     {snippetToggle ? <><CodeSnippetForm admin={admin} codeId={_id} handleEditSnippets={handleEditSnippets} {...props} /></> : <>
                         {
                             Object.keys(obj).length > 0 ? <div>
@@ -63,10 +65,12 @@ const CodeSnippets = (props) => {
                                         </code>
                                     })
                                 }
-                                <br /><button style={{ margin: '2px' }} onClick={handleEditCode}>Edit Code</button>
-                                <button style={{ margin: '2px' }} onClick={handleRemoveCode}>Remove Code</button>
-
-                                <button style={{ margin: '2px' }} onClick={handleEditSnippets}>Edit/Add Snippets</button>
+                                <br /><br />
+                                <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                                    <Button sx={{ mr: 1 }} startIcon={<Edit />} onClick={handleEditCode}>Edit Code</Button>
+                                    <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
+                                    <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
+                                </ButtonGroup>
                             </div> : <div>
                                 <p>No Object</p>
                             </div>
@@ -77,7 +81,6 @@ const CodeSnippets = (props) => {
                 </div> : <><CodeSnippetForm admin={admin} codeId={_id} {...props} /></>
             }
         </div>
-
     )
 }
 export default CodeSnippets 

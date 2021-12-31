@@ -9,7 +9,7 @@ import Tab from "./tools/Tab"
 import CodeSolution from "./CodeSolution"
 
 const ShowCode = (props) => {
-    const { isSubmitted, handleIsSubmit, codeId, handleInputChange, handleSubmitAns, errors, string } = props
+    const { isSubmitted, handleIsSubmit, codeId, handleInputChange, handleInputBlur, handleSubmitAns, errors, string } = props
 
     console.log('showCode props=', props)
 
@@ -63,7 +63,7 @@ const ShowCode = (props) => {
         } else if (ele.group === 'submit') {
             return <Submit />
         } else if (ele.group === 'input') {
-            return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleInputChange} />
+            return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} />
         }
     }
 

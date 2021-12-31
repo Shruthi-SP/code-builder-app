@@ -1,9 +1,10 @@
 import { useState } from "react"
+import { Button, TextField, Typography } from "@mui/material"
 
 const FormText = (props) => {
     console.log('formtxt props', props)
-    const { handleCancelText, handleCancelEdit, formSubmission, value:editTxt, hint:editHint} = props
-    
+    const { handleCancelText, handleCancelEdit, formSubmission, value: editTxt, hint: editHint } = props
+
     const [txt, setTxt] = useState(editTxt ? editTxt : '')
     const [hint, setHint] = useState(editHint ? editHint : '')
 
@@ -18,15 +19,29 @@ const FormText = (props) => {
         formSubmission(obj)
     }
 
-    return <form onSubmit={handleSubmit} >
-        <input style={{margin:'5px'}} type='text' value={txt} placeholder="enter texts" onChange={(e)=>{setTxt(e.target.value)}} />
-        <input style={{margin:'5px'}} type='text' value={hint} placeholder="enter hint" onChange={(e)=>{setHint(e.target.value)}} />
-        <input style={{margin:'5px'}} type='submit' />
-        {
-            editTxt ? <button onClick={()=>{handleCancelEdit()}}>Cancel</button> : <button onClick={()=>{handleCancelText()}}>Cancel</button>
-        }
-        
-        
-    </form>
+    return <div style={{ margin: '10px' }}>
+        <Typography variant="h5" mb={1}>Text Form</Typography>
+        <form onSubmit={handleSubmit}>
+
+            <TextField label='Enter text' variant='outlined' type='text' value={txt} onChange={(e)=>{setTxt(e.target.value)}}></TextField><br /><br />
+
+            <TextField label='Enter hint' variant='outlined' type='text' value={hint} onChange={(e)=>{setHint(e.target.value)}} ></TextField> <br /><br />
+
+            <Button sx={{ mr: 1 }} type="submit" variant="contained" color="primary" size="small">Submit</Button>
+
+            {editTxt ? <Button variant="contained" size="small" onClick={()=>{handleCancelEdit()}}>Cancel</Button> : <Button variant="contained" size="small" onClick={()=>{handleCancelText()}}>Cancel</Button>}
+
+        </form>
+    </div>
+
+    // return 
+    //<form onSubmit={handleSubmit} >
+    //     <input style={{margin:'5px'}} type='text' value={txt} placeholder="enter texts" onChange={(e)=>{setTxt(e.target.value)}} />
+    //     <input style={{margin:'5px'}} placeholder="enter hint" type='text' value={hint} onChange={(e)=>{setHint(e.target.value)}} />
+    //     <input style={{margin:'5px'}} type='submit' />
+    //     {
+    //         editTxt ? <button onClick={()=>{handleCancelEdit()}}>Cancel</button> : <button onClick={()=>{handleCancelText()}}>Cancel</button>
+    //     }
+    // </form>
 }
 export default FormText
