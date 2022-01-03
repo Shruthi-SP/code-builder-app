@@ -14,7 +14,7 @@ const CodesContainer = (props) => {
 
     const [show, setShow] = useState(false)
     const [preview, setPreview] = useState(false)
-    const [admin, setAdmin] = useState(true)
+    const [admin, setAdmin] = useState(false)
 
     const [code, setcode] = useState([])
 

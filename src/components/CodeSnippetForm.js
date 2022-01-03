@@ -233,11 +233,7 @@ const CodeSnippetForm = (props) => {
                             {/* <ButtonGroup variant="contained" color="secondary" size="small" aria-label="small secondary button group">
                                 {buttons}
                             </ButtonGroup> */}
-                            <Grid container >
-                                {buttons.map(ele=>{
-                                    return <Grid item sx={12} sm={6}>{ele}</Grid>
-                                })}
-                            </Grid>
+                            
                             {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
                             {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
 
@@ -300,11 +296,16 @@ const CodeSnippetForm = (props) => {
                                     }
                                 </ol> 
                             </div> */}
+                            <Grid container >
+                                {buttons.map(ele=>{
+                                    return <Grid item sx={12} sm={6}>{ele}</Grid>
+                                })}
+                            </Grid>
                             <button onClick={() => { props.handleEditSnippets() }}>Back</button>
                         </Grid>
                     }
                     <Grid item xs={8}>
-                        <ShowCode isSubmitted={isSubmitted} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
+                        <ShowCode admin={admin} isSubmitted={isSubmitted} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
                     </Grid>
                 </Grid>
             }
