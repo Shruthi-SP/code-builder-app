@@ -19,10 +19,9 @@ const CodeSnippetForm = (props) => {
     const dispatch = useDispatch()
 
     const codeObj = useSelector(state => {
-        console.log('useSeletor hook id and state.codes', props.match.params.id, state.codes)
-        console.log('code obj=', state.codes.data.find(ele => ele._id === props.codeId))
         return state.codes.data.find(ele => ele._id === props.match.params.id)
     })
+
     let array = []
     if (codeObj) {
         array = codeObj.snippets
@@ -31,7 +30,10 @@ const CodeSnippetForm = (props) => {
 
     useEffect(() => {
         setArraySnippet(array)
-    }, [array])
+    }, [codeObj])
+    useEffect(() => {
+        setArraySnippet(array)
+    }, [])
 
     const [arraySnippet, setArraySnippet] = useState(array)
     const [formTextToggle, setFormTextToggle] = useState(false)
@@ -228,8 +230,7 @@ const CodeSnippetForm = (props) => {
             {
 
                 <Grid container>
-                    {
-                        admin && <Grid item xs={4}>
+                    {admin  && <Grid item xs={4}>
                             {/* <ButtonGroup variant="contained" color="secondary" size="small" aria-label="small secondary button group">
                                 {buttons}
                             </ButtonGroup> */}
@@ -297,16 +298,16 @@ const CodeSnippetForm = (props) => {
                                 </ol> 
                             </div> */}
                             <Grid container >
-                                {buttons.map(ele=>{
-                                    return <Grid item sx={12} sm={6}>{ele}</Grid>
+                                {buttons.map((ele, i)=>{
+                                    return <Grid key={i} item xs={12} sm={6}>{ele}</Grid>
                                 })}
                             </Grid>
                             <button onClick={() => { props.handleEditSnippets() }}>Back</button>
                         </Grid>
                     }
-                    <Grid item xs={8}>
-                        <ShowCode admin={admin} isSubmitted={isSubmitted} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
-                    </Grid>
+                    {Object.keys(codeObj).length > 0 && <Grid item xs={8}>
+                        <ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
+                    </Grid>}
                 </Grid>
             }
         </>

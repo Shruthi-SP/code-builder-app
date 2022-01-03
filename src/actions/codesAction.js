@@ -48,7 +48,7 @@ export const asyncGetCode = (_id, getResult) => {
         axios.get(`/${_id}`)
             .then(response=>{
                 const result = response.data
-                console.log('axios put res result=', result)
+                console.log('axios get res result=', result)
                 getResult(result)
             })
             .catch(err=>{

@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Container, Grid, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
