@@ -116,8 +116,8 @@ const CodeStepper = (props) => {
                             {step.label}
                         </StepLabel>
                         <StepContent>
-                            <ul>{step.description.map(ele => {
-                                return <li>{ele}</li>
+                            <ul>{step.description.map((ele, i) => {
+                                return <li key={i}>{ele}</li>
                             })}</ul>
                             <Box sx={{ mb: 2 }}>
                                 <div>
