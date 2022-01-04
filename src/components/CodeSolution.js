@@ -41,7 +41,7 @@ const CodeSolution = (props) => {
                 })
             }
         </code>
-        <br /><button onClick={() => { props.handleSolution() }}>Close</button>
+        <br />{!props.admin && <button onClick={() => { props.handleSolution() }}>Close</button>}
     </div>
 }
 export default CodeSolution

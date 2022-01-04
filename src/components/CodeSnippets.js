@@ -8,6 +8,7 @@ import { Button, ButtonGroup, Typography } from "@mui/material"
 import {Delete, Edit, Add} from "@mui/icons-material"
 
 const CodeSnippets = (props) => {
+    
     console.log('code snippet compt props=', props, props.match.params.id)
     const { admin } = props
     const _id = props.match.params.id
@@ -16,15 +17,15 @@ const CodeSnippets = (props) => {
 
     const getResult = (object) => setObj(object)
 
-    useEffect(() => {
-        console.log('useEffect CodeSnip compt')
-        dispatch(asyncGetCode(_id, getResult))
-    }, [])
-
     const [codeToggle, setCodeToggle] = useState(false)
     const [snippetToggle, setSnippetToggle] = useState(false)
     const [obj, setObj] = useState({})
-    console.log('code Snippet cmpt=', obj)
+
+    useEffect(() => {
+        console.log('********************************useEffect CodeSnip compt')
+        dispatch(asyncGetCode(_id, getResult))
+        console.log('code Snippet cmpt=', obj)
+    }, [])
 
     const redirect = () => {
         console.log('redirecting from code snippets to codes list')
