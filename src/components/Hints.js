@@ -2,7 +2,7 @@ const Hint = (props) => {
     const { hints } = props
 
     return(
-        <div style={{marginTop: '50px', marginLeft: '75px'}}>
+        <div>
             <h4 style={{marginTop:'3px', marginBottom:'0px'}}>Hints</h4>
             <ul>
             {

@@ -7,7 +7,7 @@ import Space from "./tools/Space"
 import Submit from "./tools/Submit"
 import Tab from "./tools/Tab"
 import CodeSolution from "./CodeSolution"
-import { Grid } from "@mui/material"
+import { Button, Grid } from "@mui/material"
 import CodeStepper from "./CodeStepper"
 
 const ShowCode = (props) => {
@@ -37,7 +37,10 @@ const ShowCode = (props) => {
     const [code, setCode] = useState(codeSnippet || {})
     const [hints, setHints] = useState([])
     const [solution, setSolution] = useState(false)
-    const [activeStep, setActiveStep] = useState(0);
+    const [start, setStart] = useState(true)
+    const [prev, setPrev] = useState(false)
+    const [nxt, setNxt] = useState(false)
+    const [count, setCount] = useState(0)
 
     useEffect(() => {
         if (codeSnippet) {
@@ -47,45 +50,24 @@ const ShowCode = (props) => {
         }
     }, [codeSnippet])
 
-    const steps = [], hintsArr = []
-    let count = 1, start = 0
-    //--------------------------horizontal stepper------------------------
-    // codeObj.snippets.forEach((ele, i) => {
-    //     //let end = i
-    //     if (ele.group === 'input') {
-    //         steps.push(`input-${count}`)
-    //         count++
-    //         const arr = getHints(code.snippets.slice(start, i + 1))
-    //         hintsArr.push(arr)
-    //         start = i + 1
-    //     }
-    // })
+    const handleStart = (e) => {
+        e.preventDefault()
+        console.log('start fired')
+        setStart(!start)
+        const a = code.snippets.find(ele=>ele.group==='input')
+        const index = code.snippets.findIndex(ele=>ele.group==='input')
+        console.log('start', a, index)
+        setCount(a.length)
+    }
 
-    //-------------------------vertical stepper---------------------------
-    code.snippets.forEach((ele, i) => {
-        let obj = {}
-        if (ele.group === 'input') {
-            obj.label = `input-${count}`
-            obj.description = getHints(code.snippets.slice(start, i + 1))
-            count++
-            steps.push(obj)
-            start = i + 1
-        }
-    })
-    console.log('show code steps=', steps, hintsArr)
-
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1)
-    };
-
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
-
+    const handleNext = (e) => {
+        e.preventDefault()
+        console.log('nxt fired')
+    }
+    const handlePrevious = (e) => {
+        e.preventDefault()
+        console.log('prev fired')
+    }
     const handleSolution = () => {
         handleIsSubmit()
         setSolution(!solution)
@@ -112,11 +94,11 @@ const ShowCode = (props) => {
     return <>
         {admin ? <h3>Code Preview</h3> : <h3>Code</h3>}
         <Grid container>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
                 <CodeStepper getHints={getHints} codeSnippets={code.snippets} />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
-                <div>
+                {admin && <div>
                     <code>
                         <b>{code.title}</b><br />
                         <b>{code.statement}</b><br />
@@ -140,8 +122,41 @@ const ShowCode = (props) => {
                     }</ul>}
                     <h3>{string}</h3>
                     {(isSubmitted && !admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
+                </div>}
+                <div>
+                    {admin && <h3>Student view</h3>}
+                    <code>
+                        <b>{code.title}</b><br />
+                        <b>{code.statement}</b><br />
+                    </code>
+                    {start && <Button variant="contained" size="small" onClick={(e) => { handleStart(e) }}>start</Button>}
+                    {
+                        <div style={{ margin: '5px' }}>
+                            <form onSubmit={(e) => { handleSubmitAns(e) }}>
+                                {code.hasOwnProperty('snippets') &&
+                                    code.snippets.map((ele, i) => {
+                                        return <code key={i}>{buildFor(ele)}</code>
+                                    })
+                                }
+                                <br /><br />
+                                <Button sx={{ mr: 1 }} variant="contained" size="small" onClick={(e) => { handlePrevious(e) }}>Previous</Button>
+                                <Button variant="contained" size="small" onClick={(e) => { handleNext(e) }}>Next</Button>
+                            </form>
+                            <br />
+                        </div>
+                    }
+                    {errors.length > 0 && <ul>{
+                        errors.map((ele, i) => {
+                            return <li style={{ color: 'red' }} key={i}>{ele}</li>
+                        })
+                    }</ul>}
+                    <h3>{string}</h3>
+                    {(isSubmitted && !admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
                     {(solution || admin) && <CodeSolution codeId={props.codeId} handleSolution={handleSolution} admin={admin} />}
                 </div>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                {hints.length > 0 && <Hints hints={hints} />}
             </Grid>
         </Grid>
 
