@@ -14,11 +14,7 @@ const CodesContainer = (props) => {
 
     const [show, setShow] = useState(false)
     const [preview, setPreview] = useState(false)
-    const [admin, setAdmin] = useState(true)
-
-    const [code, setcode] = useState([])
-
-    const dispatch = useDispatch()
+    const [admin, setAdmin] = useState(false)
 
     useEffect(()=>{
         console.log('#####################################codes container')
@@ -42,7 +38,7 @@ const CodesContainer = (props) => {
         <div style={{marginTop:'5px'}}>
             <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
             {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
-            {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
+            {<Link style={{ margin: '5px' }} to='/codes/:id'></Link>}
             {preview && <Link style={{ margin: '5px' }} to='/codes/:id/preview'>Code Preview</Link>}
 
             <Route path='/codes' exact render={(props) => {

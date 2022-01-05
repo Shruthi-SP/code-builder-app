@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import CodeSnippetForm from "./CodeSnippetForm"
 import { buildFor } from "./tools/helper"
 import { asyncDeleteCode, asyncGetCode } from "../actions/codesAction"
 import EditCode from "./EditCode"
 import { Button, ButtonGroup, Typography } from "@mui/material"
-import {Delete, Edit, Add} from "@mui/icons-material"
+import { Delete, Edit, Add } from "@mui/icons-material"
 
 const CodeSnippets = (props) => {
     console.log('code snippet compt props=', props, props.match.params.id)
@@ -14,17 +14,19 @@ const CodeSnippets = (props) => {
 
     const dispatch = useDispatch()
 
-    const getResult = (object) => setObj(object)
-
-    useEffect(() => {
-        console.log('useEffect CodeSnip compt')
-        dispatch(asyncGetCode(_id, getResult))
-    }, [])
+    const getResult = (object) => {
+        setObj(object)
+        console.log('ue1 async get code cs compt', object)
+    }
 
     const [codeToggle, setCodeToggle] = useState(false)
     const [snippetToggle, setSnippetToggle] = useState(false)
     const [obj, setObj] = useState({})
-    console.log('code Snippet cmpt=', obj)
+    
+    useEffect(() => {
+        console.log('useEffect1 CodeSnip compt')
+        dispatch(asyncGetCode(_id, getResult))
+    }, [codeToggle])
 
     const redirect = () => {
         console.log('redirecting from code snippets to codes list')
@@ -45,24 +47,18 @@ const CodeSnippets = (props) => {
     }
 
     return (
-        <div>
-            {
-                admin ? <div style={{ margin: '5px' }}>
-                    <Typography variant="h5" color="primary.dark">Code and Snippets</Typography>
-                    {snippetToggle ? <><CodeSnippetForm admin={admin} codeId={_id} handleEditSnippets={handleEditSnippets} {...props} /></> : <>
+            <div>
+                <Typography sx={{mt:1}} variant="h5" color="primary.dark">Code and Snippets</Typography>
+                {
+                    (!admin || snippetToggle) ? <CodeSnippetForm admin={admin} codeId={_id} codeObj={obj} handleEditSnippets={handleEditSnippets} {...props} /> : <>
                         {
-                            Object.keys(obj).length > 0 ? <div>
+                            admin && <>
+                                {codeToggle && <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode}/>}
+                                <code><b>Title: {obj.title}</b><br /></code>
+                                <code><b>Statement: {obj.statement}</b></code><br />
                                 {
-                                    codeToggle ? <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} /> : <>
-                                        <code><b>Title: {obj.title}</b><br /></code>
-                                        <code><b>Statement: {obj.statement}</b></code><br />
-                                    </>
-                                }
-                                {
-                                    obj.snippets.length > 0 && obj.snippets.map((ele, i) => {
-                                        return <code key={i}>
-                                            {buildFor(ele)}
-                                        </code>
+                                    Object.keys(obj).length > 0 && obj.snippets.map((ele, i) => {
+                                        return <code key={i}>{buildFor(ele)}</code>
                                     })
                                 }
                                 <br /><br />
@@ -71,16 +67,11 @@ const CodeSnippets = (props) => {
                                     <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
                                     <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
                                 </ButtonGroup>
-                            </div> : <div>
-                                <p>No Object</p>
-                            </div>
+                            </>
                         }
                     </>
-                    }
-
-                </div> : <><CodeSnippetForm admin={admin} codeId={_id} {...props} /></>
-            }
-        </div>
+                }
+            </div>
     )
 }
 export default CodeSnippets 

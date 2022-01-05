@@ -5,12 +5,13 @@ import Space from "./tools/Space"
 import Submit from "./tools/Submit"
 
 const CodeSolution = (props) => {
-    console.log('Solution props ', props)
+    //console.log('Solution props ', props)
+    const {admin, handleSolution, code} = props
 
-    const code = useSelector((state) => {
-        console.log(state.codes)
-        return state.codes.data.find(ele => ele._id === props.codeId)
-    })
+    // const code = useSelector((state) => {
+    //     console.log(state.codes)
+    //     return state.codes.data.find(ele => ele._id === props.codeId)
+    // })
 
     const buildFor = (ele) => {
         if (ele.group === 'texts') {
@@ -41,7 +42,7 @@ const CodeSolution = (props) => {
                 })
             }
         </code>
-        <br />{!props. admin && <button onClick={() => { props.handleSolution() }}>Close</button>}
+        <br />{!admin && <button onClick={() => {handleSolution() }}>Close</button>}
     </div>
 }
 export default CodeSolution

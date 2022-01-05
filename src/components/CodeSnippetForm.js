@@ -10,17 +10,17 @@ import { asyncAddSnippet, asyncDeleteSnippet, asyncUpdateCode } from '../actions
 import { arrToDd } from "./tools/helper"
 import ModalForm from "./ModalForm"
 import { Button, IconButton, ButtonGroup, Grid, Paper } from "@mui/material"
-import { Delete, Edit } from "@mui/icons-material"
+import { ArrowBack, Delete, Edit } from "@mui/icons-material"
 
 const CodeSnippetForm = (props) => {
     console.log('codeSnippetsform props=', props)
-    const { admin } = props
+    const { admin, codeId, codeObj, handleEditSnippets } = props
 
     const dispatch = useDispatch()
 
-    const codeObj = useSelector(state => {
-        return state.codes.data.find(ele => ele._id === props.match.params.id)
-    })
+    // const codeObj = useSelector(state => {
+    //     return state.codes.data.find(ele => ele._id === props.match.params.id)
+    // })
 
     let array = []
     if (codeObj) {
@@ -227,89 +227,65 @@ const CodeSnippetForm = (props) => {
 
     return (
         <>
-            {
-
-                <Grid container>
-                    {admin  && <Grid item xs={4}>
-                            {/* <ButtonGroup variant="contained" color="secondary" size="small" aria-label="small secondary button group">
+            {}
+            <Grid container>
+                {admin && <Grid item xs={4}>
+                    {/* <ButtonGroup variant="contained" color="secondary" size="small" aria-label="small secondary button group">
                                 {buttons}
                             </ButtonGroup> */}
-                            
-                            {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
-                            {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
+                    <Button variant="contained" color="info" size="small" onClick={() => { props.handleEditSnippets() }}><ArrowBack/></Button>
 
-                            {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
-                            />}
+                    {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
+                    {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
 
-                            <div style={{ margin: '5px' }}>
-                                <h4>Re-arrange the snippets</h4>
-                                <ol>
-                                    <RLDD
-                                        items={arrToDd(arraySnippet)}
-                                        itemRenderer={(item) => {
-                                            return (
-                                                <li>
-                                                    <code>{buildFor(item)}
+                    {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
+                    />}
+
+                    <div style={{ margin: '5px' }}>
+                        <h4>Re-arrange the snippets</h4>
+                        <ol>
+                            <RLDD
+                                items={arrToDd(arraySnippet)}
+                                itemRenderer={(item) => {
+                                    return (
+                                        <li>
+                                            <code>{buildFor(item)}
+                                                {
+                                                    // editToggle && snipId === item._id ?
+                                                    //     (<ModalForm open={open} codeId={props.codeId} snippet={item} handleCancelEdit={handleCancelEdit}
+                                                    //     />) :
+                                                    (<>
                                                         {
-                                                            // editToggle && snipId === item._id ?
-                                                            //     (<ModalForm open={open} codeId={props.codeId} snippet={item} handleCancelEdit={handleCancelEdit}
-                                                            //     />) :
-                                                            (<>
-                                                                {
-                                                                    (item.group === 'texts' || item.group === 'input' || item.group === 'break') && <IconButton variant="outlined" color="primary" size="small" onClick={(e) => { handleEdit(e, item) }}>
-                                                                        <Edit />
-                                                                    </IconButton>
-                                                                    // <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, item) }}>edit</button>
-                                                                }
-
-                                                            </>)
+                                                            (item.group === 'texts' || item.group === 'input' || item.group === 'break') && <IconButton variant="outlined" color="primary" size="small" onClick={(e) => { handleEdit(e, item) }}>
+                                                                <Edit />
+                                                            </IconButton>
+                                                            // <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, item) }}>edit</button>
                                                         }
-                                                        <IconButton variant="outlined" color="error" size="small" onClick={(e) => { handleRemove(e, item) }}><Delete /></IconButton>
-                                                        {/* <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, item) }}>remove</button><br /> */}
-                                                    </code>
-                                                </li>
-                                            );
-                                        }}
-                                        onChange={handleRLDDChange}
-                                    />
-                                </ol>
-                            </div>
-                            {/* <div style={{ margin: '5px' }}>
-                                <h4>Building</h4>
-                                <ol>
-                                    {
-                                        arraySnippet.length > 0 && arraySnippet.map((ele, i) => {
-                                            return <li key={i}>
-                                                <code>{buildFor(ele)}
-                                                    {
-                                                        editToggle && snipId === ele._id ?
-                                                            (<EditSnippet codeId={props.codeId} snippet={ele} handleCancelEdit={handleCancelEdit}
-                                                            />) : (<>
-                                                                {
-                                                                    (ele.group === 'texts' || ele.group === 'input' || ele.group === 'break') && <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, ele) }}>edit</button>
-                                                                }
-                                                            </>)
-                                                    }
-                                                    <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, ele) }}>remove</button><br />
-                                                </code>
-                                            </li>
-                                        })
-                                    }
-                                </ol> 
-                            </div> */}
-                            <Grid container >
-                                {buttons.map((ele, i)=>{
-                                    return <Grid key={i} item xs={12} sm={6}>{ele}</Grid>
-                                })}
-                            </Grid>
-                            <button onClick={() => { props.handleEditSnippets() }}>Back</button>
-                        </Grid>
-                    }
-                    {Object.keys(codeObj).length > 0 && <Grid item xs={8}>
-                        <ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
-                    </Grid>}
+
+                                                    </>)
+                                                }
+                                                <IconButton variant="outlined" color="error" size="small" onClick={(e) => { handleRemove(e, item) }}><Delete /></IconButton>
+                                                {/* <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, item) }}>remove</button><br /> */}
+                                            </code>
+                                        </li>
+                                    );
+                                }}
+                                onChange={handleRLDDChange}
+                            />
+                        </ol>
+                    </div>
+                    <Grid container >
+                        {buttons.map((ele, i) => {
+                            return <Grid key={i} item xs={12} sm={6}>{ele}</Grid>
+                        })}
+                    </Grid>
                 </Grid>
-            }
+                }
+                {Object.keys(codeObj).length > 0 && <Grid item xs={8}>
+                    <ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
+                </Grid>}
+            </Grid>
+
         </>
     )
 }
