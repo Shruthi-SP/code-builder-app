@@ -6,7 +6,7 @@ import { asyncDeleteCode, asyncGetCode } from "../actions/codesAction"
 import EditCode from "./EditCode"
 import { Button, ButtonGroup, Typography } from "@mui/material"
 import {Delete, Edit, Add} from "@mui/icons-material"
-import ErrorBoundary from "./ErrorBoundry"
+import ErrorBoundary from "./ErrorBoundary"
 
 const CodeSnippets = (props) => {
     console.log('code snippet compt props=', props, props.match.params.id)

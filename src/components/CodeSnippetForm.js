@@ -11,7 +11,7 @@ import { arrToDd } from "./tools/helper"
 import ModalForm from "./ModalForm"
 import { Button, IconButton, ButtonGroup, Grid, Paper } from "@mui/material"
 import { Delete, Edit } from "@mui/icons-material"
-import ErrorBoundary from "./ErrorBoundry"
+import ErrorBoundary from "./ErrorBoundary"
 
 const CodeSnippetForm = (props) => {
     console.log('codeSnippetsform props=', props)

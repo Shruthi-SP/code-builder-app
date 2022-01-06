@@ -9,7 +9,7 @@ import AddCode from "./AddCode"
 //import CodesForm from "./CodesForm"
 import CodesListing from "./CodesListing"
 import CodeSnippets from "./CodeSnippets"
-import ErrorBoundary from "./ErrorBoundry"
+import ErrorBoundary from "./ErrorBoundary"
 
 const CodesContainer = (props) => {
 
