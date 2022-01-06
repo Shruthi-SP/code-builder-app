@@ -20,11 +20,6 @@ const CodesContainer = (props) => {
 
     const dispatch = useDispatch()
 
-    useEffect(()=>{
-        console.log('#####################################codes container')
-        // dispatch(asyncGetAllCodes())
-    })
-
     const handleShow = () => {
         setShow(true)
     }
