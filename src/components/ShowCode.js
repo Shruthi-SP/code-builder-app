@@ -45,6 +45,7 @@ const ShowCode = (props) => {
             const a = getHints(codeSnippet.snippets)
             setHints(a)
         }
+        else throw new Error('I ShowCode crashed! Code is {}');
     }, [codeSnippet])
 
     const steps = [], hintsArr = []

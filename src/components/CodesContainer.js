@@ -9,20 +9,16 @@ import AddCode from "./AddCode"
 //import CodesForm from "./CodesForm"
 import CodesListing from "./CodesListing"
 import CodeSnippets from "./CodeSnippets"
+import ErrorBoundary from "./ErrorBoundry"
 
 const CodesContainer = (props) => {
 
     const [show, setShow] = useState(false)
     const [preview, setPreview] = useState(false)
-    const [admin, setAdmin] = useState(true)
-
-    const [code, setcode] = useState([])
-
-    const dispatch = useDispatch()
+    const [admin, setAdmin] = useState(false)
 
     useEffect(()=>{
-        console.log('#####################################codes container')
-        // dispatch(asyncGetAllCodes())
+        console.log('err boundaries')
     })
 
     const handleShow = () => {
@@ -45,15 +41,15 @@ const CodesContainer = (props) => {
             {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
             {preview && <Link style={{ margin: '5px' }} to='/codes/:id/preview'>Code Preview</Link>}
 
-            <Route path='/codes' exact render={(props) => {
+            <ErrorBoundary><Route path='/codes' exact render={(props) => {
                 return <CodesListing {...props} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} handlePreview={handlePreview} handleCancelPreview={handleCancelPreview} />
-            }}></Route>
-            <Route path='/create-code' exact render={(props) => {
+            }}></Route></ErrorBoundary>
+            <ErrorBoundary><Route path='/create-code' exact render={(props) => {
                 return <AddCode {...props} handleShow={handleShow} handleCancelShow={handleCancelShow} handleCancelPreview={handleCancelPreview} />
-            }}></Route>
-            <Route path='/codes/:id' exact render={(props) => {
+            }}></Route></ErrorBoundary>
+            <ErrorBoundary><Route path='/codes/:id' exact render={(props) => {
                 return <CodeSnippets {...props} admin={admin} handlePreview={handlePreview} />
-            }} ></Route>
+            }} ></Route></ErrorBoundary>
         </div>
     )
 }

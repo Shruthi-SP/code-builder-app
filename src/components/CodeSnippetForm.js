@@ -11,12 +11,17 @@ import { arrToDd } from "./tools/helper"
 import ModalForm from "./ModalForm"
 import { Button, IconButton, ButtonGroup, Grid, Paper } from "@mui/material"
 import { Delete, Edit } from "@mui/icons-material"
+import ErrorBoundary from "./ErrorBoundry"
 
 const CodeSnippetForm = (props) => {
     console.log('codeSnippetsform props=', props)
     const { admin } = props
 
     const dispatch = useDispatch()
+
+    const isLoaded = useSelector(state => {
+        return state.codes.isLoading
+    })
 
     const codeObj = useSelector(state => {
         return state.codes.data.find(ele => ele._id === props.match.params.id)
@@ -26,6 +31,7 @@ const CodeSnippetForm = (props) => {
     if (codeObj) {
         array = codeObj.snippets
     }
+    else throw new Error('I CodeSnippetForm crashed! No code');
     // console.log('after useselector hook codeObj, snippets', codeObj, array)
 
     useEffect(() => {
@@ -33,6 +39,7 @@ const CodeSnippetForm = (props) => {
     }, [codeObj])
     useEffect(() => {
         setArraySnippet(array)
+        console.log('error boundary in codeSnippetForm', isLoaded)
     }, [])
 
     const [arraySnippet, setArraySnippet] = useState(array)
@@ -227,8 +234,8 @@ const CodeSnippetForm = (props) => {
 
     return (
         <>
-            {
-
+            {   
+             isLoaded <= 0 ? <div><h2>CodeSnippetForm crashed! Code not loaded</h2></div> :
                 <Grid container>
                     {admin  && <Grid item xs={4}>
                             {/* <ButtonGroup variant="contained" color="secondary" size="small" aria-label="small secondary button group">
@@ -306,7 +313,7 @@ const CodeSnippetForm = (props) => {
                         </Grid>
                     }
                     {Object.keys(codeObj).length > 0 && <Grid item xs={8}>
-                        <ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
+                        <ErrorBoundary><ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} /></ErrorBoundary>
                     </Grid>}
                 </Grid>
             }

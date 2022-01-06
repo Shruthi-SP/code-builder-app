@@ -6,6 +6,7 @@ import { asyncDeleteCode, asyncGetCode } from "../actions/codesAction"
 import EditCode from "./EditCode"
 import { Button, ButtonGroup, Typography } from "@mui/material"
 import {Delete, Edit, Add} from "@mui/icons-material"
+import ErrorBoundary from "./ErrorBoundry"
 
 const CodeSnippets = (props) => {
     console.log('code snippet compt props=', props, props.match.params.id)
@@ -49,7 +50,7 @@ const CodeSnippets = (props) => {
             {
                 admin ? <div style={{ margin: '5px' }}>
                     <Typography variant="h5" color="primary.dark">Code and Snippets</Typography>
-                    {snippetToggle ? <><CodeSnippetForm admin={admin} codeId={_id} handleEditSnippets={handleEditSnippets} {...props} /></> : <>
+                    {snippetToggle ? <><ErrorBoundary><CodeSnippetForm admin={admin} codeId={_id} {...props} /></ErrorBoundary></> : <>
                         {
                             Object.keys(obj).length > 0 ? <div>
                                 {
@@ -78,8 +79,10 @@ const CodeSnippets = (props) => {
                     </>
                     }
 
-                </div> : <><CodeSnippetForm admin={admin} codeId={_id} {...props} /></>
+                </div> : <><ErrorBoundary><CodeSnippetForm admin={admin} codeId={_id} {...props} /></ErrorBoundary></>
             }
+            <h2>Error Boundaries. Sibling of CodeSnippetForm component</h2>
+            <p>Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.</p>
         </div>
     )
 }
