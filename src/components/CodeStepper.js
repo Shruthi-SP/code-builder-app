@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper"
 
 const CodeStepper = (props) => {
     const {codeSnippets, getHints} = props
+    console.log('stepper props=', props)
 
     const [activeStep, setActiveStep] = useState(0);
 

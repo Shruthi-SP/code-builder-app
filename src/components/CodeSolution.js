@@ -3,14 +3,20 @@ import Break from './tools/Break'
 import Tab from "./tools/Tab"
 import Space from "./tools/Space"
 import Submit from "./tools/Submit"
+import ErrorBoundary from "./ErrorBoundary"
 
 const CodeSolution = (props) => {
-    console.log('Solution props ', props)
+    console.log('Solution props= ', props)
+    const { codeId, obj, handleSolution, admin} = props
 
-    const code = useSelector((state) => {
-        console.log(state.codes)
-        return state.codes.data.find(ele => ele._id === props.codeId)
-    })
+    if(Object.keys(obj).length === 0){
+        throw new Error('CodeSolution crashed. no code obj')
+    }
+
+    // const code = useSelector((state) => {
+    //     console.log(state.codes)
+    //     return state.codes.data.find(ele => ele._id === codeId)
+    // })
 
     const buildFor = (ele) => {
         if (ele.group === 'texts') {
@@ -33,15 +39,15 @@ const CodeSolution = (props) => {
     return <div>
         <h3>Code Solution</h3>
         <code>
-            <b>{code.title}</b><br />
-            <b>{code.statement}</b><br />
+            <b>{obj.title}</b><br />
+            <b>{obj.statement}</b><br />
             {
-                code.snippets.slice(0, code.snippets.length-1).map(ele=>{
+                obj.snippets.slice(0, obj.snippets.length-1).map(ele=>{
                     return <code key={ele._id}>{buildFor(ele)}</code>
                 })
             }
         </code>
-        <br />{!props. admin && <button onClick={() => { props.handleSolution() }}>Close</button>}
+        <br />{!admin && <button onClick={() => { handleSolution() }}>Close</button>}
     </div>
 }
 export default CodeSolution

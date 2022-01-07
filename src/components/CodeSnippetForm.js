@@ -9,7 +9,7 @@ import ShowCode from "./ShowCode"
 import { asyncAddSnippet, asyncDeleteSnippet, asyncUpdateCode } from '../actions/codesAction'
 import { arrToDd } from "./tools/helper"
 import ModalForm from "./ModalForm"
-import { Button, IconButton, ButtonGroup, Grid, Paper } from "@mui/material"
+import { Button, IconButton, ButtonGroup, Grid, Paper, Typography } from "@mui/material"
 import { Delete, Edit } from "@mui/icons-material"
 import ErrorBoundary from "./ErrorBoundary"
 
@@ -234,22 +234,15 @@ const CodeSnippetForm = (props) => {
 
     return (
         <>
-            {   
-             isLoaded <= 0 ? <div><h2>CodeSnippetForm crashed! Code not loaded</h2></div> :
-                <Grid container>
-                    {admin  && <Grid item xs={4}>
-                            {/* <ButtonGroup variant="contained" color="secondary" size="small" aria-label="small secondary button group">
-                                {buttons}
-                            </ButtonGroup> */}
-                            
-                            {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
-                            {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
-
+            {
+                isLoaded <= 0 ? <div><h2>CodeSnippetForm crashed! Code not loaded</h2></div> :
+                    <Grid container>
+                        {admin && <Grid item xs={4}>
                             {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
                             />}
 
-                            <div style={{ margin: '5px' }}>
-                                <h4>Re-arrange the snippets</h4>
+                            <div>
+                                <Typography variant="h6">Re-arrange the snippets</Typography>
                                 <ol>
                                     <RLDD
                                         items={arrToDd(arraySnippet)}
@@ -281,41 +274,22 @@ const CodeSnippetForm = (props) => {
                                     />
                                 </ol>
                             </div>
-                            {/* <div style={{ margin: '5px' }}>
-                                <h4>Building</h4>
-                                <ol>
-                                    {
-                                        arraySnippet.length > 0 && arraySnippet.map((ele, i) => {
-                                            return <li key={i}>
-                                                <code>{buildFor(ele)}
-                                                    {
-                                                        editToggle && snipId === ele._id ?
-                                                            (<EditSnippet codeId={props.codeId} snippet={ele} handleCancelEdit={handleCancelEdit}
-                                                            />) : (<>
-                                                                {
-                                                                    (ele.group === 'texts' || ele.group === 'input' || ele.group === 'break') && <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, ele) }}>edit</button>
-                                                                }
-                                                            </>)
-                                                    }
-                                                    <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, ele) }}>remove</button><br />
-                                                </code>
-                                            </li>
-                                        })
-                                    }
-                                </ol> 
-                            </div> */}
+
+                            {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
+                            {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
+
                             <Grid container >
-                                {buttons.map((ele, i)=>{
+                                {buttons.map((ele, i) => {
                                     return <Grid key={i} item xs={12} sm={6}>{ele}</Grid>
                                 })}
                             </Grid>
                             <button onClick={() => { props.handleEditSnippets() }}>Back</button>
                         </Grid>
-                    }
-                    {Object.keys(codeObj).length > 0 && <Grid item xs={8}>
-                        <ErrorBoundary><ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} /></ErrorBoundary>
-                    </Grid>}
-                </Grid>
+                        }
+                        {Object.keys(codeObj).length > 0 && <Grid item xs={8}>
+                            <ErrorBoundary><ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} /></ErrorBoundary>
+                        </Grid>}
+                    </Grid>
             }
         </>
     )

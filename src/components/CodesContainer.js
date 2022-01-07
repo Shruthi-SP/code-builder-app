@@ -15,11 +15,11 @@ const CodesContainer = (props) => {
 
     const [show, setShow] = useState(false)
     const [preview, setPreview] = useState(false)
-    const [admin, setAdmin] = useState(false)
+    const [admin, setAdmin] = useState(true)
 
     useEffect(()=>{
-        console.log('err boundaries')
-    })
+        console.log('use effect in container err boundaries')
+    }, [])
 
     const handleShow = () => {
         setShow(true)
