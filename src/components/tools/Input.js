@@ -1,5 +1,4 @@
 const Input = (props) => {
-    console.log('Input props=', props)
     const { isSubmitted, ele, handleInputChange, handleInputBlur } = props
     return <input
         // style={{border: 'none', borderBottom: isSubmitted ? (ele.answer===ele.value? '2px solid green' : '2px solid red') : '1px solid blue'}}

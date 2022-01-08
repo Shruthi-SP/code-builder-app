@@ -68,12 +68,6 @@ const CodeSnippetForm = (props) => {
         setArraySnippet(array)
     }
 
-    const handlePreviewCode = (e) => {
-        e.preventDefault()
-        console.log(arraySnippet.length)
-        setShow(!show)
-    }
-
     //-----------------------Text-------------------------------
     const handleInsertTexts = (e) => {
         e.preventDefault()
@@ -276,7 +270,7 @@ const CodeSnippetForm = (props) => {
                         </Grid>
                     }
                     {Object.keys(codeObj).length > 0 && <Grid item xs={8}>
-                        <ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} />
+                        <ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} />
                     </Grid>}
                 </Grid>
             }

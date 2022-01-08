@@ -122,7 +122,7 @@ const ShowCode = (props) => {
                         <b>{code.statement}</b><br />
                     </code>
                     {
-                        <div style={{ margin: '5px' }}>
+                        <div style={{ margin: '3px' }}>
                             <form onSubmit={(e) => { handleSubmitAns(e) }}>
                                 {code.hasOwnProperty('snippets') &&
                                     code.snippets.map((ele, i) => {
