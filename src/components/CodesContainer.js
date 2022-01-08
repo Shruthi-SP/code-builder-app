@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 //import { useDispatch } from "react-redux"
 import { Link, Route } from "react-router-dom"
 import { asyncGetAllCodes } from "../actions/codesAction"
+import Login from "../Login"
 import AddCode from "./AddCode"
 //import CodePreview from "./CodePreview"
 //import { asyncGetAllCodes } from "../actions/codesAction"
@@ -14,13 +15,18 @@ const CodesContainer = (props) => {
 
     const [show, setShow] = useState(false)
     const [preview, setPreview] = useState(false)
-    const [admin, setAdmin] = useState(true)
+    const [admin, setAdmin] = useState(false)
+    const [userLoggedIn, setUserLoggedIn] = useState(false)
 
-    const [code, setcode] = useState([])
+    const handleLoggedIn = () => {
+        setUserLoggedIn(!userLoggedIn)
+    }
 
-    const dispatch = useDispatch()
+    const handleAdmin = (isAdmin) => {
+        setAdmin(isAdmin)
+    }
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log('#####################################codes container')
         // dispatch(asyncGetAllCodes())
     })
@@ -39,22 +45,36 @@ const CodesContainer = (props) => {
     }
 
     return (
-        <div style={{marginTop:'5px'}}>
-            <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
-            {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
-            {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
-            {preview && <Link style={{ margin: '5px' }} to='/codes/:id/preview'>Code Preview</Link>}
+        <>
+            {userLoggedIn ? <div style={{ marginTop: '5px' }}>
+                <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
+                {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
+                {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
+                {preview && <Link style={{ margin: '5px' }} to='/codes/:id/preview'>Code Preview</Link>}
 
-            <Route path='/codes' exact render={(props) => {
-                return <CodesListing {...props} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} handlePreview={handlePreview} handleCancelPreview={handleCancelPreview} />
-            }}></Route>
-            <Route path='/create-code' exact render={(props) => {
-                return <AddCode {...props} handleShow={handleShow} handleCancelShow={handleCancelShow} handleCancelPreview={handleCancelPreview} />
-            }}></Route>
-            <Route path='/codes/:id' exact render={(props) => {
-                return <CodeSnippets {...props} admin={admin} handlePreview={handlePreview} />
-            }} ></Route>
-        </div>
+                <Route path='/codes' exact render={(props) => {
+                    return <CodesListing {...props} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} handlePreview={handlePreview} handleCancelPreview={handleCancelPreview} />
+                }}></Route>
+                <Route path='/create-code' exact render={(props) => {
+                    return <AddCode {...props} handleShow={handleShow} handleCancelShow={handleCancelShow} handleCancelPreview={handleCancelPreview} />
+                }}></Route>
+                <Route path='/codes/:id' exact render={(props) => {
+                    return <CodeSnippets {...props} admin={admin} handlePreview={handlePreview} />
+                }} ></Route>
+            </div>
+                :
+                <div>
+                    login
+                    {/* <Link style={{ margin: '5px' }} to='user/login'>Login</Link>
+                    <Route path='user/login' render={(props) => {
+                        return <Login {...props} handleLoggedIn={handleLoggedIn} handleAdmin={handleAdmin} />
+                    }}></Route> */}
+                    <Login {...props} handleLoggedIn={handleLoggedIn} handleAdmin={handleAdmin}/>
+
+                </div>
+            }
+        </>
+
     )
 }
 export default CodesContainer
