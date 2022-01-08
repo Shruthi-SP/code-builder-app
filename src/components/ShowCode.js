@@ -9,6 +9,7 @@ import Tab from "./tools/Tab"
 import CodeSolution from "./CodeSolution"
 import { Grid } from "@mui/material"
 import CodeStepper from "./CodeStepper"
+import ErrorBoundary from "./ErrorBoundary"
 
 const ShowCode = (props) => {
     const { admin, isSubmitted, handleIsSubmit, codeId, handleInputChange, handleInputBlur, handleSubmitAns, errors, string } = props
@@ -140,8 +141,8 @@ const ShowCode = (props) => {
                         })
                     }</ul>}
                     <h3>{string}</h3>
-                    {(isSubmitted && !admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
-                    {(solution || admin) && <CodeSolution codeId={props.codeId} handleSolution={handleSolution} admin={admin} />}
+                    {(isSubmitted || !admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
+                    {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={code} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>}
                 </div>
             </Grid>
         </Grid>

@@ -7,7 +7,7 @@ export const asyncGetAllCodes = () => {
             .then((response) => {
                 console.log('inside then')
                 const result = response.data
-                console.log('axios res=', result)
+                console.log('axios get all codes res=', result)
                 if (result.hasOwnProperty('errors')) {
                     console.log(result.errors)
                 } else {
@@ -48,7 +48,7 @@ export const asyncGetCode = (_id, getResult) => {
         axios.get(`/${_id}`)
             .then(response=>{
                 const result = response.data
-                console.log('axios get res result=', result)
+                console.log('axios get 1 code res =', result)
                 getResult(result)
             })
             .catch(err=>{
@@ -77,7 +77,7 @@ export const asyncDeleteCode = (id, redirect) => {
         axios.delete(`/${id}`)
             .then(response=>{
                 const result = response.data
-                console.log('axios put res result=', result)
+                console.log('axios delete res result=', result)
                 dispatch(deleteCode(result))
                 redirect()
             })
