@@ -5,7 +5,7 @@ import { buildFor } from "./tools/helper"
 import { asyncDeleteCode, asyncGetCode } from "../actions/codesAction"
 import EditCode from "./EditCode"
 import { Button, ButtonGroup, Typography } from "@mui/material"
-import {Delete, Edit, Add} from "@mui/icons-material"
+import { Delete, Edit, Add } from "@mui/icons-material"
 
 const CodeSnippets = (props) => {
     console.log('code snippet compt props=', props, props.match.params.id)
@@ -47,9 +47,9 @@ const CodeSnippets = (props) => {
     return (
         <div>
             {
-                admin ? <div style={{ margin: '5px' }}>
+                <div style={{ margin: '5px' }}>
                     <Typography variant="h5" color="primary.dark">Code and Snippets</Typography>
-                    {snippetToggle ? <><CodeSnippetForm admin={admin} codeId={_id} handleEditSnippets={handleEditSnippets} {...props} /></> : <>
+                    {(snippetToggle || !admin) ? <><CodeSnippetForm admin={admin} codeId={_id} codeObj={obj} handleEditSnippets={handleEditSnippets} {...props} /></> : <>
                         {
                             Object.keys(obj).length > 0 ? <div>
                                 {
@@ -78,7 +78,7 @@ const CodeSnippets = (props) => {
                     </>
                     }
 
-                </div> : <><CodeSnippetForm admin={admin} codeId={_id} {...props} /></>
+                </div>
             }
         </div>
     )

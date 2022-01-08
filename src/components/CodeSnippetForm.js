@@ -14,13 +14,13 @@ import { Delete, Edit } from "@mui/icons-material"
 
 const CodeSnippetForm = (props) => {
     console.log('codeSnippetsform props=', props)
-    const { admin } = props
+    const { admin, codeObj } = props
 
     const dispatch = useDispatch()
 
-    const codeObj = useSelector(state => {
-        return state.codes.data.find(ele => ele._id === props.match.params.id)
-    })
+    // const codeObj = useSelector(state => {
+    //     return state.codes.data.find(ele => ele._id === props.match.params.id)
+    // })
 
     let array = []
     if (codeObj) {
@@ -75,7 +75,7 @@ const CodeSnippetForm = (props) => {
     }
 
     //-----------------------Text-------------------------------
-    const handleCreateTexts = (e) => {
+    const handleInsertTexts = (e) => {
         e.preventDefault()
         setFormTextToggle(true)
     }
@@ -90,7 +90,7 @@ const CodeSnippetForm = (props) => {
     }
     //-----------------------End of Text----------------------------
     //-----------------------Input----------------------------------
-    const handleCreateInputField = (e) => {
+    const handleInsertInputField = (e) => {
         e.preventDefault()
         setFormInputToggle(true)
     }
@@ -197,8 +197,8 @@ const CodeSnippetForm = (props) => {
     }
 
     const buttons = [
-        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleCreateTexts}>Create Text</Button>,
-        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleCreateInputField}>Create Input Field</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertTexts}>Insert Text</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertInputField}>Insert Input-Field</Button>,
         <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertTab}>Insert Tab</Button>,
         <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertDoubleTab}>Insert Double Tab</Button>,
         <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertBreak}>Insert Break</Button>,
@@ -228,16 +228,9 @@ const CodeSnippetForm = (props) => {
     return (
         <>
             {
-
                 <Grid container>
-                    {admin  && <Grid item xs={4}>
-                            {/* <ButtonGroup variant="contained" color="secondary" size="small" aria-label="small secondary button group">
-                                {buttons}
-                            </ButtonGroup> */}
-                            
-                            {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
-                            {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
-
+                    {admin &&
+                        <Grid item xs={4}>
                             {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
                             />}
 
@@ -251,9 +244,6 @@ const CodeSnippetForm = (props) => {
                                                 <li>
                                                     <code>{buildFor(item)}
                                                         {
-                                                            // editToggle && snipId === item._id ?
-                                                            //     (<ModalForm open={open} codeId={props.codeId} snippet={item} handleCancelEdit={handleCancelEdit}
-                                                            //     />) :
                                                             (<>
                                                                 {
                                                                     (item.group === 'texts' || item.group === 'input' || item.group === 'break') && <IconButton variant="outlined" color="primary" size="small" onClick={(e) => { handleEdit(e, item) }}>
@@ -274,31 +264,11 @@ const CodeSnippetForm = (props) => {
                                     />
                                 </ol>
                             </div>
-                            {/* <div style={{ margin: '5px' }}>
-                                <h4>Building</h4>
-                                <ol>
-                                    {
-                                        arraySnippet.length > 0 && arraySnippet.map((ele, i) => {
-                                            return <li key={i}>
-                                                <code>{buildFor(ele)}
-                                                    {
-                                                        editToggle && snipId === ele._id ?
-                                                            (<EditSnippet codeId={props.codeId} snippet={ele} handleCancelEdit={handleCancelEdit}
-                                                            />) : (<>
-                                                                {
-                                                                    (ele.group === 'texts' || ele.group === 'input' || ele.group === 'break') && <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, ele) }}>edit</button>
-                                                                }
-                                                            </>)
-                                                    }
-                                                    <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, ele) }}>remove</button><br />
-                                                </code>
-                                            </li>
-                                        })
-                                    }
-                                </ol> 
-                            </div> */}
+
+                            {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
+                            {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
                             <Grid container >
-                                {buttons.map((ele, i)=>{
+                                {buttons.map((ele, i) => {
                                     return <Grid key={i} item xs={12} sm={6}>{ele}</Grid>
                                 })}
                             </Grid>
