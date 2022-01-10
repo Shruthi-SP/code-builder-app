@@ -10,6 +10,7 @@ import CodeSolution from "./CodeSolution"
 import { Grid } from "@mui/material"
 import CodeStepper from "./CodeStepper"
 import ErrorBoundary from "./ErrorBoundary"
+import Explanations from "./Explanations"
 
 const ShowCode = (props) => {
     const { admin, isSubmitted, handleIsSubmit, codeId, handleInputChange, handleInputBlur, handleSubmitAns, errors, string } = props
@@ -34,17 +35,31 @@ const ShowCode = (props) => {
         })
         return ar
     }
+    const getExplanations = (a) => {
+        const ar = []
+        a.forEach(ele => {
+            if (ele.hasOwnProperty('explanation')) {
+                if (ele.explanation !== '') {
+                    ar.push(ele.explanation)
+                }
+            }
+        })
+        return ar
+    }
 
     const [code, setCode] = useState(codeSnippet || {})
     const [hints, setHints] = useState([])
     const [solution, setSolution] = useState(false)
     const [activeStep, setActiveStep] = useState(0);
+    const [explanations, setExplanations] = useState([])
 
     useEffect(() => {
         if (codeSnippet) {
             setCode(codeSnippet)
             const a = getHints(codeSnippet.snippets)
             setHints(a)
+            const ex = getExplanations(codeSnippet.snippets)
+            setExplanations(ex)
         }
         else throw new Error('I ShowCode crashed! Code is {}');
     }, [codeSnippet])
@@ -144,6 +159,10 @@ const ShowCode = (props) => {
                     {(isSubmitted || !admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
                     {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={code} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>}
                 </div>
+                <Grid item xs={12} sm={6}>
+                {(hints.length > 0 ) && <Hints hints={hints} />}
+                {explanations.length > 0 && <Explanations explanations={explanations}/>}
+            </Grid>
             </Grid>
         </Grid>
 
