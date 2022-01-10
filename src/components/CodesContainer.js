@@ -14,11 +14,7 @@ const CodesContainer = (props) => {
 
     const [show, setShow] = useState(false)
     const [preview, setPreview] = useState(false)
-    const [admin, setAdmin] = useState(true)
-
-    const [code, setcode] = useState([])
-
-    const dispatch = useDispatch()
+    const [admin, setAdmin] = useState(false)
 
     useEffect(()=>{
         console.log('#####################################codes container')

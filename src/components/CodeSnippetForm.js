@@ -104,8 +104,8 @@ const CodeSnippetForm = (props) => {
         const arr = [...arraySnippet]
         const result = arr.find(element => element._id === ele._id)
         result.isDisable = true
-        console.log('handleInputBlur', arr)
         setArraySnippet(arr)
+        console.log('handleInputBlur', arr)
     }
     const handleCancelInput = () => {
         setFormInputToggle(false)
