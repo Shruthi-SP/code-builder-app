@@ -21,6 +21,10 @@ const CodeSnippetForm = (props) => {
     const codeObj = useSelector(state => {
         return state.codes.data.find(ele => ele._id === props.match.params.id)
     })
+    const user = useSelector(state=>{
+        return state.user
+    })
+    console.log('csform user', user)
 
     let array = []
     if (codeObj) {
@@ -160,18 +164,22 @@ const CodeSnippetForm = (props) => {
         console.log('err str', err, string)
         const formData = {
             codeId: props.codeId,
-            studentId: new Date().getTime(),
+            studentId: user.id,
             answers: answers,
             score: str
         }
-        axios.post('http://localhost:3044/api/answers', formData)
+        if(user.role === 'student'){
+           axios.post('http://localhost:3044/api/answers', formData)
             .then(response => {
                 console.log('post ans response=', response.data)
+                alert('submitted successfully')
             })
             .catch(err => {
                 console.log('catch blk', err.message)
             })
-        console.log('Submitted answers to api', formData)
+        console.log('Submitted answers to api', formData) 
+        } else console.log('answer submitted by admin', formData)
+        
         setErrors(err)
         setString(str)
         setIsSubmitted(true)
