@@ -162,7 +162,8 @@ const CodeSnippets = (props) => {
         setErrors(err)
         setString(str)
         setIsSubmitted(true)
-        localStorage.clear()
+        //localStorage.clear()
+        localStorage.removeItem('user_inputs')
     }
     const handleSolution = () => {
         handleIsSubmit()

@@ -129,9 +129,9 @@ const ShowCode = (props) => {
     return <>
         {admin ? <h3>Code Preview</h3> : <h3>Code</h3>}
         <Grid container>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
                 <CodeStepper getHints={getHints} codeSnippets={code.snippets} />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
                 <div>
                     <code>

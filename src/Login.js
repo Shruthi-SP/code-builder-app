@@ -7,6 +7,8 @@ import { Typography, TextField, Button} from "@mui/material"
 
 const Login = (props) => {
     console.log('Login props=', props)
+    const {getData} = props
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [formErr, setFormErr] = useState({})
@@ -19,14 +21,14 @@ const Login = (props) => {
         setFormErr({})
     }
     
-    const getData = (obj) => {
-        if(obj.role==='admin'){
-            props.handleAdmin(true)
-        }
-        props.handleLoggedIn()
-        props.history.push('/codes')
-        resetForm()
-    }
+    // const getData = (obj) => {
+    //     if(obj.role==='admin'){
+    //         props.handleAdmin(true)
+    //     }
+    //     props.handleLoggedIn()
+    //     props.history.push('/codes')
+    //     resetForm()
+    // }
 
     const runValidation = () => {
         if(email.trim().length === 0){

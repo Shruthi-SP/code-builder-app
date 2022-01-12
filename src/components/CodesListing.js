@@ -21,7 +21,6 @@ const CodesListing = (props) => {
 
     useEffect(() => {
         props.handleCancelShow()
-        props.handleCancelPreview()
     })
 
     return (
@@ -38,6 +37,7 @@ const CodesListing = (props) => {
                                 <br /><Link to='#' onClick={(e) => {
                                     props.handleShow()
                                     props.history.push(`/codes/${ele._id}`)
+                                    //localStorage.setItem('codeId', ele._id)
                                 }} >Solve</Link><br />
                             </>
                         </Box>

@@ -21,8 +21,11 @@ export const asyncSetUser = (formData, getData) => {
         } else {
             dispatch(setUser(obj))
             console.log('async setuser success response', obj)
-            alert('Login successful')
+            if(localStorage.getItem('user')===null){
+                alert('Login successful')
+            }
             getData(obj)
+            localStorage.setItem('user', JSON.stringify(obj))
         }
     }
 }
