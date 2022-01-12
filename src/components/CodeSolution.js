@@ -13,11 +13,6 @@ const CodeSolution = (props) => {
         throw new Error('CodeSolution crashed. no code obj')
     }
 
-    // const code = useSelector((state) => {
-    //     console.log(state.codes)
-    //     return state.codes.data.find(ele => ele._id === codeId)
-    // })
-
     const buildFor = (ele) => {
         if (ele.group === 'texts') {
             return ele.value

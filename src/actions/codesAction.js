@@ -15,7 +15,7 @@ export const asyncGetAllCodes = () => {
                 }
             })
             .catch((err) => {
-                console.log('inside Catch block')
+                console.log('inside Catch block', err)
                 alert(err.message)
             })
     }

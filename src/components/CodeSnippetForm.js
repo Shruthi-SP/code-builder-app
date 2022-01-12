@@ -10,12 +10,12 @@ import { asyncAddSnippet, asyncDeleteSnippet, asyncUpdateCode } from '../actions
 import { arrToDd } from "./tools/helper"
 import ModalForm from "./ModalForm"
 import { Button, IconButton, ButtonGroup, Grid, Paper, Typography } from "@mui/material"
-import { Delete, Edit } from "@mui/icons-material"
 import ErrorBoundary from "./ErrorBoundary"
+import { ArrowBack, Delete, Edit } from "@mui/icons-material"
 
 const CodeSnippetForm = (props) => {
     console.log('codeSnippetsform props=', props)
-    const { admin } = props
+    const { admin, codeId, codeObj, handleEditSnippets } = props
 
     const dispatch = useDispatch()
 
@@ -23,7 +23,7 @@ const CodeSnippetForm = (props) => {
         return state.codes.isLoading
     })
 
-    const codeObj = useSelector(state => {
+    const coObj = useSelector(state => {
         return state.codes.data.find(ele => ele._id === props.match.params.id)
     })
 
@@ -238,11 +238,13 @@ const CodeSnippetForm = (props) => {
                 isLoaded <= 0 ? <div><h2>CodeSnippetForm crashed! Code not loaded</h2></div> :
                     <Grid container>
                         {admin && <Grid item xs={4}>
+                            <Button variant="contained" color="info" size="small" onClick={() => { props.handleEditSnippets() }}><ArrowBack /></Button>
+
                             {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
                             />}
 
-                            <div>
-                                <Typography variant="h6">Re-arrange the snippets</Typography>
+                            <div style={{ margin: '5px' }}>
+                                <h4>Re-arrange the snippets</h4>
                                 <ol>
                                     <RLDD
                                         items={arrToDd(arraySnippet)}
@@ -251,29 +253,19 @@ const CodeSnippetForm = (props) => {
                                                 <li>
                                                     <code>{buildFor(item)}
                                                         {
-                                                            // editToggle && snipId === item._id ?
-                                                            //     (<ModalForm open={open} codeId={props.codeId} snippet={item} handleCancelEdit={handleCancelEdit}
-                                                            //     />) :
-                                                            (<>
-                                                                {
-                                                                    (item.group === 'texts' || item.group === 'input' || item.group === 'break') && <IconButton variant="outlined" color="primary" size="small" onClick={(e) => { handleEdit(e, item) }}>
-                                                                        <Edit />
-                                                                    </IconButton>
-                                                                    // <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, item) }}>edit</button>
-                                                                }
-
-                                                            </>)
+                                                            (item.group === 'texts' || item.group === 'input' || item.group === 'break') && <IconButton variant="outlined" color="primary" size="small" onClick={(e) => { handleEdit(e, item) }}>
+                                                                <Edit />
+                                                            </IconButton>
                                                         }
                                                         <IconButton variant="outlined" color="error" size="small" onClick={(e) => { handleRemove(e, item) }}><Delete /></IconButton>
-                                                        {/* <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, item) }}>remove</button><br /> */}
-                                                    </code>
-                                                </li>
+                                                    </code >
+                                                </li >
                                             );
                                         }}
                                         onChange={handleRLDDChange}
                                     />
-                                </ol>
-                            </div>
+                                </ol >
+                            </div >
 
                             {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
                             {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
@@ -284,14 +276,16 @@ const CodeSnippetForm = (props) => {
                                 })}
                             </Grid>
                             <button onClick={() => { props.handleEditSnippets() }}>Back</button>
-                        </Grid>
+                        </Grid >
                         }
-                        {Object.keys(codeObj).length > 0 && <Grid item xs={8}>
-                            <ErrorBoundary><ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} /></ErrorBoundary>
-                        </Grid>}
-                    </Grid>
+                        {
+                            Object.keys(codeObj).length > 0 && <Grid item xs={8}>
+                                <ErrorBoundary><ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} /></ErrorBoundary>
+                            </Grid>
+                        }
+                    </Grid >
             }
-        </>
-    )
+
+        </>)
 }
 export default CodeSnippetForm
