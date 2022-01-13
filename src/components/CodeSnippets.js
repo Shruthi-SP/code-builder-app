@@ -309,31 +309,6 @@ const CodeSnippets = (props) => {
                 </Grid>
             </div>
         </div >
-        {/* <div>
-            <Typography sx={{ mt: 1 }} variant="h5" color="primary.dark">Code and Snippets</Typography>
-            {
-                (!admin || snippetToggle) ? <CodeSnippetForm admin={admin} codeId={_id} codeObj={obj} handleEditSnippets={handleEditSnippets} {...props} /> : <>
-                    {
-                        admin && <>
-                            {codeToggle && <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} />}
-                            <code><b>Title: {obj.title}</b><br /></code>
-                            <code><b>Statement: {obj.statement}</b></code><br />
-                            {
-                                Object.keys(obj).length > 0 && obj.snippets.map((ele, i) => {
-                                    return <code key={i}>{buildFor(ele)}</code>
-                                })
-                            }
-                            <br /><br />
-                            <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                                <Button sx={{ mr: 1 }} startIcon={<Edit />} onClick={handleEditCode}>Edit Code</Button>
-                                <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
-                                <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
-                            </ButtonGroup>
-                        </>
-                    }
-                </>
-            }
-        </div> */}
     </>)
 }
 export default CodeSnippets

@@ -207,7 +207,7 @@ const ShowCode = (props) => {
                         <div style={{ margin: '5px' }}>
                             <form onSubmit={(e) => { handleSubmitAns(e) }}>
                                 {code.hasOwnProperty('snippets') &&
-                                    code.snippets.slice(0, count).map((ele, i) => {
+                                    arraySnippet.slice(0, count).map((ele, i) => {
                                         return <code key={i}>{buildFor(ele)}</code>
                                     })
                                 }
