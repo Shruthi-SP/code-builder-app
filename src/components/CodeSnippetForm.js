@@ -28,7 +28,7 @@ const CodeSnippetForm = (props) => {
     })
 
     let array = []
-    if (codeObj) {
+    if (coObj) {
         array = codeObj.snippets
     }
     else throw new Error('I CodeSnippetForm crashed! No code');
@@ -280,7 +280,7 @@ const CodeSnippetForm = (props) => {
                         }
                         {
                             Object.keys(codeObj).length > 0 && <Grid item xs={8}>
-                                <ErrorBoundary><ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={codeObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} /></ErrorBoundary>
+                                <ErrorBoundary><ShowCode admin={admin} isSubmitted={isSubmitted} codeObj={coObj} handleIsSubmit={handleIsSubmit} codeId={props.codeId} handleSubmitAns={handleSubmitAns} errors={errors} string={string} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} handlePreviewCode={handlePreviewCode} /></ErrorBoundary>
                             </Grid>
                         }
                     </Grid >

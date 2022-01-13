@@ -204,9 +204,9 @@ const CodeSnippets = (props) => {
         } else if (ele.group === 'submit') {
             return <Submit />
         } else if (ele.group === 'input') {
-            
-                return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} />
-            
+
+            return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} />
+
         }
     }
     const buildForSolution = (ele) => {
@@ -223,36 +223,25 @@ const CodeSnippets = (props) => {
         } else if (ele.group === 'submit') {
             return <Submit />
         } else if (ele.group === 'input') {
-                return ele.answer 
+            return ele.answer
         }
     }
 
     return (<>
         <div>
             {
-                (admin && Object.keys(obj).length > 0) ? <div style={{ margin: '5px' }}>
-                    <h3>Admin view</h3>
-                    <Typography variant="h5" color="primary.dark">Code and Snippets</Typography>
-                    {snippetToggle ? <>
-                        {arraySnippet.length > 0 && <>
-                            <h3>Admin create snippet form</h3>
-                            <ErrorBoundary><CodeSnippetForm admin={admin} codeId={_id} {...props} obj={obj} /></ErrorBoundary>
-                        </>
-                        }</>
-                        : <>
+                <div>
+                    <Typography sx={{ mt: 1 }} variant="h5" color="primary.dark">Code and Snippets</Typography>
+                    {
+                        (!admin || snippetToggle) ? <CodeSnippetForm admin={admin} codeId={_id} codeObj={obj} handleEditSnippets={handleEditSnippets} {...props} /> : <>
                             {
-                                arraySnippet.length > 0 ? <div>
+                                admin && <>
+                                    {codeToggle && <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} />}
+                                    <code><b>Title: {obj.title}</b><br /></code>
+                                    <code><b>Statement: {obj.statement}</b></code><br />
                                     {
-                                        codeToggle ? <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} /> : <>
-                                            <code><b>Title: {obj.title}</b><br /></code>
-                                            <code><b>Statement: {obj.statement}</b></code><br />
-                                        </>
-                                    }
-                                    {
-                                        arraySnippet.length > 0 && arraySnippet.map((ele, i) => {
-                                            return <code key={i}>
-                                                {buildFor(ele)}
-                                            </code>
+                                        Object.keys(obj).length > 0 && obj.snippets.map((ele, i) => {
+                                            return <code key={i}>{buildFor(ele)}</code>
                                         })
                                     }
                                     <br /><br />
@@ -261,16 +250,11 @@ const CodeSnippets = (props) => {
                                         <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
                                         <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
                                     </ButtonGroup>
-                                </div> : <div>
-                                    <p>No Object</p>
-                                </div>
+                                </>
                             }
                         </>
                     }
-
                 </div>
-                    :
-                    <h3>student view</h3>
             }
             <div>
                 <h1>Code</h1>
@@ -324,33 +308,32 @@ const CodeSnippets = (props) => {
                     </Grid>
                 </Grid>
             </div>
-
         </div >
-            <div>
-                <Typography sx={{mt:1}} variant="h5" color="primary.dark">Code and Snippets</Typography>
-                {
-                    (!admin || snippetToggle) ? <CodeSnippetForm admin={admin} codeId={_id} codeObj={obj} handleEditSnippets={handleEditSnippets} {...props} /> : <>
-                        {
-                            admin && <>
-                                {codeToggle && <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode}/>}
-                                <code><b>Title: {obj.title}</b><br /></code>
-                                <code><b>Statement: {obj.statement}</b></code><br />
-                                {
-                                    Object.keys(obj).length > 0 && obj.snippets.map((ele, i) => {
-                                        return <code key={i}>{buildFor(ele)}</code>
-                                    })
-                                }
-                                <br /><br />
-                                <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                                    <Button sx={{ mr: 1 }} startIcon={<Edit />} onClick={handleEditCode}>Edit Code</Button>
-                                    <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
-                                    <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
-                                </ButtonGroup>
-                            </>
-                        }
-                    </>
-                }
-            </div>
+        {/* <div>
+            <Typography sx={{ mt: 1 }} variant="h5" color="primary.dark">Code and Snippets</Typography>
+            {
+                (!admin || snippetToggle) ? <CodeSnippetForm admin={admin} codeId={_id} codeObj={obj} handleEditSnippets={handleEditSnippets} {...props} /> : <>
+                    {
+                        admin && <>
+                            {codeToggle && <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} />}
+                            <code><b>Title: {obj.title}</b><br /></code>
+                            <code><b>Statement: {obj.statement}</b></code><br />
+                            {
+                                Object.keys(obj).length > 0 && obj.snippets.map((ele, i) => {
+                                    return <code key={i}>{buildFor(ele)}</code>
+                                })
+                            }
+                            <br /><br />
+                            <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                                <Button sx={{ mr: 1 }} startIcon={<Edit />} onClick={handleEditCode}>Edit Code</Button>
+                                <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
+                                <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
+                            </ButtonGroup>
+                        </>
+                    }
+                </>
+            }
+        </div> */}
     </>)
 }
 export default CodeSnippets

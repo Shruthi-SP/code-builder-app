@@ -15,7 +15,7 @@ import Explanations from "./Explanations"
 const ShowCode = (props) => {
     const { admin, isSubmitted, handleIsSubmit, codeId, codeObj, handleInputChange, handleInputBlur, handleSubmitAns, errors, string } = props
 
-    //console.log('showCode props=', props)
+    console.log('showCode props=', props)
 
     const codeSnippet = useSelector(state => {
         //console.log('total questions', state.codes)
@@ -47,7 +47,8 @@ const ShowCode = (props) => {
         return ar
     }
 
-    const [code, setCode] = useState(codeSnippet || codeObj || {})
+    const [code, setCode] = useState(codeObj)
+    const [arraySnippet, setArraySnippet] = useState(codeObj.snippets)
     const [hints, setHints] = useState([])
     const [solution, setSolution] = useState(false)
     const [activeStep, setActiveStep] = useState(0);
@@ -69,39 +70,22 @@ const ShowCode = (props) => {
         else throw new Error('I ShowCode crashed! Code is {}');
     }, [codeSnippet])
 
-    // const indices = []
-    // code.snippets.forEach((ele, i) => {
-    //     if (ele.group === 'input') {
-    //         indices.push(i)
-    //     }
-    // })
-    // console.log('indices = ', indices)
-    // let index = 0
-
     const handleStart = (e) => {
         e.preventDefault()
         console.log('start fired')
         setStart(!start)
         const a = code.snippets.find(ele => ele.group === 'input')
         const index = code.snippets.findIndex(ele => ele.group === 'input')
-        const h = getHints(code.snippets.slice(0, index+1))
+        const h = getHints(code.snippets.slice(0, index + 1))
         setStudHints(h)
         console.log('start hints', h)
         setCount(index + 1)
         console.log('start', a, index)
-        // setCount(indices[index]+1)
-        // index++
-        // console.log('start', indices[index]+1, index)
     }
 
     const handleNext = (e) => {
         e.preventDefault()
         setPrev(false)
-        // if(count < code.snippets.length && index < indices.length){
-        //     console.log('next event', count, index)
-        //     setCount(indices[index] + 1)
-        //     index++
-        // }
         if (count < code.snippets.length) {
             console.log('next', count)
             const a = code.snippets.slice(count).find(ele => ele.group === 'input')
@@ -126,23 +110,34 @@ const ShowCode = (props) => {
         setNxt(false)
         const arr = [...code.snippets].reverse()
         console.log('prev', arr, count)
-        if (count > 0 ) {
-            const a = arr.slice((arr.length)-(count-1)).find(ele => ele.group === 'input')
-            if(a){
+        if (count > 0) {
+            const a = arr.slice((arr.length) - (count - 1)).find(ele => ele.group === 'input')
+            if (a) {
                 let index = a.id + 1
                 const h = getHints(code.snippets.slice(0, index))
                 setStudHints(h)
                 console.log('prev', a, a.id, index, h)
                 setCount(index)
-            }else{
+            } else {
                 console.log('no input field', a)
                 setPrev(true)
             }
-            
         }
-
         console.log('prev fired')
-
+    }
+    const handleChange = (e, ele) => {
+        const arr = [...arraySnippet]
+        const result = arr.find(element => element._id === ele._id)
+        result.value = e.target.value.trim()
+        console.log('handleInputChange', arr)
+        setArraySnippet(arr)
+    }
+    const handleBlur = (e, ele) => {
+        const arr = [...arraySnippet]
+        const result = arr.find(element => element._id === ele._id)
+        result.isDisable = true
+        console.log('handleInputBlur', arr)
+        setArraySnippet(arr)
     }
     const handleSolution = () => {
         handleIsSubmit()
@@ -163,7 +158,7 @@ const ShowCode = (props) => {
         } else if (ele.group === 'submit') {
             return <Submit />
         } else if (ele.group === 'input') {
-            return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} />
+            return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleChange} handleInputBlur={handleBlur} />
         }
     }
 
@@ -183,7 +178,7 @@ const ShowCode = (props) => {
                         <div style={{ margin: '5px' }}>
                             <form onSubmit={(e) => { handleSubmitAns(e) }}>
                                 {code.hasOwnProperty('snippets') &&
-                                    code.snippets.map((ele, i) => {
+                                    arraySnippet.map((ele, i) => {
                                         return <code key={i}>{buildFor(ele)}</code>
                                     })
                                 }
@@ -198,8 +193,8 @@ const ShowCode = (props) => {
                     }</ul>}
                     <h3>{string}</h3>
                     {(isSubmitted || !admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
-                    {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={code} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>}
-                    {(isSubmitted || admin) && <Explanations explanations={explanations} />}
+                    {/* {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={code} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>}
+                    {(isSubmitted || admin) && <Explanations explanations={explanations} />} */}
                 </div>}
                 <div>
                     {admin && <h3>Student view</h3>}
@@ -218,7 +213,7 @@ const ShowCode = (props) => {
                                 }
                                 <br /><br />
                                 {!start && <><Button sx={{ mr: 1 }} variant="contained" size="small" disabled={prev} onClick={(e) => { handlePrevious(e) }}>Previous</Button>
-                                <Button variant="contained" size="small" disabled={nxt} onClick={(e) => { handleNext(e) }}>Next</Button></>}
+                                    <Button variant="contained" size="small" disabled={nxt} onClick={(e) => { handleNext(e) }}>Next</Button></>}
                             </form>
                             <br />
                         </div>
@@ -230,12 +225,14 @@ const ShowCode = (props) => {
                     }</ul>}
                     <h3>{string}</h3>
                     {(isSubmitted && !admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
-                    {(solution || admin) && <CodeSolution code={code} handleSolution={handleSolution} admin={admin} />}
+                    {/* {(solution || admin) && <CodeSolution obj={code} handleSolution={handleSolution} admin={admin} />} */}
+                    {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={code} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>}
+                    {(isSubmitted || admin) && <Explanations explanations={explanations} />}
                 </div>
             </Grid>
             <Grid item xs={12} sm={6}>
                 {(hints.length > 0 && admin) && <Hints hints={hints} />}
-                {studHints.length > 0 && <Hints hints={studHints}/>}
+                {studHints.length > 0 && <Hints hints={studHints} />}
             </Grid>
         </Grid>
 
