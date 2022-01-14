@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, withRouter } from "react-router-dom"
 import CodeItem from "./CodeItem"
 
 const CodesListing = (props) => {
@@ -35,7 +35,7 @@ const CodesListing = (props) => {
                                 <Typography variant="h6">{i + 1}. {ele.statement}</Typography>
                                 {admin && <CodeItem snippets={ele.snippets} />}
                                 <br /><Link to='#' onClick={(e) => {
-                                    props.handleShow()
+                                    props.handleShow(e)
                                     props.history.push(`/codes/${ele._id}`)
                                     //localStorage.setItem('codeId', ele._id)
                                 }} >Solve</Link><br />
@@ -47,4 +47,4 @@ const CodesListing = (props) => {
         }</>
     )
 }
-export default CodesListing
+export default withRouter(CodesListing)

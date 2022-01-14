@@ -1,8 +1,18 @@
 const array = [
-    {id: 1, user_name: 'admin1', email:'admin1@dct.com', password:'secret123', role:'admin'},
-    {id: 1, user_name: 'student1', email:'student1@dct.com', password:'secret123', role:'student'},
-    {id: 1, user_name: 'student2', email:'student2@dct.com', password:'secret123', role:'student'},
+    {id: 1, user_name: 'admin1', email:'admin1@dct.com', password:'secret123', role:'admin', account_type:'dct'},
+    {id: 1, user_name: 'student1', email:'student1@dct.com', password:'secret123', role:'student', account_type:'dct'},
+    {id: 1, user_name: 'student2', email:'student2@dct.com', password:'secret123', role:'student', account_type:'dct'},
 ]
+
+export const asyncRegister = (formData, resetForm, redirect) => {
+    return () => {
+        array.push(formData)
+        resetForm()
+        redirect()
+        console.log('user array', array)
+        alert('registered successfully')
+    }
+}
 
 export const asyncSetUser = (formData, getData) => {
     return (dispatch) => {
@@ -21,10 +31,11 @@ export const asyncSetUser = (formData, getData) => {
         } else {
             dispatch(setUser(obj))
             console.log('async setuser success response', obj)
-            if(localStorage.getItem('user')===null){
+            //alert('login successful')
+            getData(obj)
+            if(!localStorage.getItem('user')){
                 alert('Login successful')
             }
-            getData(obj)
             localStorage.setItem('user', JSON.stringify(obj))
         }
     }

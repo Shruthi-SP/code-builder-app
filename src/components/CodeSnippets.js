@@ -274,9 +274,9 @@ const CodeSnippets = (props) => {
                 <h2>Sibling of CodeSnippetForm component</h2>
                 <span>Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.</span><br />
                 <Grid container>
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                         <CodeStepper getHints={getHints} codeSnippets={arraySnippet} />
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={12} sm={6}>
                         <div>
                             <code>

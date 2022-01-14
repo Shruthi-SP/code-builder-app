@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { withRouter } from "react-router-dom"
 import { useDispatch } from 'react-redux'
-import { asyncSetUser } from "./actions/userAction"
+import { asyncSetUser } from "../../actions/userAction"
 import validator from 'validator'
 import { Typography, TextField, Button} from "@mui/material"
 
@@ -63,7 +63,8 @@ const Login = (props) => {
                 password: password
             }
             dispatch(asyncSetUser(formData, getData))
-            console.log('dispatching form login', formData)
+            props.history.push('/codes')
+            console.log('dispatching form login', formData)           
         }
         else {
             setFormErr(err)
