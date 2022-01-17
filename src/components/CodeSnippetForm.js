@@ -76,7 +76,7 @@ const CodeSnippetForm = (props) => {
             snippets: [...newItems]
         }
         dispatch(asyncUpdateCode(codeObj, formData))
-        setArraySnippet(array)
+        setArraySnippet([...newItems])
     }
 
     const handlePreviewCode = (e) => {

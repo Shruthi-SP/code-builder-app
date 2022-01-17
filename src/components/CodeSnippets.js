@@ -8,7 +8,6 @@ import { Button, ButtonGroup, Typography, Grid } from "@mui/material"
 import { Delete, Edit, Add } from "@mui/icons-material"
 import ErrorBoundary from "./ErrorBoundary"
 import axios from "axios"
-import CodeStepper from "./CodeStepper"
 import CodeSolution from "./CodeSolution"
 import Input from "./tools/Input"
 import Break from "./tools/Break"
@@ -16,65 +15,13 @@ import Space from "./tools/Space"
 import Submit from "./tools/Submit"
 import Tab from "./tools/Tab"
 import Explanations from "./Explanations"
+import Hint from "./Hints"
 
 const CodeSnippets = (props) => {
     console.log('code snippet compt props=', props, props.match.params.id)
     const { admin } = props
     const _id = props.match.params.id
     console.log('props.match.params.id', _id)
-
-    let userInput = []
-    if (JSON.parse(localStorage.getItem('user_inputs'))) {
-        userInput = [...(JSON.parse(localStorage.getItem('user_inputs')))]
-    }
-    else {
-        userInput = []
-    }
-    console.log('userInput in cs', userInput)
-
-    const dispatch = useDispatch()
-
-    const getHints = (a) => {
-        const ar = []
-        a.forEach(ele => {
-            if (ele.hasOwnProperty('hint')) {
-                if (ele.hint !== '') {
-                    ar.push(ele.hint)
-                }
-            }
-        })
-        return ar
-    }
-    const getExplanations = (a) => {
-        const ar = []
-        a.forEach(ele => {
-            if (ele.hasOwnProperty('explanation')) {
-                if (ele.explanation !== '') {
-                    ar.push(ele.explanation)
-                }
-            }
-        })
-        return ar
-    }
-
-    const codes = useSelector(state => {
-        console.log('useSelector in CS', state.codes)
-        return state.codes
-    })
-
-    const getResult = (object) => {
-        console.log('**********getting the code*********')
-        if (Object.keys(object).length > 0) {
-            console.log('getResult fn got code in cs', object)
-            setObj(object)
-            setArraySnippet(object.snippets)
-            const h = getHints(object.snippets)
-            setHints(h)
-            const ex = getExplanations(object.snippets)
-            setExplanations(ex)
-        }
-        else throw new Error('Code Snippets crashed, couldnt get the obj')
-    }
 
     const [codeToggle, setCodeToggle] = useState(false)
     const [snippetToggle, setSnippetToggle] = useState(false)
@@ -86,28 +33,72 @@ const CodeSnippets = (props) => {
     const [errors, setErrors] = useState([])
     const [hints, setHints] = useState([])
     const [explanations, setExplanations] = useState([])
+    const [start, setStart] = useState(true)
+    const [prev, setPrev] = useState(false)
+    const [nxt, setNxt] = useState(false)
+    const [count, setCount] = useState(0)
+    const [studHints, setStudHints] = useState([])
 
+    // const codes = useSelector(state => {
+    //     console.log('useSelector in CS', state.codes)
+    //     return state.codes
+    // })
+
+    // useEffect(() => {
+    //     if (codes && codes.isLoading === true) {
+    //         const code = codes.data.find(ele => ele._id === _id)
+    //         setObj(code)
+    //         setArraySnippet(code.snippets)
+    //         let cs = JSON.parse(localStorage.getItem('user_inputs'))
+    //         // if (cs && cs.length > 0) {
+    //         //     setArraySnippet(cs)
+    //         // }
+    //         if(localStorage.user_inputs){
+    //             setArraySnippet(cs)
+    //         }
+    //         console.log('CS ue2 codes var', code, code.snippets)
+    //     }
+    // }, [codes])
+    const getResult = (object) => {
+        console.log('**********getting the code*********')
+        if (Object.keys(object).length > 0) {
+            console.log('getResult fn got code in cs', object)
+            setObj(object)
+            let cs = JSON.parse(localStorage.getItem('user_inputs'))
+            if (cs && cs.length > 0) {
+                setArraySnippet(cs)
+            }else{
+                setArraySnippet(object.snippets)
+            }
+            console.log('cs in ue1 cs, object, object.snippets', cs, object, object.snippets)
+            const h = getHints(object.snippets)
+            setHints(h)
+            const ex = getExplanations(object.snippets)
+            setExplanations(ex)
+        }
+        else throw new Error('Code Snippets crashed, couldnt get the obj')
+    }
+    const dispatch = useDispatch()
     useEffect(() => {
         console.log('1st useEffect CodeSnip compt')
         dispatch(asyncGetCode(_id, getResult))
-        let cs = JSON.parse(localStorage.getItem('user_inputs'))
-        if (cs && cs.length > 0) {
-            setArraySnippet(cs)
-        }
-        console.log('cs in ue1', cs)
     }, [])
 
     window.onload = (e) => {
         console.log('on window load:', JSON.parse(localStorage.getItem('user_inputs')))
-        if (localStorage.length != 0) {
+        if (localStorage.user_inputs) {
             setArraySnippet(JSON.parse(localStorage.getItem('user_inputs')))
         }
     }
-    console.log('code Snippet cmpt=', obj, arraySnippet)
-
-    const handleIsSubmit = () => {
-        setIsSubmitted(false)
+    
+    let userInput = []
+    if (JSON.parse(localStorage.getItem('user_inputs'))) {
+        userInput = [...(JSON.parse(localStorage.getItem('user_inputs')))]
     }
+    else {
+        userInput = []
+    }
+    console.log('userInput in cs, obj, arraySnippet', userInput, obj, arraySnippet)
     const handleInputChange = (e, ele) => {
         const arr = [...arraySnippet]
         const result = arr.find(element => element._id === ele._id)
@@ -125,6 +116,9 @@ const CodeSnippets = (props) => {
         localStorage.setItem('user_inputs', JSON.stringify(arr))
         console.log('handleInputBlur', result, arr, JSON.parse(localStorage.user_inputs))
         setArraySnippet(arr)
+    }
+    const handleIsSubmit = () => {
+        setIsSubmitted(false)
     }
     const handleSubmitAns = (e) => {
         e.preventDefault()
@@ -165,6 +159,63 @@ const CodeSnippets = (props) => {
         //localStorage.clear()
         localStorage.removeItem('user_inputs')
     }
+    const handleStart = (e) => {
+        e.preventDefault()
+        console.log('start fired')
+        setStart(!start)
+        setPrev(true)
+        const a = obj.snippets.find(ele => ele.group === 'input')
+        const index = obj.snippets.findIndex(ele => ele.group === 'input')
+        const h = getHints(obj.snippets.slice(0, index + 1))
+        setStudHints(h)
+        setCount(index + 1)
+        console.log('start count, obj, obj.id, index, hints',count, a, a.id, index, h)
+    }
+
+    const handleNext = (e) => {
+        e.preventDefault()
+        setPrev(false)
+        if (count < obj.snippets.length) {
+            console.log('next', count)
+            const a = obj.snippets.slice(count).find(ele => ele.group === 'input')
+            if (a) {
+                const index = Number(a.id) + 1
+                const h = getHints(obj.snippets.slice(0, index))
+                setStudHints(h)
+                console.log('next a, index, h', a, index, h)
+                setCount(index)
+            } else {
+                setCount(obj.snippets.length)
+                const h = getHints(obj.snippets)
+                setStudHints(h)
+                console.log('no input field', h)
+                setNxt(true)
+            }
+        }
+        console.log('nxt fired')
+    }
+    const handlePrevious = (e) => {
+        e.preventDefault()
+        setNxt(false)
+        const arr = [...obj.snippets].reverse()
+        console.log('prev event fired', arr, count)
+        if (count > 0) {
+            const a = arr.slice((arr.length) - (count - 1)).find(ele => ele.group === 'input')
+            if (a) {
+                let index = a.id + 1
+                const h = getHints(obj.snippets.slice(0, index))
+                setStudHints(h)
+                console.log('prev', a, a.id, index, h)
+                setCount(index)
+            } else {
+                setCount(count)
+                console.log('no input field', a)
+                setPrev(true)
+            }
+
+        } 
+    }
+
     const handleSolution = () => {
         handleIsSubmit()
         setSolution(!solution)
@@ -187,6 +238,33 @@ const CodeSnippets = (props) => {
     const handleRemoveCode = (e) => {
         dispatch(asyncDeleteCode(_id, redirect))
     }
+    const getHints = (a) => {
+        const ar = []
+        a.forEach(ele => {
+            if (ele.hasOwnProperty('hint')) {
+                // if(ele.hints.length>0){
+                //     for(let i=0;i<ele.hints.length;i++){
+                //         ar.push(ele.hints[i])
+                //     }
+                // }
+                if (ele.hint !== '') {
+                    ar.push(ele.hint)
+                }
+            }
+        })
+        return ar
+    }
+    const getExplanations = (a) => {
+        const ar = []
+        a.forEach(ele => {
+            if (ele.hasOwnProperty('explanation')) {
+                if (ele.explanation !== '') {
+                    ar.push(ele.explanation)
+                }
+            }
+        })
+        return ar
+    }
     const buildForStudent = (ele) => {
         if (ele.group === 'texts') {
             return ele.value
@@ -201,9 +279,7 @@ const CodeSnippets = (props) => {
         } else if (ele.group === 'submit') {
             return <Submit />
         } else if (ele.group === 'input') {
-            
-                return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} />
-            
+            return <Input ele={ele} isSubmitted={isSubmitted} handleInputChange={handleInputChange} handleInputBlur={handleInputBlur} />
         }
     }
     const buildForSolution = (ele) => {
@@ -220,7 +296,7 @@ const CodeSnippets = (props) => {
         } else if (ele.group === 'submit') {
             return <Submit />
         } else if (ele.group === 'input') {
-                return ele.answer 
+            return ele.answer
         }
     }
 
@@ -271,37 +347,41 @@ const CodeSnippets = (props) => {
             }
             <div>
                 <h1>Code</h1>
-                <h2>Sibling of CodeSnippetForm component</h2>
-                <span>Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.</span><br />
+                {/* <h2>Sibling of CodeSnippetForm component</h2> */}
+                {/* <span>Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.</span><br /> */}
                 <Grid container>
-                    {/* <Grid item xs={12} sm={6}>
-                        <CodeStepper getHints={getHints} codeSnippets={arraySnippet} />
-                    </Grid> */}
                     <Grid item xs={12} sm={6}>
-                        <div>
-                            <code>
-                                <b>{obj.title}</b><br />
-                                <b>{obj.statement}</b><br />
-                            </code>
-                            {
-                                <div style={{ margin: '5px' }}>
-                                    <form onSubmit={(e) => { handleSubmitAns(e) }}>
-                                        {obj.hasOwnProperty('snippets') &&
-                                            arraySnippet.map((ele, i) => {
-                                                return <code key={i}>{buildForStudent(ele)}</code>
-                                            })
-                                        }
-                                    </form>
-                                    <br />
-                                </div>
-                            }
+                        {/* <div> */}
+                            <div>
+                                {admin && <h3>Student view</h3>}
+                                <code>
+                                    <b>{obj.title}</b><br />
+                                    <b>{obj.statement}</b><br />
+                                </code>
+                                {start && <Button variant="contained" size="small" onClick={(e) => { handleStart(e) }}>start</Button>}
+                                {
+                                    <div style={{ margin: '5px' }}>
+                                        <form onSubmit={(e) => { handleSubmitAns(e) }}>
+                                            {obj.hasOwnProperty('snippets') &&
+                                                arraySnippet.slice(0, count).map((ele, i) => {
+                                                    return <code key={i}>{buildForStudent(ele)}</code>
+                                                })
+                                            }
+                                            <br /><br />
+                                            {!start && <><Button sx={{ mr: 1 }} variant="contained" size="small" disabled={prev} onClick={(e) => { handlePrevious(e) }}>Previous</Button>
+                                                <Button variant="contained" size="small" disabled={nxt} onClick={(e) => { handleNext(e) }}>Next</Button></>}
+                                        </form>
+                                        <br />
+                                    </div>
+                                }
+                            </div>
                             {errors.length > 0 && <ul>{
                                 errors.map((ele, i) => {
                                     return <li style={{ color: 'red' }} key={i}>{ele}</li>
                                 })
                             }</ul>}
                             <h3>{string}</h3>
-                            {(isSubmitted || !admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
+                            {(isSubmitted || admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
                             {/* {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={obj} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>} */}
                             {(solution) && <div>
                                 <h3>Code Solution</h3>
@@ -314,10 +394,13 @@ const CodeSnippets = (props) => {
                                         })
                                     }
                                 </code>
-                                <br />{!admin && <button onClick={() => { handleSolution() }}>Close</button>}
+                                <br /><button onClick={() => { handleSolution() }}>Close</button>
                             </div>}
                             {(isSubmitted || admin) && <Explanations explanations={explanations} />}
-                        </div>
+                        {/* </div> */}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        {studHints.length > 0 && <Hint hints={studHints} />}
                     </Grid>
                 </Grid>
             </div>

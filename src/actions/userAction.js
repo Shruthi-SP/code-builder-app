@@ -42,4 +42,7 @@ export const asyncSetUser = (formData, getData) => {
 }
 export const setUser = (obj) => {
     return { type: 'SET_USER', payload: obj}
+} 
+export const removeUser = () => {
+    return { type: 'REMOVE_USER'}
 }

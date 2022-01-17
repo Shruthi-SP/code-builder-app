@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import Hints from "./Hints"
+import Hint from "./Hints"
 import Input from "./tools/Input"
 import Break from "./tools/Break"
 import Space from "./tools/Space"
@@ -129,9 +129,6 @@ const ShowCode = (props) => {
     return <>
         {admin ? <h3>Code Preview</h3> : <h3>Code</h3>}
         <Grid container>
-            {/* <Grid item xs={12} sm={6}>
-                <CodeStepper getHints={getHints} codeSnippets={code.snippets} />
-            </Grid> */}
             <Grid item xs={12} sm={6}>
                 <div>
                     <code>
@@ -160,6 +157,9 @@ const ShowCode = (props) => {
                     {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={code} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>}
                     {(isSubmitted || admin) && <Explanations explanations={explanations} />}
                 </div>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                {hints.length > 0 && <Hint hints={hints} />}
             </Grid>
         </Grid>
 

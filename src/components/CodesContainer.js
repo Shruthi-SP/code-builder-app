@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 //import { useDispatch } from "react-redux"
 import { Link, Route, withRouter } from "react-router-dom"
 import { asyncGetAllCodes } from "../actions/codesAction"
-import { asyncSetUser } from "../actions/userAction"
+import { asyncSetUser, removeUser } from "../actions/userAction"
 import Login from "./user/Login"
 import Register from "./user/Register"
 import AddCode from "./AddCode"
@@ -36,35 +36,29 @@ const CodesContainer = (props) => {
     const handleAdmin = (isAdmin) => {
         setAdmin(isAdmin)
     }
+    const handleLogout = () => {
+        localStorage.clear()
+        //localStorage.removeItem('user')
+        dispatch(removeUser())
+        setAdmin(false)
+        setUserLoggedIn(false)
+        props.history.push('/')
+        alert('successfully logged out')
+    }
 
     const getData = (obj) => {
         if (obj.role === 'admin') {
             handleAdmin(true)
         }
-        //handleLoggedIn()
         setUserLoggedIn(true)
-        // if (props.match.params.id) {
-        //     props.history.push(`/codes/${props.match.params.id}`)
-        // }else {
-        //     props.history.push('/codes')
-        // }
     }
     const dispatch = useDispatch()
     useEffect(() => {
         const obj = JSON.parse(localStorage.getItem('user'))
-        if (localStorage.getItem('user')) {
+        if (localStorage.user) {
             dispatch(asyncSetUser(obj, getData))
         }
     }, [])
-
-    // useEffect(() => {
-    //     const obj = JSON.parse(localStorage.getItem('user'))
-    //     if (obj !== null) {
-    //         dispatch(asyncSetUser(obj, getData))
-    //         console.log('user present')
-    //     }
-    //     console.log('use effect in container err boundaries')
-    // }, [])
 
     const handleShow = (e) => {
         e.preventDefault()
@@ -82,6 +76,8 @@ const CodesContainer = (props) => {
                         <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
                         {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
                         {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
+                        <Link style={{ margin: '5px' }}
+                            to='#' onClick={handleLogout}>Logout</Link>
                     </div>
                     :
                     <div>

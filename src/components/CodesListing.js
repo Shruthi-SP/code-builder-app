@@ -38,7 +38,7 @@ const CodesListing = (props) => {
                                     props.handleShow(e)
                                     props.history.push(`/codes/${ele._id}`)
                                     //localStorage.setItem('codeId', ele._id)
-                                }} >Solve</Link><br />
+                                }} >{admin ? 'Show' : 'Solve'}</Link><br />
                             </>
                         </Box>
                     })
