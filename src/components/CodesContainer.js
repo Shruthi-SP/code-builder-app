@@ -14,6 +14,7 @@ import CodesListing from "./CodesListing"
 import CodeSnippets from "./CodeSnippets"
 import ErrorBoundary from "./ErrorBoundary"
 import PrivateRoute from "./tools/PrivateRoute"
+import { Grid, Typography } from "@mui/material"
 
 const CodesContainer = (props) => {
     console.log('codes container props', props)
@@ -72,12 +73,37 @@ const CodesContainer = (props) => {
         <>
             {
                 (userLoggedIn) ?
-                    <div style={{ marginTop: '5px' }}>
-                        <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
+                    <div style={{ marginTop: '5px', maxWidth: "100%"}}>
+                        {/* <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
                         {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
                         {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
-                        <Link style={{ margin: '5px' }}
-                            to='#' onClick={handleLogout}>Logout</Link>
+                        <Link style={{ margin: '5px', justifyContent: 'end' }}
+                            to='#' onClick={handleLogout}>Logout</Link> */}
+                        <Grid container direction="row">
+                            <Grid
+                                item
+                                xs
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "flex-start"
+                                }}
+                            >
+                                <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
+                                {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
+                                {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
+                            </Grid>
+                            <Grid
+                                item
+                                xs
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "flex-end"
+                                }}
+                            >
+                                <Link style={{ margin: '5px', justifyContent: 'end' }}
+                                    to='#' onClick={handleLogout}>Logout</Link>
+                            </Grid>
+                        </Grid>
                     </div>
                     :
                     <div>

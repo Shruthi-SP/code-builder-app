@@ -41,7 +41,7 @@ function App(props) {
 
   return (
     <Container>
-      <Typography variant="h4">Code Builder App</Typography>
+      <Typography variant="h4" style={{textAlign: 'center'}}>Code Builder App</Typography>
       <CodesContainer {...props}/>
       {/* <CodesContainer admin={admin} handleAdmin={handleAdmin} userLoggedIn={userLoggedIn} handleLoggedIn={handleLoggedIn} getData={getData} /> */}
     </Container>
