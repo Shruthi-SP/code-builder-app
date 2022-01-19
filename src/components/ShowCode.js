@@ -25,12 +25,19 @@ const ShowCode = (props) => {
     })
 
     const getHints = (a) => {
+        console.log('geting hints=', a)
         const ar = []
         a.forEach(ele => {
-            if (ele.hasOwnProperty('hint')) {
-                if (ele.hint !== '') {
-                    ar.push(ele.hint)
+            if (ele.hasOwnProperty('hints')) {
+                console.log('hints prop ele=', ele)
+                if(ele.hints.length>0){
+                    for(let i=0;i<ele.hints.length;i++){
+                        ar.push(ele.hints[i].hint)
+                    }
                 }
+                // if (ele.hint !== '') {
+                //     ar.push(ele.hint)
+                // }
             }
         })
         return ar

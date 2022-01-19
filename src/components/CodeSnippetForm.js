@@ -26,7 +26,7 @@ const CodeSnippetForm = (props) => {
     const codeObj = useSelector(state => {
         return state.codes.data.find(ele => ele._id === props.match.params.id)
     })
-    const user = useSelector(state=>{
+    const user = useSelector(state => {
         return state.user
     })
     console.log('csform user', user)
@@ -175,18 +175,18 @@ const CodeSnippetForm = (props) => {
             answers: answers,
             score: str
         }
-        if(user.role === 'student'){
-           axios.post('http://localhost:3044/api/answers', formData)
-            .then(response => {
-                console.log('post ans response=', response.data)
-                alert('submitted successfully')
-            })
-            .catch(err => {
-                console.log('catch blk', err.message)
-            })
-        console.log('Submitted answers to api', formData) 
+        if (user.role === 'student') {
+            axios.post('http://localhost:3044/api/answers', formData)
+                .then(response => {
+                    console.log('post ans response=', response.data)
+                    alert('submitted successfully')
+                })
+                .catch(err => {
+                    console.log('catch blk', err.message)
+                })
+            console.log('Submitted answers to api', formData)
         } else console.log('answer submitted by admin', formData)
-        
+
         setErrors(err)
         setString(str)
         setIsSubmitted(true)
@@ -212,8 +212,8 @@ const CodeSnippetForm = (props) => {
     }
 
     const buttons = [
-        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleCreateTexts}>Create Text</Button>,
-        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleCreateInputField}>Create Input Field</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleCreateTexts}>Insert Text</Button>,
+        <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleCreateInputField}>Insert Input Field</Button>,
         <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertTab}>Insert Tab</Button>,
         <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertDoubleTab}>Insert Double Tab</Button>,
         <Button variant="contained" color="secondary" size="small" sx={{ borderRadius: 10, m: 1 }} onClick={handleInsertBreak}>Insert Break</Button>,
@@ -248,7 +248,6 @@ const CodeSnippetForm = (props) => {
                         {admin && <Grid item xs={4}>
                             {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
                             />}
-
                             <div>
                                 <Typography variant="h6">Re-arrange the snippets</Typography>
                                 <ol>
@@ -259,21 +258,15 @@ const CodeSnippetForm = (props) => {
                                                 <li>
                                                     <code>{buildFor(item)}
                                                         {
-                                                            // editToggle && snipId === item._id ?
-                                                            //     (<ModalForm open={open} codeId={props.codeId} snippet={item} handleCancelEdit={handleCancelEdit}
-                                                            //     />) :
                                                             (<>
                                                                 {
                                                                     (item.group === 'texts' || item.group === 'input' || item.group === 'break') && <IconButton variant="outlined" color="primary" size="small" onClick={(e) => { handleEdit(e, item) }}>
                                                                         <Edit />
                                                                     </IconButton>
-                                                                    // <button style={{ margin: '2px' }} onClick={(e) => { handleEdit(e, item) }}>edit</button>
                                                                 }
-
                                                             </>)
                                                         }
                                                         <IconButton variant="outlined" color="error" size="small" onClick={(e) => { handleRemove(e, item) }}><Delete /></IconButton>
-                                                        {/* <button style={{ margin: '2px' }} onClick={(e) => { handleRemove(e, item) }}>remove</button><br /> */}
                                                     </code>
                                                 </li>
                                             );

@@ -239,17 +239,20 @@ const CodeSnippets = (props) => {
         dispatch(asyncDeleteCode(_id, redirect))
     }
     const getHints = (a) => {
+        console.log('geting hints=', a)
         const ar = []
         a.forEach(ele => {
-            if (ele.hasOwnProperty('hint')) {
-                // if(ele.hints.length>0){
-                //     for(let i=0;i<ele.hints.length;i++){
-                //         ar.push(ele.hints[i])
-                //     }
-                // }
-                if (ele.hint !== '') {
-                    ar.push(ele.hint)
+            if (ele.hasOwnProperty('hints')) {
+                
+                if(ele.hints.length>0){
+                    for(let i=0;i<ele.hints.length;i++){
+                        console.log('hints ele=', ele.hints[i].hint)
+                        ar.push(ele.hints[i].hint)
+                    }
                 }
+                // if (ele.hint !== '') {
+                //     ar.push(ele.hint)
+                // }
             }
         })
         return ar
