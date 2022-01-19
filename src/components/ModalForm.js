@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -12,7 +13,7 @@ import FormText from './FormText'
 
 const ModalForm = (props) => {
     console.log('edit snippets compt', props)
-    const {open,handleClose, codeId, snippet, handleCancelEdit} = props
+    const { open, handleClose, codeId, snippet, handleCancelEdit } = props
     const dispatch = useDispatch()
 
     const [editLimit, setEditLimit] = useState('')
@@ -40,7 +41,10 @@ const ModalForm = (props) => {
 
                     {snippet.group === 'input' && <FromInput {...snippet} formSubmission={formSubmission} handleCancelEdit={handleCancelEdit} />}
 
-                    {snippet.group === 'break' && <><input type='text' value={editLimit} placeholder="Change Limit" onChange={(e) => { setEditLimit(e.target.value) }} /><button onClick={handleSetLimit}>Set</button><button onClick={() => { handleCancelEdit() }}>Cancel</button></>}
+                    {/* {snippet.group === 'break' && <><input type='text' value={editLimit} placeholder="Change Limit" onChange={(e) => { setEditLimit(e.target.value) }} /><button onClick={handleSetLimit}>Set</button><button onClick={() => { handleCancelEdit() }}>Cancel</button></>} */}
+                    {snippet.group === 'break' && <><TextField label='Enter limit here' variant='outlined' type='text' value={editLimit} placeholder="Change Limit" onChange={(e) => { setEditLimit(e.target.value) }} /><br /><br />
+                        <Button sx={{ mr: 1 }} variant="contained" size="small" onClick={handleSetLimit}>Set</Button>
+                        <Button variant="contained" size="small" onClick={() => { handleCancelEdit() }}>Cancel</Button></>}
 
                 </DialogContent>
                 <DialogActions>

@@ -1,3 +1,4 @@
+import { Button, TextField } from "@mui/material"
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { asyncUpdateSnippet } from '../actions/codesAction'
@@ -30,7 +31,9 @@ const EditSnippet = (props) => {
 
             {snippet.group === 'input' && <><FromInput {...snippet} formSubmission={formSubmission} handleCancelEdit={handleCancelEdit} /><br /></>}
 
-            {snippet.group === 'break' && <><input type='text' value={editLimit} placeholder="Change Limit" onChange={(e)=>{setEditLimit(e.target.value)}}/><button onClick={handleSetLimit}>Set</button><button onClick={()=>{handleCancelEdit()}}>Cancel</button></>}
+            {snippet.group === 'break' && <><TextField label='Enter limit here' variant='outlined' type='text' value={editLimit} placeholder="Change Limit" onChange={(e)=>{setEditLimit(e.target.value)}}/><br /><br />
+            <Button variant="contained" size="small" onClick={handleSetLimit}>Set</Button>
+            <Button variant="contained" size="small" onClick={()=>{handleCancelEdit()}}>Cancel</Button></>}
         </div>   
     )
 }
