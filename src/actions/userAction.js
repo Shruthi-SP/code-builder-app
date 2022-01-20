@@ -9,7 +9,6 @@ export const asyncRegister = (formData, resetForm, redirect) => {
         array.push(formData)
         resetForm()
         redirect()
-        console.log('user array', array)
         alert('registered successfully')
     }
 }
@@ -19,19 +18,15 @@ export const asyncSetUser = (formData, getData) => {
         let obj={}
         array.forEach(ele=>{
             if(ele.email === formData.email && ele.password === formData.password){
-                console.log('async setuser found', formData, ele)
                 obj={...ele}
             }
         })
         if(Object.keys(obj).length === 0){
             const result = {}
                 result.errors = 'Invalid email or password'
-                console.log('async setuser err res', result.errors)
                 alert(result.errors)
         } else {
             dispatch(setUser(obj))
-            console.log('async setuser success response', obj)
-            //alert('login successful')
             getData(obj)
             if(!localStorage.getItem('user')){
                 alert('Login successful')

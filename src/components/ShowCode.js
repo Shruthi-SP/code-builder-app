@@ -15,21 +15,15 @@ import Explanations from "./Explanations"
 const ShowCode = (props) => {
     const { admin, isSubmitted, handleIsSubmit, codeId, handleInputChange, handleInputBlur, handleSubmitAns, errors, string } = props
 
-    console.log('showCode props=', props)
-
     const codeSnippet = useSelector(state => {
-        console.log('total questions', state.codes)
         const obj = state.codes.data.find(ele => ele._id === codeId)
-        console.log('selected question snippets', obj)
         return obj
     })
 
     const getHints = (a) => {
-        console.log('geting hints=', a)
         const ar = []
         a.forEach(ele => {
             if (ele.hasOwnProperty('hints')) {
-                console.log('hints prop ele=', ele)
                 if(ele.hints.length>0){
                     for(let i=0;i<ele.hints.length;i++){
                         ar.push(ele.hints[i].hint)
@@ -96,7 +90,6 @@ const ShowCode = (props) => {
             start = i + 1
         }
     })
-    console.log('show code steps=', steps, hintsArr)
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)

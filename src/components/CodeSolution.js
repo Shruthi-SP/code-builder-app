@@ -6,17 +6,11 @@ import Submit from "./tools/Submit"
 import ErrorBoundary from "./ErrorBoundary"
 
 const CodeSolution = (props) => {
-    console.log('Solution props= ', props)
     const { codeId, obj, handleSolution, admin} = props
 
     if(Object.keys(obj).length === 0){
         throw new Error('CodeSolution crashed. no code obj')
     }
-
-    // const code = useSelector((state) => {
-    //     console.log(state.codes)
-    //     return state.codes.data.find(ele => ele._id === codeId)
-    // })
 
     const buildFor = (ele) => {
         if (ele.group === 'texts') {

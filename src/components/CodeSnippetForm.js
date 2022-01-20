@@ -14,7 +14,6 @@ import { Delete, Edit } from "@mui/icons-material"
 import ErrorBoundary from "./ErrorBoundary"
 
 const CodeSnippetForm = (props) => {
-    console.log('codeSnippetsform props=', props)
     const { admin } = props
 
     const dispatch = useDispatch()
@@ -29,21 +28,18 @@ const CodeSnippetForm = (props) => {
     const user = useSelector(state => {
         return state.user
     })
-    console.log('csform user', user)
 
     let array = []
     if (codeObj) {
         array = codeObj.snippets
     }
     else throw new Error('I CodeSnippetForm crashed! No code');
-    // console.log('after useselector hook codeObj, snippets', codeObj, array)
 
     useEffect(() => {
         setArraySnippet(array)
     }, [codeObj])
     useEffect(() => {
         setArraySnippet(array)
-        console.log('error boundary in codeSnippetForm', isLoaded)
     }, [])
 
     const [arraySnippet, setArraySnippet] = useState(array)
@@ -81,7 +77,6 @@ const CodeSnippetForm = (props) => {
 
     const handlePreviewCode = (e) => {
         e.preventDefault()
-        console.log(arraySnippet.length)
         setShow(!show)
     }
 
@@ -91,7 +86,6 @@ const CodeSnippetForm = (props) => {
         setFormTextToggle(true)
     }
     const handleFormTextToggle = () => {
-        console.log('CodeSnip compt handleFormTextToggle')
         setFormTextToggle(false)
         setArraySnippet(array)
     }
@@ -106,7 +100,6 @@ const CodeSnippetForm = (props) => {
         setFormInputToggle(true)
     }
     const handleFormInputToggle = () => {
-        console.log('create i/p')
         setFormInputToggle(false)
         setArraySnippet(array)
     }
@@ -114,14 +107,12 @@ const CodeSnippetForm = (props) => {
         const arr = [...arraySnippet]
         const result = arr.find(element => element._id === ele._id)
         result.value = e.target.value.trim()
-        console.log('handleInputChange', arr)
         setArraySnippet(arr)
     }
     const handleInputBlur = (e, ele) => {
         const arr = [...arraySnippet]
         const result = arr.find(element => element._id === ele._id)
         result.isDisable = true
-        console.log('handleInputBlur', arr)
         setArraySnippet(arr)
     }
     const handleCancelInput = () => {
@@ -152,9 +143,7 @@ const CodeSnippetForm = (props) => {
     //------------------------Submit Answers---------------------
     const handleSubmitAns = (e) => {
         e.preventDefault()
-        console.log('Answer Submit event triggered array=', arraySnippet)
         const arr = arraySnippet.filter(ele => ele.group === 'input')
-        console.log('input tags', arr.length)
         let n = arr.length
         let err = []
         let answers = []
@@ -166,9 +155,7 @@ const CodeSnippetForm = (props) => {
                     err.push(`Expected ${ele.answer} instead Received ${ele.value}`)
             }
         })
-        console.log('input answers', answers)
         const str = `Score ${n}/${arr.length}`
-        console.log('err str', err, string)
         const formData = {
             codeId: props.codeId,
             studentId: user.id,
@@ -178,14 +165,12 @@ const CodeSnippetForm = (props) => {
         if (user.role === 'student') {
             axios.post('http://localhost:3044/api/answers', formData)
                 .then(response => {
-                    console.log('post ans response=', response.data)
                     alert('submitted successfully')
                 })
                 .catch(err => {
-                    console.log('catch blk', err.message)
+                    alert('catch blk', err.message)
                 })
-            console.log('Submitted answers to api', formData)
-        } else console.log('answer submitted by admin', formData)
+        }
 
         setErrors(err)
         setString(str)
@@ -196,7 +181,6 @@ const CodeSnippetForm = (props) => {
         e.preventDefault()
         setSnipId(ele._id)
         setSnip(ele)
-        console.log('edit event triggered', e, ele)
         setEditToggle(true)
         handleClickOpen()
     }
@@ -206,7 +190,6 @@ const CodeSnippetForm = (props) => {
     }
     const handleRemove = (e, ele) => {
         e.preventDefault()
-        console.log('remove event triggered')
         dispatch(asyncDeleteSnippet(props.codeId, ele._id))
         setArraySnippet(array)
     }

@@ -24,7 +24,6 @@ export const arrToDd = (arr) => {
     const a = arr.map((ele,i)=>{
         return {...ele, id:i}
     })
-    console.log('arrtodd=', a)
     return a
 }
 export const ddToArr = (arr) => {
@@ -33,6 +32,5 @@ export const ddToArr = (arr) => {
         delete ele.id
         return ele
     })
-    console.log('ddtoarr', a)
     return a
 }

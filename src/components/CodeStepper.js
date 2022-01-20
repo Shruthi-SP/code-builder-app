@@ -10,7 +10,6 @@ import Paper from "@mui/material/Paper"
 
 const CodeStepper = (props) => {
     const {codeSnippets, getHints} = props
-    console.log('stepper props=', props)
 
     const [activeStep, setActiveStep] = useState(0);
 
@@ -39,7 +38,6 @@ const CodeStepper = (props) => {
             start = i + 1
         }
     })
-    console.log('steps=', steps)
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)

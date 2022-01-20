@@ -7,7 +7,6 @@ const EditCode = (props) => {
     const dispatch = useDispatch()
 
     const formSubmission = (formData, resetForm) => {
-        console.log('edit code from submit')
         dispatch(asyncUpdateCode(code, formData, resetForm))
         handleEditCode()
     }

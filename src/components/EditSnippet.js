@@ -5,7 +5,6 @@ import FromInput from "./FormInput"
 import FormText from './FormText'
 
 const EditSnippet = (props) => {
-    console.log('edit snippets compt', props)
     const {codeId, snippet, handleCancelEdit} = props
     const dispatch = useDispatch()
 
@@ -14,14 +13,12 @@ const EditSnippet = (props) => {
     const formSubmission = (formData) => {
         dispatch(asyncUpdateSnippet(codeId, snippet._id, formData))
         handleCancelEdit()
-        console.log('dispatching update')
     }
     const handleSetLimit = (e) => {
         e.preventDefault()
         const formData = {
             limit: editLimit
         }
-        console.log('setLimit', formData)
         formSubmission(formData)
     }
     return (

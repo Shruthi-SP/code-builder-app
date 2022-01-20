@@ -17,19 +17,9 @@ import PrivateRoute from "./tools/PrivateRoute"
 import { Grid, Typography } from "@mui/material"
 
 const CodesContainer = (props) => {
-    console.log('codes container props', props)
-    //const { userLoggedIn, handleLoggedIn, admin, handleAdmin, getData } = props
     const [show, setShow] = useState(false)
-    // useEffect(() => {
-    //     if (localStorage.getItem('codeId') !== null) {
-    //         props.history.push(`/codes/${(localStorage.getItem('codeId'))}`)
-    //     }
-    // }, [])
-
-    ///const [preview, setPreview] = useState(false)
     const [admin, setAdmin] = useState(false)
     const [userLoggedIn, setUserLoggedIn] = useState(false)
-    //const [isUser, setIsUser] = useState(false)
 
     const handleLoggedIn = () => {
         setUserLoggedIn(!userLoggedIn)

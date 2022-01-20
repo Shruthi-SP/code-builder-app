@@ -10,13 +10,6 @@ import { asyncGetAllCodes } from './actions/codesAction';
 const store = configureStore()
 store.dispatch(asyncGetAllCodes())
 
-console.log('store=', store)
-console.log('state= ', store.getState())
-
-store.subscribe(() => {
-  console.log('updated state=', store.getState())
-})
-
 ReactDOM.render(
   <BrowserRouter >
     <Provider store={store}>
