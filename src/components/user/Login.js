@@ -61,7 +61,7 @@ const Login = (props) => {
                 password: password
             }
             dispatch(asyncSetUser(formData, getData))
-            props.history.push('/codes')          
+            // props.history.push('/codes')          
         }
         else {
             setFormErr(err)

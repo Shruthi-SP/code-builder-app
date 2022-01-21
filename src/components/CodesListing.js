@@ -18,9 +18,9 @@ const CodesListing = (props) => {
         setArray(codes)
     }, [codes])
 
-    // useEffect(() => {
-    //     props.handleCancelShow()
-    // })
+    useEffect(() => {
+        props.handleCancelShow()
+    })
 
     return (
         <>{

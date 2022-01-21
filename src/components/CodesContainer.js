@@ -2,14 +2,10 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 //import { useDispatch } from "react-redux"
 import { Link, Route, withRouter } from "react-router-dom"
-import { asyncGetAllCodes } from "../actions/codesAction"
 import { asyncSetUser, removeUser } from "../actions/userAction"
 import Login from "./user/Login"
 import Register from "./user/Register"
 import AddCode from "./AddCode"
-//import CodePreview from "./CodePreview"
-//import { asyncGetAllCodes } from "../actions/codesAction"
-//import CodesForm from "./CodesForm"
 import CodesListing from "./CodesListing"
 import CodeSnippets from "./CodeSnippets"
 import ErrorBoundary from "./ErrorBoundary"
@@ -42,6 +38,7 @@ const CodesContainer = (props) => {
             handleAdmin(true)
         }
         setUserLoggedIn(true)
+        props.history.push('/codes')
     }
     const dispatch = useDispatch()
     useEffect(() => {
@@ -51,8 +48,7 @@ const CodesContainer = (props) => {
         }
     }, [])
 
-    const handleShow = (e) => {
-        e.preventDefault()
+    const handleShow = () => {
         setShow(true)
     }
     const handleCancelShow = () => {

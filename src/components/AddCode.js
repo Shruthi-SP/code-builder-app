@@ -7,24 +7,16 @@ const AddCode = (props) => {
 
     useEffect(()=>{
         props.handleCancelShow()
-        props.handleCancelPreview()
-    })
+    }, [])
 
     const dispatch = useDispatch()
 
-    // const redirect = () => {
-    //     console.log('redirecting from code snippets to codes list')
-    //     props.history.push('/codes')
-    // }
     const redirect = (id) => {
-        //props.handleShow()
-        console.log('redirection id', id)
-        console.log('redirecting from cmpt')
+        props.handleShow()
         props.history.push(`/codes/${id}`)
     }
 
     const formSubmission = (formData, resetForm) => {
-        console.log('add code form submit')
         dispatch(asyncAddCode(formData, resetForm, redirect))
     }
 
