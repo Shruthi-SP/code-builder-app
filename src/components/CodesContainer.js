@@ -64,11 +64,6 @@ const CodesContainer = (props) => {
             {
                 (userLoggedIn) ?
                     <div style={{ marginTop: '5px', maxWidth: "100%"}}>
-                        {/* <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
-                        {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
-                        {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
-                        <Link style={{ margin: '5px', justifyContent: 'end' }}
-                            to='#' onClick={handleLogout}>Logout</Link> */}
                         <Grid container direction="row">
                             <Grid
                                 item
@@ -97,7 +92,6 @@ const CodesContainer = (props) => {
                     </div>
                     :
                     <div>
-                        {/* <Login {...props} getData={getData} handleLoggedIn={handleLoggedIn} handleAdmin={handleAdmin} /> */}
                         <Link style={{ margin: '5px' }} to='/register'> Register</Link>
                         <Link style={{ margin: '5px' }} to='/login'>Login</Link>
                     </div>
@@ -108,8 +102,9 @@ const CodesContainer = (props) => {
             }}></Route>
 
             {/* <PrivateRoute path='/codes' component={CodesListing} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} {...props}/>
-            <PrivateRoute path='/create-code' component={AddCode} />
-            <PrivateRoute path='/codes/:id' component={CodeSnippets} /> */}
+            <PrivateRoute path='/create-code' component={AddCode} handleShow={handleShow} handleCancelShow={handleCancelShow} {...props} />
+            <PrivateRoute path='/codes/:id' component={CodeSnippets} admin={admin} {...props}/> */}
+
             <ErrorBoundary><Route path='/codes' exact render={(props) => {
                 return <CodesListing {...props} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} />
             }}></Route></ErrorBoundary>

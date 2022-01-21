@@ -10,7 +10,6 @@ const AddSnippet = (props) => {
     const formSubmission = (formData) => {
         dispatch(asyncAddSnippet(codeId, formData))
         group==='texts' ? handleFormTextToggle() : handleFormInputToggle()
-        console.log('addsnippet formSubmit')
     }
     return (
         <div>

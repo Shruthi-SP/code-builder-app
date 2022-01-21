@@ -7,7 +7,6 @@ import { Typography } from '@mui/material'
 
 const CodeItem = (props) => {
     const { snippets } = props
-    console.log('snippets=',snippets)
 
     const buildFor = (ele) => {
         if (ele.group === 'texts') {

@@ -5,11 +5,10 @@ import { Link, withRouter } from "react-router-dom"
 import CodeItem from "./CodeItem"
 
 const CodesListing = (props) => {
-    console.log('CodesListing props=', props)
+    //console.log('code listing props', props)
     const { admin } = props
 
     const codes = useSelector((state) => {
-        console.log(state.codes)
         return state.codes.data
     })
 
@@ -19,9 +18,9 @@ const CodesListing = (props) => {
         setArray(codes)
     }, [codes])
 
-    useEffect(() => {
-        props.handleCancelShow()
-    })
+    // useEffect(() => {
+    //     props.handleCancelShow()
+    // })
 
     return (
         <>{

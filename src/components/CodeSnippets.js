@@ -40,10 +40,10 @@ const CodeSnippets = (props) => {
     const getResult = (object) => {
         if (Object.keys(object).length > 0) {
             setObj(object)
-            let cs = JSON.parse(localStorage.getItem('user_inputs'))
+            let cs = JSON.parse(localStorage.getItem(_id))
             if (cs && cs.length > 0) {
                 setArraySnippet(cs)
-            }else{
+            } else {
                 setArraySnippet(object.snippets)
             }
             const h = getHints(object.snippets)
@@ -58,12 +58,21 @@ const CodeSnippets = (props) => {
         dispatch(asyncGetCode(_id, getResult))
     }, [])
 
+    useEffect(() => {
+        return () => {
+            if (localStorage.user_inputs) {
+                localStorage.setItem(_id, localStorage.user_inputs)
+                localStorage.removeItem('user_inputs')
+            }
+        }
+    }, [])
+
     window.onload = (e) => {
         if (localStorage.user_inputs) {
             setArraySnippet(JSON.parse(localStorage.getItem('user_inputs')))
         }
     }
-    
+
     let userInput = []
     if (JSON.parse(localStorage.getItem('user_inputs'))) {
         userInput = [...(JSON.parse(localStorage.getItem('user_inputs')))]
@@ -71,7 +80,7 @@ const CodeSnippets = (props) => {
     else {
         userInput = []
     }
-    
+
     const handleInputChange = (e, ele) => {
         const arr = [...arraySnippet]
         const result = arr.find(element => element._id === ele._id)
@@ -103,24 +112,34 @@ const CodeSnippets = (props) => {
                     err.push(`Expected ${ele.answer} instead Received ${ele.value}`)
             }
         })
+        const studentId = JSON.parse(localStorage.getItem('user')).id
         const str = `Score ${n}/${arr.length}`
         const formData = {
-            codeId: props.codeId,
-            studentId: new Date().getTime(),
+            codeId: _id,
+            studentId: studentId,
             answers: answers,
             score: str
         }
-        axios.post('http://localhost:3044/api/answers', formData)
-            .then(response => {
-                console.log('post ans response=', response.data)
-            })
-            .catch(err => {
-                console.log('catch blk', err.message)
-            })
+        if (!admin) {
+            axios.post('http://localhost:3044/api/answers', formData)
+                .then(response => {
+                    if (response.hasOwnProperty('errors')) {
+                        alert(errors.message)
+                    }
+                    else {
+                        alert('answer submitted')
+                    }
+
+                })
+                .catch(err => {
+                    alert(err.message)
+                })
+        }
         setErrors(err)
         setString(str)
         setIsSubmitted(true)
-        localStorage.removeItem('user_inputs')
+        //localStorage.removeItem('user_inputs')
+        localStorage.removeItem(_id)
     }
     const handleStart = (e) => {
         e.preventDefault()
@@ -167,7 +186,7 @@ const CodeSnippets = (props) => {
                 setPrev(true)
             }
 
-        } 
+        }
     }
 
     const handleSolution = () => {
@@ -194,9 +213,9 @@ const CodeSnippets = (props) => {
     const getHints = (a) => {
         const ar = []
         a.forEach(ele => {
-            if (ele.hasOwnProperty('hints')) {                
-                if(ele.hints.length>0){
-                    for(let i=0;i<ele.hints.length;i++){
+            if (ele.hasOwnProperty('hints')) {
+                if (ele.hints.length > 0) {
+                    for (let i = 0; i < ele.hints.length; i++) {
                         ar.push(ele.hints[i].hint)
                     }
                 }
@@ -253,7 +272,7 @@ const CodeSnippets = (props) => {
     return (
         <div>
             {
-                (admin && Object.keys(obj).length > 0) ? <div style={{ margin: '5px' }}>
+                (admin && Object.keys(obj).length > 0) && <div style={{ margin: '5px' }}>
                     <h3>Admin view</h3>
                     <Typography variant="h5" color="primary.dark">Code and Snippets</Typography>
                     {snippetToggle ? <>
@@ -262,92 +281,84 @@ const CodeSnippets = (props) => {
                             <ErrorBoundary><CodeSnippetForm admin={admin} codeId={_id} {...props} obj={obj} /></ErrorBoundary>
                         </>
                         }</>
-                        : <>
+                        : <div>
                             {
-                                arraySnippet.length > 0 ? <div>
-                                    {
-                                        codeToggle ? <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} /> : <>
-                                            <code><b>Title: {obj.title}</b><br /></code>
-                                            <code><b>Statement: {obj.statement}</b></code><br />
-                                        </>
-                                    }
-                                    {
-                                        arraySnippet.length > 0 && arraySnippet.map((ele, i) => {
-                                            return <code key={i}>
-                                                {buildFor(ele)}
-                                            </code>
-                                        })
-                                    }
-                                    <br /><br />
-                                    <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                                        <Button sx={{ mr: 1 }} startIcon={<Edit />} onClick={handleEditCode}>Edit Code</Button>
-                                        <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
-                                        <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
-                                    </ButtonGroup>
-                                </div> : <div>
-                                    <p>No Object</p>
-                                </div>
+                                codeToggle ? <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} /> : <>
+                                    <code><b>Title: {obj.title}</b><br /></code>
+                                    <code><b>Statement: {obj.statement}</b></code><br />
+                                </>
                             }
-                        </>
+                            {
+                                arraySnippet.length > 0 && arraySnippet.map((ele, i) => {
+                                    return <code key={i}>
+                                        {buildFor(ele)}
+                                    </code>
+                                })
+                            }
+                            <br /><br />
+
+
+                            <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                                <Button sx={{ mr: 1 }} startIcon={<Edit />} onClick={handleEditCode}>Edit Code</Button>
+                                <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
+                                <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
+                            </ButtonGroup>
+                        </div>
+
                     }
 
                 </div>
-                    :
-                    <h3>student view</h3>
             }
             <div>
-                <h1>Code</h1>
+                <h2>{admin ? 'student view' : 'Code'}</h2>
                 {/* <h2>Sibling of CodeSnippetForm component</h2> */}
                 {/* <span>Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.</span><br /> */}
                 <Grid container>
                     <Grid item xs={12} sm={6}>
-                        {/* <div> */}
-                            <div>
-                                {admin && <h3>Student view</h3>}
-                                <code>
-                                    <b>{obj.title}</b><br />
-                                    <b>{obj.statement}</b><br />
-                                </code>
-                                {start && <Button variant="contained" size="small" onClick={(e) => { handleStart(e) }}>start</Button>}
+                        <div>
+                            <code>
+                                <b>{obj.title}</b><br />
+                                <b>{obj.statement}</b><br />
+                            </code>
+                            {start && <Button variant="contained" size="small" onClick={(e) => { handleStart(e) }}>start</Button>}
+                            {
+                                <div style={{ margin: '5px' }}>
+                                    <form onSubmit={(e) => { handleSubmitAns(e) }}>
+                                        {obj.hasOwnProperty('snippets') &&
+                                            arraySnippet.slice(0, count).map((ele, i) => {
+                                                return <code key={i}>{buildForStudent(ele)}</code>
+                                            })
+                                        }
+                                        <br /><br />
+                                        {!start && <><Button sx={{ mr: 1 }} variant="contained" size="small" disabled={prev} onClick={(e) => { handlePrevious(e) }}>Previous</Button>
+                                            <Button variant="contained" size="small" disabled={nxt} onClick={(e) => { handleNext(e) }}>Next</Button></>}
+                                    </form>
+                                    <br />
+                                </div>
+                            }
+                        </div>
+                        {errors.length > 0 && <ul>{
+                            errors.map((ele, i) => {
+                                return <li style={{ color: 'red' }} key={i}>{ele}</li>
+                            })
+                        }</ul>}
+                        <h3>{string}</h3>
+                        {(isSubmitted || admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
+                        {/* {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={obj} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>} */}
+                        {(solution) && <div>
+                            <h3>Code Solution</h3>
+                            <code>
+                                <b>{obj.title}</b><br />
+                                <b>{obj.statement}</b><br />
                                 {
-                                    <div style={{ margin: '5px' }}>
-                                        <form onSubmit={(e) => { handleSubmitAns(e) }}>
-                                            {obj.hasOwnProperty('snippets') &&
-                                                arraySnippet.slice(0, count).map((ele, i) => {
-                                                    return <code key={i}>{buildForStudent(ele)}</code>
-                                                })
-                                            }
-                                            <br /><br />
-                                            {!start && <><Button sx={{ mr: 1 }} variant="contained" size="small" disabled={prev} onClick={(e) => { handlePrevious(e) }}>Previous</Button>
-                                                <Button variant="contained" size="small" disabled={nxt} onClick={(e) => { handleNext(e) }}>Next</Button></>}
-                                        </form>
-                                        <br />
-                                    </div>
+                                    obj.snippets.slice(0, obj.snippets.length - 1).map(ele => {
+                                        return <code key={ele._id}>{buildForSolution(ele)}</code>
+                                    })
                                 }
-                            </div>
-                            {errors.length > 0 && <ul>{
-                                errors.map((ele, i) => {
-                                    return <li style={{ color: 'red' }} key={i}>{ele}</li>
-                                })
-                            }</ul>}
-                            <h3>{string}</h3>
-                            {(isSubmitted || admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
-                            {/* {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={obj} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>} */}
-                            {(solution) && <div>
-                                <h3>Code Solution</h3>
-                                <code>
-                                    <b>{obj.title}</b><br />
-                                    <b>{obj.statement}</b><br />
-                                    {
-                                        obj.snippets.slice(0, obj.snippets.length - 1).map(ele => {
-                                            return <code key={ele._id}>{buildForSolution(ele)}</code>
-                                        })
-                                    }
-                                </code>
-                                <br /><button onClick={() => { handleSolution() }}>Close</button>
-                            </div>}
-                            {(isSubmitted || admin) && <Explanations explanations={explanations} />}
-                        {/* </div> */}
+                            </code>
+                            <br /><button onClick={() => { handleSolution() }}>Close</button>
+                        </div>}
+                        {(isSubmitted || admin) && <Explanations explanations={explanations} />}
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         {studHints.length > 0 && <Hint hints={studHints} />}

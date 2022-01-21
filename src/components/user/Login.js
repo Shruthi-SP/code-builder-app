@@ -6,7 +6,6 @@ import validator from 'validator'
 import { Typography, TextField, Button} from "@mui/material"
 
 const Login = (props) => {
-    console.log('Login props=', props)
     const {getData} = props
 
     const [email, setEmail] = useState('')
@@ -45,7 +44,6 @@ const Login = (props) => {
     const handleChange = (e) =>{
         const attr = e.target.name
         const value = e.target.value
-        console.log('Login handleChange', attr, value)
         if(attr==='email'){
             setEmail(value)
         }
@@ -63,8 +61,7 @@ const Login = (props) => {
                 password: password
             }
             dispatch(asyncSetUser(formData, getData))
-            props.history.push('/codes')
-            console.log('dispatching form login', formData)           
+            props.history.push('/codes')          
         }
         else {
             setFormErr(err)

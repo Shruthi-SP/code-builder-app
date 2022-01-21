@@ -6,9 +6,6 @@ import validator from 'validator'
 import { Typography, TextField, Button} from "@mui/material"
 
 const Register = (props) => {
-    console.log('Register props=', props)
-
-    const {getData} = props
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -54,7 +51,6 @@ const Register = (props) => {
     const handleChange = (e) =>{
         const attr = e.target.name
         const value = e.target.value
-        console.log('Register handleChange', attr, value)
         if(attr==='email'){
             setEmail(value)
         }
@@ -79,7 +75,6 @@ const Register = (props) => {
                 account_type: 'self'
             }
             dispatch(asyncRegister(formData, resetForm, redirect))
-            console.log('dispatching form register', formData)
         }
         else {
             setFormErr(err)

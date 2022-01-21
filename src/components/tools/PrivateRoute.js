@@ -1,12 +1,11 @@
 import { Route, Redirect, withRouter } from "react-router-dom"
 import ErrorBoundary from "../ErrorBoundary"
 
-const PrivateRoute = ({component: Component, ...rest}) => {
-    console.log('Private route', rest)
+const PrivateRoute = ({component: Component, admin, handleShow, handleCancelShow, ...rest}) => {
     return (
-        <ErrorBoundary><Route {...rest} render={(rest)=>{
+        <ErrorBoundary><Route {...rest} render={(props)=>{
             return localStorage.getItem('user') ? (
-                <Component {...rest} />
+                <Component {...props} {...rest} />
             ) : (
                 <Redirect to={{pathname: '/login'}} />
             )
