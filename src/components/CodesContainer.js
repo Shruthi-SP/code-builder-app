@@ -38,7 +38,6 @@ const CodesContainer = (props) => {
             handleAdmin(true)
         }
         setUserLoggedIn(true)
-        props.history.push('/codes')
     }
     const dispatch = useDispatch()
     useEffect(() => {

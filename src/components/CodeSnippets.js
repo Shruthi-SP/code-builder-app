@@ -278,7 +278,7 @@ const CodeSnippets = (props) => {
                     {snippetToggle ? <>
                         {arraySnippet.length > 0 && <>
                             <h3>Admin create snippet form</h3>
-                            <ErrorBoundary><CodeSnippetForm admin={admin} codeId={_id} {...props} obj={obj} /></ErrorBoundary>
+                            <ErrorBoundary><CodeSnippetForm admin={admin} codeId={_id} {...props} obj={obj} handleEditSnippets={handleEditSnippets} /></ErrorBoundary>
                         </>
                         }</>
                         : <div>
