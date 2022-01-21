@@ -44,15 +44,14 @@ const FromInput = (props) => {
     }
 
     const handleRemoveHint = (e, obj) => {
-        e.preventDefault()
+        //e.preventDefault()
         const h = hints.filter(ele => ele._id !== obj._id || ele.hint_id !== obj.hint_id)
         setHints(h)
         setHint('')
-        handleSubmit()
     }
 
     const handleAddHints = (e) => {
-        e.preventDefault()
+        //e.preventDefault()
         if (hint.trim().length > 0) {
             const h = {
                 hint: hint,
@@ -99,7 +98,7 @@ const FromInput = (props) => {
                         key={ele.hint_id ? ele.hint_id : ele._id}>
                         {ele.hint}
                         <IconButton variant="outlined" color="success" size="small" onClick={(e) => { handleEditHint(e, ele) }}><Edit /></IconButton>
-                        <IconButton variant="outlined" color="error" size="small" onClick={(e) => { handleRemoveHint(e, ele) }}><Cancel /></IconButton>
+                        <IconButton variant="outlined" color="error" size="small" onClick={(e)=>{handleRemoveHint(e, ele) }}><Cancel /></IconButton>
                     </li>
                 })}
             </ul></>}

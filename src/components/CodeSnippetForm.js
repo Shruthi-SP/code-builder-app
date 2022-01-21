@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import RLDD from 'react-list-drag-and-drop/lib/RLDD'
 import AddSnippet from "./AddSnippet"
-import EditSnippet from './EditSnippet'
+//import EditSnippet from './EditSnippet'
 import Submit from "./tools/Submit"
 import ShowCode from "./ShowCode"
 import { asyncAddSnippet, asyncDeleteSnippet, asyncUpdateCode } from '../actions/codesAction'
 import { arrToDd } from "./tools/helper"
 import ModalForm from "./ModalForm"
-import { Button, IconButton, ButtonGroup, Grid, Paper, Typography } from "@mui/material"
+import { Button, IconButton, Grid, Typography } from "@mui/material"
 import { Delete, Edit } from "@mui/icons-material"
 import ErrorBoundary from "./ErrorBoundary"
 
@@ -226,7 +226,7 @@ const CodeSnippetForm = (props) => {
     return (
         <>
             {
-                isLoaded <= 0 ? <div><h2>CodeSnippetForm crashed! Code not loaded</h2></div> :
+                !isLoaded ? <div><h2>CodeSnippetForm crashed! Code not loaded</h2></div> :
                     <Grid container>
                         {admin && <Grid item xs={4}>
                             {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}

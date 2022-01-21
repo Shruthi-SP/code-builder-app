@@ -5,14 +5,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useDispatch } from "react-redux"
-import { asyncUpdateSnippet } from '../actions/codesAction'
-import FromInput from "./FormInput"
-import FormText from './FormText'
 
 const ModalHints = (props) => {
     const { open, handleClose, hObj, handleHint } = props
-    const dispatch = useDispatch()
 
     const [clue, setClue] = useState(hObj.hint)
 

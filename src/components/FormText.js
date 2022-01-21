@@ -48,7 +48,6 @@ const FormText = (props) => {
         const h = hints.filter(ele => ele._id !== obj._id || ele.hint_id !== obj.hint_id)
         setHints(h)
         setHint('')
-        handleSubmit()
     }
 
     const handleAddHints = (e) => {
@@ -73,7 +72,8 @@ const FormText = (props) => {
                 group: 'texts',
                 value: txt,
                 hints: hints,
-                explanation: explain
+                explanation: explain,
+                hint: hint
             }
             formSubmission(obj)
         } else {
