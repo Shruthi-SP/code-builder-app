@@ -16,6 +16,7 @@ import Submit from "./tools/Submit"
 import Tab from "./tools/Tab"
 import Explanations from "./Explanations"
 import Hint from "./Hints"
+import { withRouter } from "react-router-dom"
 
 const CodeSnippets = (props) => {
     const { admin } = props
@@ -42,6 +43,7 @@ const CodeSnippets = (props) => {
             setObj(object)
             let cs = JSON.parse(localStorage.getItem(_id))
             if (cs && cs.length > 0) {
+                console.log('found', cs)
                 setArraySnippet(cs)
             } else {
                 setArraySnippet(object.snippets)
@@ -369,4 +371,4 @@ const CodeSnippets = (props) => {
         </div >
     )
 }
-export default CodeSnippets
+export default withRouter(CodeSnippets)

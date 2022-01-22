@@ -55,13 +55,15 @@ const Login = (props) => {
     const handleLoginSubmit = (e) => {
         e.preventDefault()
         runValidation()
+        const redirect = () => {
+            props.history.push('/codes')
+        }
         if(Object.keys(err).length === 0){
             const formData = {
                 email: email,
                 password: password
             }
-            dispatch(asyncSetUser(formData, getData))
-            props.history.push('/codes')          
+            dispatch(asyncSetUser(formData, getData, redirect))
         }
         else {
             setFormErr(err)

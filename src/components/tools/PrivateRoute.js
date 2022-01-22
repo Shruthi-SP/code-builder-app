@@ -2,11 +2,11 @@ import { Route, Redirect, withRouter } from "react-router-dom"
 import ErrorBoundary from "../ErrorBoundary"
 
 const PrivateRoute = (props) => {
-    const {component:Component, ...rest} = props
+    const {component:Component, path, ...rest} = props
     return (
-        <ErrorBoundary><Route {...rest} render={(props)=>{
+        <ErrorBoundary><Route path={path} exact={true} {...rest} render={(props)=>{
             return localStorage.getItem('user') ? (
-                <Component {...props} {...rest} />
+                <Component {...props} {...rest}  />
             ) : (
                 <Redirect to={{pathname: '/login'}} />
             )
@@ -15,4 +15,4 @@ const PrivateRoute = (props) => {
     )
 }
 
-export default PrivateRoute
+export default withRouter(PrivateRoute)

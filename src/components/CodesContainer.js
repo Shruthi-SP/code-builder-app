@@ -17,12 +17,30 @@ const CodesContainer = (props) => {
     const [admin, setAdmin] = useState(false)
     const [userLoggedIn, setUserLoggedIn] = useState(false)
 
+    const dispatch = useDispatch()
+
     const handleLoggedIn = () => {
         setUserLoggedIn(!userLoggedIn)
     }
+
     const handleAdmin = (isAdmin) => {
         setAdmin(isAdmin)
     }
+
+    const getData = (obj) => {
+        if (obj.role === 'admin') {
+            handleAdmin(true)
+        }
+        setUserLoggedIn(true)
+    }
+       
+    useEffect(() => {
+        const obj = JSON.parse(localStorage.getItem('user'))
+        if (localStorage.user) {
+            dispatch(asyncSetUser(obj, getData))
+        }
+    }, [])
+
     const handleLogout = () => {
         localStorage.clear()
         //localStorage.removeItem('user')
@@ -32,20 +50,6 @@ const CodesContainer = (props) => {
         props.history.push('/')
         alert('successfully logged out')
     }
-
-    const getData = (obj) => {
-        if (obj.role === 'admin') {
-            handleAdmin(true)
-        }
-        setUserLoggedIn(true)
-    }
-    const dispatch = useDispatch()
-    useEffect(() => {
-        const obj = JSON.parse(localStorage.getItem('user'))
-        if (localStorage.user) {
-            dispatch(asyncSetUser(obj, getData))
-        }
-    }, [])
 
     const handleShow = () => {
         setShow(true)
@@ -58,30 +62,15 @@ const CodesContainer = (props) => {
         <>
             {
                 (userLoggedIn) ?
-                    <div style={{ marginTop: '5px', maxWidth: "100%"}}>
+                    <div style={{ marginTop: '5px', maxWidth: "100%" }}>
                         <Grid container direction="row">
-                            <Grid
-                                item
-                                xs
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "flex-start"
-                                }}
-                            >
+                            <Grid item xs sx={{display: "flex", justifyContent: "flex-start"}}>
                                 <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
                                 {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
                                 {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
                             </Grid>
-                            <Grid
-                                item
-                                xs
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "flex-end"
-                                }}
-                            >
-                                <Link style={{ margin: '5px', justifyContent: 'end' }}
-                                    to='#' onClick={handleLogout}>Logout</Link>
+                            <Grid item xs sx={{display: "flex", justifyContent: "flex-end"}}>
+                                <Link style={{ margin: '5px', justifyContent: 'end' }} to='#' onClick={handleLogout}>Logout</Link>
                             </Grid>
                         </Grid>
                     </div>
@@ -96,19 +85,9 @@ const CodesContainer = (props) => {
                 return <Login {...props} handleLoggedIn={handleLoggedIn} getData={getData} handleCancelShow={handleLoggedIn} handleAdmin={handleAdmin} />
             }}></Route>
 
-            {/* <PrivateRoute path='/codes' component={CodesListing} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} {...props}/>
-            <PrivateRoute path='/create-code' component={AddCode} handleShow={handleShow} handleCancelShow={handleCancelShow} {...props} />
-            <PrivateRoute path='/codes/:id' component={CodeSnippets} admin={admin} {...props}/> */}
-
-            <ErrorBoundary><Route path='/codes' exact render={(props) => {
-                return <CodesListing {...props} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} />
-            }}></Route></ErrorBoundary>
-            <ErrorBoundary><Route path='/create-code' exact render={(props) => {
-                return <AddCode {...props} handleShow={handleShow} handleCancelShow={handleCancelShow} />
-            }}></Route></ErrorBoundary>
-            <ErrorBoundary><Route path='/codes/:id' exact render={(props) => {
-                return <CodeSnippets {...props} admin={admin} />
-            }} ></Route></ErrorBoundary>
+            <PrivateRoute path='/codes' component={CodesListing} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} />
+            <PrivateRoute path='/create-code' component={AddCode} handleShow={handleShow} handleCancelShow={handleCancelShow}/>
+            <PrivateRoute path='/codes/:id' component={CodeSnippets} admin={admin} />
         </>
     )
 }

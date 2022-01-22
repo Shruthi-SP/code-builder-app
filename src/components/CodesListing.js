@@ -5,7 +5,6 @@ import { Link, withRouter } from "react-router-dom"
 import CodeItem from "./CodeItem"
 
 const CodesListing = (props) => {
-    //console.log('code listing props', props)
     const { admin } = props
 
     const codes = useSelector((state) => {
@@ -33,11 +32,7 @@ const CodesListing = (props) => {
                                 <Typography variant="h6" >{ele.title}</Typography>
                                 <Typography variant="h6">{i + 1}. {ele.statement}</Typography>
                                 {admin && <CodeItem snippets={ele.snippets} />}
-                                <br /><Link to='#' onClick={(e) => {
-                                    props.handleShow(e)
-                                    props.history.push(`/codes/${ele._id}`)
-                                    //localStorage.setItem('codeId', ele._id)
-                                }} >{admin ? 'Show' : 'Solve'}</Link><br />
+                                <br /><Link to={`/codes/${ele._id}`}>{admin ? 'Show' : 'Solve'}</Link><br />
                             </>
                         </Box>
                     })
