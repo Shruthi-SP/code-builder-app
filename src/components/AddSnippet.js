@@ -4,7 +4,7 @@ import FormText from './FormText'
 import FromInput from "./FormInput"
 
 const AddSnippet = (props) => {
-    const { codeId, group, handleFormTextToggle, handleCancelText, handleFormInputToggle, handleCancelInput } = props
+    const { length,codeId, group, handleFormTextToggle, handleCancelText, handleFormInputToggle, handleCancelInput } = props
     const dispatch = useDispatch()
 
     const formSubmission = (formData) => {
@@ -13,8 +13,8 @@ const AddSnippet = (props) => {
     }
     return (
         <div>
-            {group === 'texts' && <><FormText handleCancelText={handleCancelText} formSubmission={formSubmission}/><br /></>}
-            {group === 'input' && <><FromInput handleCancelInput={handleCancelInput} formSubmission={formSubmission} /><br /></>}
+            {group === 'texts' && <><FormText length={length} handleCancelText={handleCancelText} formSubmission={formSubmission}/><br /></>}
+            {group === 'input' && <><FromInput length={length} handleCancelInput={handleCancelInput} formSubmission={formSubmission} /><br /></>}
         </div>
         
     )

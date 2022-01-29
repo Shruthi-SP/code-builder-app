@@ -17,6 +17,7 @@ import Tab from "./tools/Tab"
 import Explanations from "./Explanations"
 import Hint from "./Hints"
 import { withRouter } from "react-router-dom"
+import Swal from 'sweetalert2'
 
 const CodeSnippets = (props) => {
     const { admin } = props
@@ -37,13 +38,17 @@ const CodeSnippets = (props) => {
     const [nxt, setNxt] = useState(false)
     const [count, setCount] = useState(0)
     const [studHints, setStudHints] = useState([])
+    const [preview, setPreview] = useState(false)
+
+    const handlePreview = (e) => {
+        setPreview(!preview)
+    }
 
     const getResult = (object) => {
         if (Object.keys(object).length > 0) {
             setObj(object)
             let cs = JSON.parse(localStorage.getItem(_id))
             if (cs && cs.length > 0) {
-                console.log('found', cs)
                 setArraySnippet(cs)
             } else {
                 setArraySnippet(object.snippets)
@@ -58,7 +63,7 @@ const CodeSnippets = (props) => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(asyncGetCode(_id, getResult))
-    }, [])
+    }, [codeToggle])
 
     useEffect(() => {
         return () => {
@@ -126,15 +131,33 @@ const CodeSnippets = (props) => {
             axios.post('http://localhost:3044/api/answers', formData)
                 .then(response => {
                     if (response.hasOwnProperty('errors')) {
-                        alert(errors.message)
+                        //alert(errors.message)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.errors,
+                            footer: ''
+                        })
                     }
                     else {
-                        alert('answer submitted')
+                        //alert('answer submitted')
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Submitted',
+                            text: 'answer submitted',
+                            footer: ''
+                        })
                     }
 
                 })
                 .catch(err => {
-                    alert(err.message)
+                    //alert(err.message)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err.message,
+                        footer: ''
+                    })
                 })
         }
         setErrors(err)
@@ -162,6 +185,7 @@ const CodeSnippets = (props) => {
             if (a) {
                 const index = Number(a.id) + 1
                 const h = getHints(obj.snippets.slice(0, index))
+                console.log('next',index, a, obj.snippets, count)
                 setStudHints(h)
                 setCount(index)
             } else {
@@ -181,6 +205,7 @@ const CodeSnippets = (props) => {
             if (a) {
                 let index = a.id + 1
                 const h = getHints(obj.snippets.slice(0, index))
+                console.log('prev',h, index, a)
                 setStudHints(h)
                 setCount(index)
             } else {
@@ -277,12 +302,10 @@ const CodeSnippets = (props) => {
                 (admin && Object.keys(obj).length > 0) && <div style={{ margin: '5px' }}>
                     <h3>Admin view</h3>
                     <Typography variant="h5" color="primary.dark">Code and Snippets</Typography>
-                    {snippetToggle ? <>
-                        {arraySnippet.length > 0 && <>
+                    {snippetToggle ? <>                        
                             <h3>Admin create snippet form</h3>
                             <ErrorBoundary><CodeSnippetForm admin={admin} codeId={_id} {...props} obj={obj} handleEditSnippets={handleEditSnippets} /></ErrorBoundary>
                         </>
-                        }</>
                         : <div>
                             {
                                 codeToggle ? <EditCode code={obj} handleEditCode={handleEditCode} handleCancelCode={handleCancelCode} /> : <>
@@ -298,20 +321,17 @@ const CodeSnippets = (props) => {
                                 })
                             }
                             <br /><br />
-
-
                             <ButtonGroup variant="contained" aria-label="outlined primary button group">
                                 <Button sx={{ mr: 1 }} startIcon={<Edit />} onClick={handleEditCode}>Edit Code</Button>
                                 <Button sx={{ mr: 1 }} startIcon={<Delete />} onClick={handleRemoveCode}>Remove Code</Button>
                                 <Button startIcon={<><Edit /><Add /></>} onClick={handleEditSnippets}>Snippets</Button>
-                            </ButtonGroup>
+                            </ButtonGroup><br />
+                            <Button onClick={handlePreview}>{preview ? 'Close Preview' : 'Show Preview'}</Button>
                         </div>
-
                     }
-
                 </div>
             }
-            <div>
+            {(!admin || preview) && <div>
                 <h2>{admin ? 'student view' : 'Code'}</h2>
                 {/* <h2>Sibling of CodeSnippetForm component</h2> */}
                 {/* <span>Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.</span><br /> */}
@@ -366,9 +386,8 @@ const CodeSnippets = (props) => {
                         {studHints.length > 0 && <Hint hints={studHints} />}
                     </Grid>
                 </Grid>
-            </div>
-
-        </div >
+            </div>}
+        </div>
     )
 }
 export default withRouter(CodeSnippets)

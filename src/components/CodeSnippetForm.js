@@ -10,15 +10,17 @@ import { asyncAddSnippet, asyncDeleteSnippet, asyncUpdateCode } from '../actions
 import { arrToDd } from "./tools/helper"
 import ModalForm from "./ModalForm"
 import { Button, IconButton, Grid, Typography } from "@mui/material"
-import { Delete, Edit } from "@mui/icons-material"
+import { Delete, Edit, ArrowBackIos } from "@mui/icons-material"
 import ErrorBoundary from "./ErrorBoundary"
 
 const CodeSnippetForm = (props) => {
+    console.log('code snippets form props', props)
     const { admin } = props
 
     const dispatch = useDispatch()
 
     const isLoaded = useSelector(state => {
+        console.log(state.codes.isLoading)
         return state.codes.isLoading
     })
 
@@ -55,6 +57,8 @@ const CodeSnippetForm = (props) => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [open, setOpen] = useState(false);
 
+    console.log('cs form arr snipts', arraySnippet)
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -84,14 +88,17 @@ const CodeSnippetForm = (props) => {
     const handleCreateTexts = (e) => {
         e.preventDefault()
         setFormTextToggle(true)
+        setOpen(true)
     }
     const handleFormTextToggle = () => {
         setFormTextToggle(false)
         setArraySnippet(array)
+        setOpen(false)
     }
     const handleCancelText = () => {
         setFormTextToggle(false)
         setEditToggle(false)
+        setOpen(false)
     }
     //-----------------------End of Text----------------------------
     //-----------------------Input----------------------------------
@@ -122,23 +129,23 @@ const CodeSnippetForm = (props) => {
     const handleInsertBreak = (e) => {
         e.preventDefault()
         setLimit(limit + 1)
-        dispatch(asyncAddSnippet(props.codeId, { group: 'break', limit: limit + 1 }))
+        dispatch(asyncAddSnippet(props.codeId, { group: 'break', limit: limit + 1, id:arraySnippet.length },))
     }
     const handleInsertTab = (e) => {
         e.preventDefault()
-        dispatch(asyncAddSnippet(props.codeId, { group: 'tab' }))
+        dispatch(asyncAddSnippet(props.codeId, { group: 'tab', id:arraySnippet.length }))
     }
     const handleInsertDoubleTab = (e) => {
         e.preventDefault()
-        dispatch(asyncAddSnippet(props.codeId, { group: 'doubleTab' }))
+        dispatch(asyncAddSnippet(props.codeId, { group: 'doubleTab', id:arraySnippet.length }))
     }
     const handleInsertSpace = (e) => {
         e.preventDefault()
-        dispatch(asyncAddSnippet(props.codeId, { group: 'space' }))
+        dispatch(asyncAddSnippet(props.codeId, { group: 'space', id:arraySnippet.length }))
     }
     const handleInsertSubmit = (e) => {
         e.preventDefault()
-        dispatch(asyncAddSnippet(props.codeId, { group: 'submit' }))
+        dispatch(asyncAddSnippet(props.codeId, { group: 'submit', id:arraySnippet.length }))
     }
     //------------------------Submit Answers---------------------
     const handleSubmitAns = (e) => {
@@ -229,7 +236,7 @@ const CodeSnippetForm = (props) => {
                 !isLoaded ? <div><h2>CodeSnippetForm crashed! Code not loaded</h2></div> :
                     <Grid container>
                         {admin && <Grid item xs={4}>
-                            {editToggle && <ModalForm open={open} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
+                            {editToggle && <ModalForm open={open} length={arraySnippet.length} codeId={props.codeId} snippet={snip} handleCancelEdit={handleCancelEdit} handleClose={handleClose}
                             />}
                             <div>
                                 <Typography variant="h6">Re-arrange the snippets</Typography>
@@ -259,15 +266,15 @@ const CodeSnippetForm = (props) => {
                                 </ol>
                             </div>
 
-                            {formTextToggle && <AddSnippet codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText} />}
-                            {formInputToggle && <AddSnippet codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
+                            {formTextToggle && <AddSnippet length={arraySnippet.length} codeId={props.codeId} group={'texts'} handleFormTextToggle={handleFormTextToggle} handleCancelText={handleCancelText}  />}
+                            {formInputToggle && <AddSnippet length={arraySnippet.length} codeId={props.codeId} group={'input'} handleFormInputToggle={handleFormInputToggle} handleCancelInput={handleCancelInput} />}
 
                             <Grid container >
                                 {buttons.map((ele, i) => {
                                     return <Grid key={i} item xs={12} sm={6}>{ele}</Grid>
                                 })}
                             </Grid>
-                            <button onClick={() => { props.handleEditSnippets() }}>Back</button>
+                            <Button variant="contained" startIcon={<ArrowBackIos />} size="small" onClick={() => { props.handleEditSnippets() }}>Back</Button>
                         </Grid>
                         }
                         {Object.keys(codeObj).length > 0 && <Grid item xs={8}>

@@ -4,7 +4,8 @@ import { Add, Cancel, Edit } from "@mui/icons-material"
 import ModalHints from "./ModalHints"
 
 const FromInput = (props) => {
-    const { handleCancelInput, handleCancelEdit, formSubmission, answer: editAns, hint: editHint, hints: editHints, explanation: editExplain } = props
+    const {length, handleCancelInput, handleCancelEdit, formSubmission, answer: editAns, hint: editHint, hints: editHints, explanation: editExplain, id: editId } = props
+    const [id, setId] = useState(editId ? editId : length)
     const [ans, setAns] = useState(editAns ? editAns : '')
     const [hint, setHint] = useState(editHint ? editHint : '')
     const [hints, setHints] = useState(editHints ? editHints : [])
@@ -64,7 +65,7 @@ const FromInput = (props) => {
     }
 
     const handleSubmit = (e) => {
-        console.log('handle submit ', e)
+        //console.log('handle submit ', e)
         e.preventDefault()
         runValidation()
         if (Object.keys(errors).length === 0) {

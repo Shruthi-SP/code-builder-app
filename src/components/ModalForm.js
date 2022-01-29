@@ -11,7 +11,7 @@ import FromInput from "./FormInput"
 import FormText from './FormText'
 
 const ModalForm = (props) => {
-    const {open,handleClose, codeId, snippet, handleCancelEdit} = props
+    const {length, open,handleClose, codeId, snippet, handleCancelEdit} = props
     const dispatch = useDispatch()
 
     const [editLimit, setEditLimit] = useState('')
@@ -33,9 +33,9 @@ const ModalForm = (props) => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit Snippet</DialogTitle>
                 <DialogContent>
-                    {snippet.group === 'texts' && <FormText {...snippet} formSubmission={formSubmission} handleCancelEdit={handleCancelEdit} />}
+                    {snippet.group === 'texts' && <FormText length={length} {...snippet} formSubmission={formSubmission} handleCancelEdit={handleCancelEdit} />}
 
-                    {snippet.group === 'input' && <FromInput {...snippet} formSubmission={formSubmission} handleCancelEdit={handleCancelEdit} />}
+                    {snippet.group === 'input' && <FromInput length={length} {...snippet} formSubmission={formSubmission} handleCancelEdit={handleCancelEdit} />}
 
                     {snippet.group === 'break' && <><TextField label='Enter limit here' variant='outlined' type='text' value={editLimit} placeholder="Change Limit" onChange={(e) => { setEditLimit(e.target.value) }} /><br /><br />
                         <Button sx={{ mr: 1 }} variant="contained" size="small" onClick={handleSetLimit}>Set</Button>

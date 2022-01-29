@@ -1,7 +1,9 @@
-const array = [
+import Swal from 'sweetalert2'
+
+export const array = [
     { id: 1, user_name: 'admin1', email: 'admin1@dct.com', password: 'secret123', role: 'admin', account_type: 'dct' },
-    { id: 1, user_name: 'student1', email: 'student1@dct.com', password: 'secret123', role: 'student', account_type: 'dct' },
-    { id: 1, user_name: 'student2', email: 'student2@dct.com', password: 'secret123', role: 'student', account_type: 'dct' },
+    { id: 2, user_name: 'student1', email: 'student1@dct.com', password: 'secret123', role: 'student', account_type: 'dct' },
+    { id: 3, user_name: 'student2', email: 'student2@dct.com', password: 'secret123', role: 'student', account_type: 'dct' },
 ]
 
 export const asyncRegister = (formData, resetForm, redirect) => {
@@ -9,7 +11,13 @@ export const asyncRegister = (formData, resetForm, redirect) => {
         array.push(formData)
         resetForm()
         redirect()
-        alert('registered successfully')
+        //alert('registered successfully')
+        Swal.fire({
+            icon: 'success',
+            title: 'Registered',
+            text: 'Registered successfully',
+            footer: ''
+          })
     }
 }
 
@@ -29,11 +37,23 @@ export const asyncSetUser = (formData, getData, redirect) => {
             if (Object.keys(obj).length === 0) {
                 const result = {}
                 result.errors = 'Invalid email or password'
-                alert(result.errors)
+                //alert(result.errors)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: result.errors,
+                    footer: ''
+                  })
             } else {
                 dispatch(setUser(obj))
                 getData(obj)
-                alert('Login successful')
+                //alert('Login successful')
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Login Successful',
+                    footer: ''
+                  })
                 localStorage.setItem('user', JSON.stringify(obj))
                 redirect()
             }

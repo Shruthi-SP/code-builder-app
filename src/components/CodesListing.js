@@ -24,7 +24,7 @@ const CodesListing = (props) => {
     return (
         <>{
             array.length === 0 ? <div><h2>CodeListing crashed! No array of codes</h2></div> : <div style={{ marginLeft: '5px' }}>
-                <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>Listing Codes:</Typography>
+                <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>Listing Codes: {array.length}</Typography>
                 {array.length > 0 &&
                     array.map((ele, i) => {
                         return <Box width='100%' sx={{ border: 1, borderColor: 'error.main', borderRadius: 2, mb: 2, p: 2 }} key={i}>
@@ -41,4 +41,4 @@ const CodesListing = (props) => {
         }</>
     )
 }
-export default withRouter(CodesListing)
+export default CodesListing
