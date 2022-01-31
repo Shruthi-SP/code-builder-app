@@ -7,12 +7,14 @@ import Login from "./user/Login"
 import Register from "./user/Register"
 import AddCode from "./AddCode"
 import CodesListing from "./CodesListing"
+import StudentsListing from "./StudentsListing"
 import CodeSnippets from "./CodeSnippets"
 import ErrorBoundary from "./ErrorBoundary"
 import PrivateRoute from "./tools/PrivateRoute"
 import { Box, Divider, Grid, Typography } from "@mui/material"
 import CodeDashboard from "./CodeDashboard"
 import Swal from 'sweetalert2'
+import StudentProfile from "./StudentProfile"
 
 const CodesContainer = (props) => {
     const [show, setShow] = useState(false)
@@ -75,7 +77,9 @@ const CodesContainer = (props) => {
                             <Grid item xs sx={{ display: "flex", justifyContent: "flex-start", }}>
                                 <Link style={{ margin: '5px' }} to='/codes' >Codes List</Link>
                                 {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
+                                {admin && <Link style={{ margin: '5px' }} to='/students'>Students List </Link>}
                                 {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
+                                <Link style={{ margin: '5px' }} to='/students/:id'>Profile </Link>
                                 <Link style={{ margin: '5px' }} to='/dashboard' >Dashboard</Link>
                             </Grid>
                             <Grid item xs sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -96,8 +100,10 @@ const CodesContainer = (props) => {
             }}></Route>
 
             <PrivateRoute path='/codes' component={CodesListing} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} />
+            <PrivateRoute path='/students' component={StudentsListing} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} />
             <PrivateRoute path='/create-code' component={AddCode} handleShow={handleShow} handleCancelShow={handleCancelShow} />
             <PrivateRoute path='/codes/:id' component={CodeSnippets} admin={admin} />
+            <PrivateRoute path='/students/:id' component={StudentProfile} admin={admin} />
             <PrivateRoute path='/dashboard' component={CodeDashboard} admin={admin} />
         </Box>
     )

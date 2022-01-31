@@ -20,6 +20,7 @@ import { withRouter } from "react-router-dom"
 import Swal from 'sweetalert2'
 
 const CodeSnippets = (props) => {
+    console.log('cs props', props)
     const { admin } = props
     const _id = props.match.params.id
 
