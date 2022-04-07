@@ -41,13 +41,15 @@ const CodeDashboard = (props) => {
                 if (result.hasOwnProperty('errors')) {
                     console.log('error', result.errors)
                 } else {
-                    console.log('get all submitted answers', result.allAnswers)
+                    console.log('student ans for all questions=',result)
                     const obj = {}
                     obj['Correct'] = result.obtainedPoints
                     obj['Incorrect'] = result.totalPoints - result.obtainedPoints
                     const arr = Object.entries(obj)
                     setChartData(arr)
                     setScore(result)
+                    setStudentSpec(result.allAnswers)
+                    setStudentsAll([])
                 }
             })
             .catch(err => {
@@ -118,7 +120,7 @@ const CodeDashboard = (props) => {
     }
 
     return <div>
-        <Typography variant="h5">{props.admin ? 'Admin ' : user.user_name } Dashboard</Typography>
+        <Typography variant="h4">{props.admin ? 'Admin ' : 'Student '}Dashboard</Typography>
         <Grid container direction='row' >
             <DashboardCard heading='Total Codes' number={codes.length} />
             {props.admin && <><DashboardCard heading='Total Students' number={array.length} />
