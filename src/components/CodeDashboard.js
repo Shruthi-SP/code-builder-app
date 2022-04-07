@@ -41,12 +41,15 @@ const CodeDashboard = (props) => {
                 if (result.hasOwnProperty('errors')) {
                     console.log('error', result.errors)
                 } else {
+                    console.log('student ans for all questions=',result)
                     const obj = {}
                     obj['Correct'] = result.obtainedPoints
                     obj['Incorrect'] = result.totalPoints - result.obtainedPoints
                     const arr = Object.entries(obj)
                     setChartData(arr)
                     setScore(result)
+                    setStudentSpec(result.allAnswers)
+                    setStudentsAll([])
                 }
             })
             .catch(err => {
@@ -78,7 +81,7 @@ const CodeDashboard = (props) => {
 
     const defaultProps = {
         options: array,
-        getOptionLabel: (option) => option.user_name,
+        getOptionLabel: (option) => option.user_name ? option.user_name : 'anonymous',
     };
 
     const handleGo = () => {
