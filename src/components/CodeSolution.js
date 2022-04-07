@@ -36,7 +36,7 @@ const CodeSolution = (props) => {
             <b>{obj.title}</b><br />
             <b>{obj.statement}</b><br />
             {
-                obj.snippets.slice(0, obj.snippets.length-1).map(ele=>{
+                obj.snippets.slice(0, obj.snippets.length).map(ele=>{
                     return <code key={ele._id}>{buildFor(ele)}</code>
                 })
             }

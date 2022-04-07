@@ -41,6 +41,7 @@ const CodeDashboard = (props) => {
                 if (result.hasOwnProperty('errors')) {
                     console.log('error', result.errors)
                 } else {
+                    console.log('get all submitted answers', result.allAnswers)
                     const obj = {}
                     obj['Correct'] = result.obtainedPoints
                     obj['Incorrect'] = result.totalPoints - result.obtainedPoints
@@ -117,7 +118,7 @@ const CodeDashboard = (props) => {
     }
 
     return <div>
-        <Typography variant="h4">{props.admin ? 'Admin ' : 'Student '}Dashboard</Typography>
+        <Typography variant="h5">{props.admin ? 'Admin ' : user.user_name } Dashboard</Typography>
         <Grid container direction='row' >
             <DashboardCard heading='Total Codes' number={codes.length} />
             {props.admin && <><DashboardCard heading='Total Students' number={array.length} />

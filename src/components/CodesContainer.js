@@ -32,6 +32,7 @@ const CodesContainer = (props) => {
     }
 
     const getData = (obj) => {
+        console.log('cc settting user', obj)
         if (obj.role === 'admin') {
             handleAdmin(true)
         }
@@ -79,7 +80,7 @@ const CodesContainer = (props) => {
                                 {admin && <Link style={{ margin: '5px' }} to='/create-code'>Create Code </Link>}
                                 {admin && <Link style={{ margin: '5px' }} to='/students'>Students List </Link>}
                                 {show && <Link style={{ margin: '5px' }} to='/codes/:id'>Snippet </Link>}
-                                <Link style={{ margin: '5px' }} to='/students/:id'>Profile </Link>
+                                {!admin && <Link style={{ margin: '5px' }} to='/students/:id'>My-Profile </Link>}
                                 <Link style={{ margin: '5px' }} to='/dashboard' >Dashboard</Link>
                             </Grid>
                             <Grid item xs sx={{ display: "flex", justifyContent: "flex-end" }}>

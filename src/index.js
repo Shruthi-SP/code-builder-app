@@ -9,6 +9,9 @@ import { asyncGetAllCodes } from './actions/codesAction';
 
 const store = configureStore()
 store.dispatch(asyncGetAllCodes())
+store.subscribe(()=>{
+  console.log('updated state=', store.getState())
+})
 
 ReactDOM.render(
   <BrowserRouter >
