@@ -6,28 +6,12 @@ import validator from 'validator'
 import { Typography, TextField, Button} from "@mui/material"
 
 const Login = (props) => {
-    const {getData} = props
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [formErr, setFormErr] = useState({})
     const err = {}
     const dispatch = useDispatch()
-
-    const resetForm = () => {
-        setEmail('')
-        setPassword('')
-        setFormErr({})
-    }
-    
-    // const getData = (obj) => {
-    //     if(obj.role==='admin'){
-    //         props.handleAdmin(true)
-    //     }
-    //     props.handleLoggedIn()
-    //     props.history.push('/codes')
-    //     resetForm()
-    // }
 
     const runValidation = () => {
         if(email.trim().length === 0){
@@ -55,7 +39,11 @@ const Login = (props) => {
     const handleLoginSubmit = (e) => {
         e.preventDefault()
         runValidation()
-        const redirect = () => {
+        const redirect = (obj) => {
+            // props.handleLoggedIn()
+            // if(obj.role==='admin'){
+            //     props.handleAdmin()
+            // }
             props.history.push('/codes')
         }
         if(Object.keys(err).length === 0){
@@ -63,7 +51,7 @@ const Login = (props) => {
                 email: email,
                 password: password
             }
-            dispatch(asyncSetUser(formData, getData, redirect))
+            dispatch(asyncSetUser(formData, redirect))
         }
         else {
             setFormErr(err)
@@ -84,6 +72,5 @@ const Login = (props) => {
 
         </form>
     </div>
-
 }
 export default withRouter(Login)

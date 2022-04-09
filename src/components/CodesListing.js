@@ -5,11 +5,15 @@ import { Link, withRouter } from "react-router-dom"
 import CodeItem from "./CodeItem"
 
 const CodesListing = (props) => {
-    const { admin } = props
+    const user = useSelector(state => {
+        return state.user
+    })
 
     const codes = useSelector((state) => {
         return state.codes.data
     })
+
+    const admin = user.role === 'admin' ? true : false
 
     const [array, setArray] = useState(codes)
 

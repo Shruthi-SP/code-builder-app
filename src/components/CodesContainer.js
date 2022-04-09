@@ -22,29 +22,25 @@ const CodesContainer = (props) => {
     const [userLoggedIn, setUserLoggedIn] = useState(false)
 
     const dispatch = useDispatch()
-
     const handleLoggedIn = () => {
         setUserLoggedIn(!userLoggedIn)
     }
-
-    const handleAdmin = (isAdmin) => {
-        setAdmin(isAdmin)
+    const handleAdmin = () => {
+        setAdmin(!admin)
     }
 
-    const getData = (obj) => {
-        console.log('cc settting user', obj)
-        if (obj.role === 'admin') {
-            handleAdmin(true)
-        }
-        setUserLoggedIn(true)
-    }
+    const user = useSelector(state => {
+        return state.user
+    })
 
     useEffect(() => {
-        const obj = JSON.parse(localStorage.getItem('user'))
-        if (localStorage.user) {
-            dispatch(asyncSetUser(obj, getData))
+        if (Object.keys(user).length > 0) {
+            setUserLoggedIn(true)
+            if (user.role === 'admin') {
+                setAdmin(true)
+            }
         }
-    }, [])
+    }, [user])
 
     const handleLogout = () => {
         localStorage.clear()
@@ -97,15 +93,15 @@ const CodesContainer = (props) => {
             {/* <Divider sx={{m:2, ml:0, mr:0}} /> */}
             <Route path='/register' component={Register}></Route>
             <Route path='/login' render={(props) => {
-                return <Login {...props} handleLoggedIn={handleLoggedIn} getData={getData} handleCancelShow={handleLoggedIn} handleAdmin={handleAdmin} />
+                return <Login {...props} handleLoggedIn={handleLoggedIn} handleCancelShow={handleLoggedIn} handleAdmin={handleAdmin} />
             }}></Route>
 
-            <PrivateRoute path='/codes' component={CodesListing} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} />
-            <PrivateRoute path='/students' component={StudentsListing} admin={admin} handleShow={handleShow} handleCancelShow={handleCancelShow} />
+            <PrivateRoute path='/codes' component={CodesListing} handleShow={handleShow} handleCancelShow={handleCancelShow} />
+            <PrivateRoute path='/students' component={StudentsListing} handleShow={handleShow} handleCancelShow={handleCancelShow} />
             <PrivateRoute path='/create-code' component={AddCode} handleShow={handleShow} handleCancelShow={handleCancelShow} />
-            <PrivateRoute path='/codes/:id' component={CodeSnippets} admin={admin} />
-            <PrivateRoute path='/students/:id' component={StudentProfile} admin={admin} />
-            <PrivateRoute path='/dashboard' component={CodeDashboard} admin={admin} />
+            <PrivateRoute path='/codes/:id' component={CodeSnippets} />
+            <PrivateRoute path='/students/:id' component={StudentProfile} />
+            <PrivateRoute path='/dashboard' component={CodeDashboard} />
         </Box>
     )
 }

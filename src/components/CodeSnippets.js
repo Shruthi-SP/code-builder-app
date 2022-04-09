@@ -20,8 +20,11 @@ import { withRouter } from "react-router-dom"
 import Swal from 'sweetalert2'
 
 const CodeSnippets = (props) => {
-    console.log('cs props', props)
-    const { admin } = props
+    const user = useSelector(state=>{
+        return state.user
+    })
+    const admin = user.role === 'admin' ? true : false
+    //console.log('cs admin', admin)
     const _id = props.match.params.id
 
     const [codeToggle, setCodeToggle] = useState(false)
@@ -186,7 +189,7 @@ const CodeSnippets = (props) => {
             if (a) {
                 const index = Number(a.id) + 1
                 const h = getHints(obj.snippets.slice(0, index))
-                console.log('next',index, a, obj.snippets, count)
+                //console.log('next',index, a, obj.snippets, count)
                 setStudHints(h)
                 setCount(index)
             } else {
@@ -206,7 +209,7 @@ const CodeSnippets = (props) => {
             if (a) {
                 let index = a.id + 1
                 const h = getHints(obj.snippets.slice(0, index))
-                console.log('prev',h, index, a)
+                //console.log('prev',h, index, a)
                 setStudHints(h)
                 setCount(index)
             } else {

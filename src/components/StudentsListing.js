@@ -10,7 +10,7 @@ const StudentsListing = (props) => {
     useEffect(() => {
         props.handleCancelShow()
         const s = array.filter(ele => ele.role === 'student')
-        console.log('students pg=', s)
+        //console.log('students pg=', s)
         setStudents(s)
     }, [])
 

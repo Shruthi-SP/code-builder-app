@@ -9,6 +9,8 @@ import DashboardTable from "./DashboardTable";
 import DashboardCard from "./DashboardCard";
 import { FastForward } from "@mui/icons-material";
 import DashboardChart from "./DashboardChart";
+import Swal from 'sweetalert2'
+
 const CodeDashboard = (props) => {
     const codesR = useSelector(state => {
         return state.codes
@@ -16,6 +18,7 @@ const CodeDashboard = (props) => {
     const user = useSelector(state => {
         return state.user
     })
+    const admin = user.role === 'admin' ? true : false
 
     const getArray = (a) => {
         const r = a.map(ele => {
@@ -39,9 +42,15 @@ const CodeDashboard = (props) => {
             .then(response => {
                 const result = response.data
                 if (result.hasOwnProperty('errors')) {
-                    console.log('error', result.errors)
+                    //console.log('error', result.errors)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: result.errors,
+                        footer: ''
+                    })
                 } else {
-                    console.log('student ans for all questions=',result)
+                    //console.log('student ans for all questions=',result)
                     const obj = {}
                     obj['Correct'] = result.obtainedPoints
                     obj['Incorrect'] = result.totalPoints - result.obtainedPoints
@@ -53,7 +62,13 @@ const CodeDashboard = (props) => {
                 }
             })
             .catch(err => {
-                console.log(err.message)
+                //console.log(err.message)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: err.message,
+                    footer: ''
+                })
             })
     }
 
@@ -63,17 +78,29 @@ const CodeDashboard = (props) => {
             .then((response) => {
                 result = response.data
                 if (result.hasOwnProperty('errors')) {
-                    console.log(result.errors)
+                    //console.log(result.errors)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: result.errors,
+                        footer: ''
+                    })
                 }
                 else {
                     setAnswers(result)
                 }
             }).catch((err) => {
-                console.log(err.message)
+                //console.log(err.message)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: err.message,
+                    footer: ''
+                })
             })
         setCodes(codesR.data)
         setAuto(getArray(codesR.data))
-        if (!props.admin) {
+        if (!admin) {
             setStudent(user)
             getAllSubmitted(user.id)
         }
@@ -89,18 +116,31 @@ const CodeDashboard = (props) => {
             axios.get(`http://localhost:3044/api/answers/codes/${statement._id}/students/${student.id}`)
                 .then(response => {
                     const result = response.data
+                    //console.log('go both', result)
                     if (result.hasOwnProperty('errors')) {
-                        console.log('error', result.errors)
+                        //console.log('error', result.errors)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: result.errors,
+                            footer: ''
+                        })
                     } else {
                         setStudentSpec(result)
                     }
                 })
                 .catch(err => {
-                    console.log(err.message)
+                    //console.log(err.message)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err.message,
+                        footer: ''
+                    })
                 })
 
         }
-        if (student) {
+        if (student && !statement) {
             getAllSubmitted(student.id)
         }
         if (statement) {
@@ -108,13 +148,25 @@ const CodeDashboard = (props) => {
                 .then(response => {
                     const result = response.data
                     if (result.hasOwnProperty('errors')) {
-                        console.log('error', result.errors)
+                        //console.log('error', result.errors)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: result.errors,
+                            footer: ''
+                        })
                     } else {
                         setStudentsAll(result)
                     }
                 })
                 .catch(err => {
-                    console.log(err.message)
+                    //console.log(err.message)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err.message,
+                        footer: ''
+                    })
                 })
         }
     }
@@ -123,7 +175,7 @@ const CodeDashboard = (props) => {
         <Typography variant="h4">{props.admin ? 'Admin ' : 'Student '}Dashboard</Typography>
         <Grid container direction='row' >
             <DashboardCard heading='Total Codes' number={codes.length} />
-            {props.admin && <><DashboardCard heading='Total Students' number={array.length} />
+            {admin && <><DashboardCard heading='Total Students' number={array.length} />
                 <DashboardCard heading='Total Answers' number={answers.length} /></>}
         </Grid>
         <Divider sx={{ m: 2, ml: 0 }} />
@@ -154,7 +206,7 @@ const CodeDashboard = (props) => {
                         renderInput={(params) => <TextField {...params} label="Select the Code" />}
                     />
                 </Grid>
-                {props.admin && <Grid>
+                {admin && <Grid>
                     <Autocomplete
                         {...defaultProps}
                         sx={{ width: 300, m: 2 }}
@@ -168,7 +220,7 @@ const CodeDashboard = (props) => {
                 <Button variant="contained" size="small" endIcon={<FastForward />} sx={{ mt: 2, ml: 2, p: 0, maxHeight: 52 }} onClick={handleGo}>Go</Button>
             </Grid>
         {studentSpec.length > 0 && <DashboardTable heading={`A student's attempt to specific question`} tableData={studentSpec} />}
-        {(studentsAll.length > 0 && props.admin) && <DashboardTable heading={`All student's answer to specific question`} tableData={studentsAll} />}
+        {(studentsAll.length > 0 && admin) && <DashboardTable heading={`All student's answer to specific question`} tableData={studentsAll} />}
     </div>
 }
 export default CodeDashboard

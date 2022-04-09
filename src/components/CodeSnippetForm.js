@@ -14,13 +14,11 @@ import { Delete, Edit, ArrowBackIos } from "@mui/icons-material"
 import ErrorBoundary from "./ErrorBoundary"
 
 const CodeSnippetForm = (props) => {
-    console.log('code snippets form props', props)
-    const { admin } = props
 
     const dispatch = useDispatch()
 
     const isLoaded = useSelector(state => {
-        console.log(state.codes.isLoading)
+        //console.log(state.codes.isLoading)
         return state.codes.isLoading
     })
 
@@ -30,6 +28,7 @@ const CodeSnippetForm = (props) => {
     const user = useSelector(state => {
         return state.user
     })
+    const admin = user.role === 'admin' ? true : false
 
     let array = []
     if (codeObj) {
@@ -56,8 +55,6 @@ const CodeSnippetForm = (props) => {
     const [editToggle, setEditToggle] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [open, setOpen] = useState(false);
-
-    console.log('cs form arr snipts', arraySnippet)
 
     const handleClickOpen = () => {
         setOpen(true);

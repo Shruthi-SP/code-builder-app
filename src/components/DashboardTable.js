@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 
 const DashboardTable = (props) => {
   const { heading, tableData } = props
-  console.log('DT props=', heading, tableData)
+  //console.log('DT props=', heading, tableData)
 
   const codes = useSelector(state=>{
     return state.codes
@@ -29,7 +29,8 @@ const DashboardTable = (props) => {
   const getStudentName = (id) => {
     const student = array.find(ele => ele.id == id)
     //console.log('get student name=',student)
-    return student.user_name
+    let r =''
+    return r = student ? student.user_name : 'anonymous'
   }
   const getCodeTitle = (id) => {
     const code = codes.data.find(ele=>ele._id==id)

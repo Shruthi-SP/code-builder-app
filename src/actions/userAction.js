@@ -17,15 +17,15 @@ export const asyncRegister = (formData, resetForm, redirect) => {
             title: 'Registered',
             text: 'Registered successfully',
             footer: ''
-          })
+        })
     }
 }
 
-export const asyncSetUser = (formData, getData, redirect) => {
+export const asyncSetUser = (formData, redirect) => {
     return (dispatch) => {
         if (localStorage.user) {
             dispatch(setUser(formData))
-            getData(formData)
+            //getData(formData)
         }
         else {
             let obj = {}
@@ -43,19 +43,19 @@ export const asyncSetUser = (formData, getData, redirect) => {
                     title: 'Oops...',
                     text: result.errors,
                     footer: ''
-                  })
+                })
             } else {
                 dispatch(setUser(obj))
-                getData(obj)
+                //getData(obj)
                 //alert('Login successful')
+                localStorage.setItem('user', JSON.stringify(obj))
+                redirect(obj)
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
                     text: 'Login Successful',
                     footer: ''
-                  })
-                localStorage.setItem('user', JSON.stringify(obj))
-                redirect()
+                })
             }
         }
     }
