@@ -16,7 +16,7 @@ if(localStorage.getItem('user')){
   store.dispatch(setUser(obj))
 }
 store.subscribe(()=>{
-  //console.log('updated state=', store.getState())
+  console.log('updated state=', store.getState())
 })
 
 ReactDOM.render(

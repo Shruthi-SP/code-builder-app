@@ -38,7 +38,7 @@ const CodeDashboard = (props) => {
     const [studentSpec, setStudentSpec] = useState([])
 
     const getAllSubmitted = (id) => {
-        axios.get(`http://localhost:3044/api/answers/students/${id}`)
+        axios.get(`http://localhost:3043/api/answers/students/${id}`)
             .then(response => {
                 const result = response.data
                 if (result.hasOwnProperty('errors')) {
@@ -74,7 +74,7 @@ const CodeDashboard = (props) => {
 
     useEffect(() => {
         let result
-        axios.get('http://localhost:3044/api/answers')
+        axios.get('http://localhost:3043/api/answers')
             .then((response) => {
                 result = response.data
                 if (result.hasOwnProperty('errors')) {
@@ -101,6 +101,7 @@ const CodeDashboard = (props) => {
         setCodes(codesR.data)
         setAuto(getArray(codesR.data))
         if (!admin) {
+            console.log('cd', admin)
             setStudent(user)
             getAllSubmitted(user.id)
         }
@@ -113,7 +114,7 @@ const CodeDashboard = (props) => {
 
     const handleGo = () => {
         if (statement && student) {
-            axios.get(`http://localhost:3044/api/answers/codes/${statement._id}/students/${student.id}`)
+            axios.get(`http://localhost:3043/api/answers/codes/${statement._id}/students/${student.id}`)
                 .then(response => {
                     const result = response.data
                     //console.log('go both', result)
@@ -144,7 +145,7 @@ const CodeDashboard = (props) => {
             getAllSubmitted(student.id)
         }
         if (statement) {
-            axios.get(`http://localhost:3044/api/answers/codes/${statement._id}`)
+            axios.get(`http://localhost:3043/api/answers/codes/${statement._id}`)
                 .then(response => {
                     const result = response.data
                     if (result.hasOwnProperty('errors')) {

@@ -21,7 +21,7 @@ const StudentProfile = (props) => {
         return state.user
     })
     const getAllSubmitted = (id) => {
-        axios.get(`http://localhost:3044/api/answers/students/${id}`)
+        axios.get(`http://localhost:3043/api/answers/students/${id}`)
             .then(response => {
                 const result = response.data
                 if (result.hasOwnProperty('errors')) {
@@ -29,7 +29,7 @@ const StudentProfile = (props) => {
                     alert('Error', result.errors)
                 } else {
                     const obj = {}
-                    //console.log('get all submitted answers', result)
+                    console.log('get all submitted answers', result)
                     obj['Correct'] = result.obtainedPoints
                     obj['Incorrect'] = result.totalPoints - result.obtainedPoints
                     const arr = Object.entries(obj)
@@ -52,6 +52,7 @@ const StudentProfile = (props) => {
             setStudent(s)            
         }
         else {
+            console.log('stu profile', user.role)
             setStudent(user)
             getAllSubmitted(user.id)
         }
@@ -70,12 +71,12 @@ const StudentProfile = (props) => {
                 </Grid>
                 <Grid item><DashboardChart data={chartData} /></Grid>
                 <Grid item>
-                    <Typography variant="h6">Questions</Typography>
+                    {/* <Typography variant="h6">Questions</Typography>
                     <ul>{
                         codes.map(ele => {
                             return <li key={ele._id}><Link>{ele.title}</Link></li>
                         })
-                    }</ul>
+                    }</ul> */}
                 </Grid>
             </Grid>
         </>}
