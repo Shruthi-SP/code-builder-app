@@ -4,7 +4,7 @@ import CodeSnippetForm from "./CodeSnippetForm"
 import { buildFor } from "./tools/helper"
 import { asyncDeleteCode, asyncGetCode } from "../actions/codesAction"
 import EditCode from "./EditCode"
-import { Button, ButtonGroup, Typography, Grid } from "@mui/material"
+import { Button, ButtonGroup, Typography, Grid, Box, Paper } from "@mui/material"
 import { Delete, Edit, Add } from "@mui/icons-material"
 import ErrorBoundary from "./ErrorBoundary"
 import axios from "axios"
@@ -20,7 +20,7 @@ import { withRouter } from "react-router-dom"
 import Swal from 'sweetalert2'
 
 const CodeSnippets = (props) => {
-    const user = useSelector(state=>{
+    const user = useSelector(state => {
         return state.user
     })
     const admin = user.role === 'admin' ? true : false
@@ -306,7 +306,8 @@ const CodeSnippets = (props) => {
                 (admin && Object.keys(obj).length > 0) && <div style={{ margin: '5px' }}>
                     <h3>Admin view</h3>
                     <Typography variant="h5" color="primary.dark">Code and Snippets</Typography>
-                    {snippetToggle ? <>                        
+                    {snippetToggle ?
+                        <>
                             <h3>Admin create snippet form</h3>
                             <ErrorBoundary><CodeSnippetForm admin={admin} codeId={_id} {...props} obj={obj} handleEditSnippets={handleEditSnippets} /></ErrorBoundary>
                         </>
@@ -318,11 +319,18 @@ const CodeSnippets = (props) => {
                                 </>
                             }
                             {
-                                arraySnippet.length > 0 && arraySnippet.map((ele, i) => {
-                                    return <code key={i}>
-                                        {buildFor(ele)}
-                                    </code>
-                                })
+                                arraySnippet.length > 0 && <Box sx={{ width: '50%', m: 1 }}>
+                                    <h4 style={{ margin:'3px' }}>Code</h4>
+                                    <Paper elevation={3} sx={{ p: 1, backgroundColor:'#F8F9F9'}} >
+                                        {
+                                            arraySnippet.map((ele, i) => {
+                                                return <code key={i}>
+                                                    {buildFor(ele)}
+                                                </code>
+                                            })
+                                        }
+                                    </Paper>
+                                </Box>
                             }
                             <br /><br />
                             <ButtonGroup variant="contained" aria-label="outlined primary button group">
@@ -335,63 +343,65 @@ const CodeSnippets = (props) => {
                     }
                 </div>
             }
-            {(!admin || preview) && <div>
-                <h2>{admin ? 'student view' : 'Code'}</h2>
-                {/* <h2>Sibling of CodeSnippetForm component</h2> */}
-                {/* <span>Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.</span><br /> */}
-                <Grid container>
-                    <Grid item xs={12} sm={6}>
-                        <div>
-                            <code>
-                                <b>{obj.title}</b><br />
-                                <b>{obj.statement}</b><br />
-                            </code>
-                            {start && <Button variant="contained" size="small" onClick={(e) => { handleStart(e) }}>start</Button>}
-                            {
-                                <div style={{ margin: '5px' }}>
-                                    <form onSubmit={(e) => { handleSubmitAns(e) }}>
-                                        {obj.hasOwnProperty('snippets') &&
-                                            arraySnippet.slice(0, count).map((ele, i) => {
-                                                return <code key={i}>{buildForStudent(ele)}</code>
-                                            })
-                                        }
-                                        <br /><br />
-                                        {!start && <><Button sx={{ mr: 1 }} variant="contained" size="small" disabled={prev} onClick={(e) => { handlePrevious(e) }}>Previous</Button>
-                                            <Button variant="contained" size="small" disabled={nxt} onClick={(e) => { handleNext(e) }}>Next</Button></>}
-                                    </form>
-                                    <br />
-                                </div>
-                            }
-                        </div>
-                        {errors.length > 0 && <ul>{
-                            errors.map((ele, i) => {
-                                return <li style={{ color: 'red' }} key={i}>{ele}</li>
-                            })
-                        }</ul>}
-                        <h3>{string}</h3>
-                        {(isSubmitted || admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
-                        {/* {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={obj} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>} */}
-                        {(solution) && <div>
-                            <h3>Code Solution</h3>
-                            <code>
-                                <b>{obj.title}</b><br />
-                                <b>{obj.statement}</b><br />
+            {
+                (!admin || preview) && <div>
+                    <h2>{admin ? 'student view' : 'Code'}</h2>
+                    {/* <h2>Sibling of CodeSnippetForm component</h2> */}
+                    {/* <span>Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.</span><br /> */}
+                    <Grid container>
+                        <Grid item xs={12} sm={6}>
+                            <div>
+                                <code>
+                                    <b>{obj.title}</b><br />
+                                    <b>{obj.statement}</b><br />
+                                </code>
+                                {start && <Button variant="contained" size="small" onClick={(e) => { handleStart(e) }}>start</Button>}
                                 {
-                                    obj.snippets.slice(0, obj.snippets.length - 1).map(ele => {
-                                        return <code key={ele._id}>{buildForSolution(ele)}</code>
-                                    })
+                                    <div style={{ margin: '5px' }}>
+                                        <form onSubmit={(e) => { handleSubmitAns(e) }}>
+                                            {obj.hasOwnProperty('snippets') &&
+                                                arraySnippet.slice(0, count).map((ele, i) => {
+                                                    return <code key={i}>{buildForStudent(ele)}</code>
+                                                })
+                                            }
+                                            <br /><br />
+                                            {!start && <><Button sx={{ mr: 1 }} variant="contained" size="small" disabled={prev} onClick={(e) => { handlePrevious(e) }}>Previous</Button>
+                                                <Button variant="contained" size="small" disabled={nxt} onClick={(e) => { handleNext(e) }}>Next</Button></>}
+                                        </form>
+                                        <br />
+                                    </div>
                                 }
-                            </code>
-                            <br /><button onClick={() => { handleSolution() }}>Close</button>
-                        </div>}
-                        {(isSubmitted || admin) && <Explanations explanations={explanations} />}
+                            </div>
+                            {errors.length > 0 && <ul>{
+                                errors.map((ele, i) => {
+                                    return <li style={{ color: 'red' }} key={i}>{ele}</li>
+                                })
+                            }</ul>}
+                            <h3>{string}</h3>
+                            {(isSubmitted || admin) && <button onClick={() => { handleSolution() }}>See Solution</button>}
+                            {/* {(solution || admin) && <ErrorBoundary><CodeSolution codeId={props.codeId} obj={obj} handleSolution={handleSolution} admin={admin} /></ErrorBoundary>} */}
+                            {(solution) && <div>
+                                <h3>Code Solution</h3>
+                                <code>
+                                    <b>{obj.title}</b><br />
+                                    <b>{obj.statement}</b><br />
+                                    {
+                                        obj.snippets.slice(0, obj.snippets.length - 1).map(ele => {
+                                            return <code key={ele._id}>{buildForSolution(ele)}</code>
+                                        })
+                                    }
+                                </code>
+                                <br /><button onClick={() => { handleSolution() }}>Close</button>
+                            </div>}
+                            {(isSubmitted || admin) && <Explanations explanations={explanations} />}
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            {studHints.length > 0 && <Hint hints={studHints} />}
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        {studHints.length > 0 && <Hint hints={studHints} />}
-                    </Grid>
-                </Grid>
-            </div>}
-        </div>
+                </div>
+            }
+        </div >
     )
 }
 export default withRouter(CodeSnippets)
